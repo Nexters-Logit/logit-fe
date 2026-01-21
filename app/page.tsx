@@ -106,12 +106,7 @@ function ExperienceCard({
         </p>
       </div>
       <div className="absolute right-0 bottom-0 w-32.5 h-30">
-        <Image
-          src={illustration}
-          alt={title}
-          fill
-          className="object-contain"
-        />
+        <Image src={illustration} alt={title} fill className="object-contain" />
       </div>
     </div>
   );
@@ -387,18 +382,30 @@ function DesignTokensTest() {
       <div>
         <h3 className="text-title-2 text-gray-400 mb-6">폰트 굵기</h3>
         <div className="space-y-4">
-          <p className="text-title-2 font-normal text-gray-400">
-            Pretendard Regular (400) - 가나다라마바사 ABCDEFG 1234567890
-          </p>
-          <p className="text-title-2 font-medium text-gray-400">
-            Pretendard Medium (500) - 가나다라마바사 ABCDEFG 1234567890
-          </p>
-          <p className="text-title-2 font-semibold text-gray-400">
-            Pretendard SemiBold (600) - 가나다라마바사 ABCDEFG 1234567890
-          </p>
-          <p className="text-title-2 font-bold text-gray-400">
-            Pretendard Bold (700) - 가나다라마바사 ABCDEFG 1234567890
-          </p>
+          <div className="flex items-baseline gap-8 border-b border-gray-70 pb-4">
+            <span className="w-32 text-body-7-3 text-gray-200">400</span>
+            <span className="text-2xl font-normal text-gray-400">
+              Pretendard Regular - 가나다라마바사 ABCDEFG 1234567890
+            </span>
+          </div>
+          <div className="flex items-baseline gap-8 border-b border-gray-70 pb-4">
+            <span className="w-32 text-body-7-3 text-gray-200">500</span>
+            <span className="text-2xl font-medium text-gray-400">
+              Pretendard Medium - 가나다라마바사 ABCDEFG 1234567890
+            </span>
+          </div>
+          <div className="flex items-baseline gap-8 border-b border-gray-70 pb-4">
+            <span className="w-32 text-body-7-3 text-gray-200">600</span>
+            <span className="text-2xl font-semibold text-gray-400">
+              Pretendard SemiBold - 가나다라마바사 ABCDEFG 1234567890
+            </span>
+          </div>
+          <div className="flex items-baseline gap-8 border-b border-gray-70 pb-4">
+            <span className="w-32 text-body-7-3 text-gray-200">700</span>
+            <span className="text-2xl font-bold text-gray-400">
+              Pretendard Bold - 가나다라마바사 ABCDEFG 1234567890
+            </span>
+          </div>
         </div>
       </div>
     </section>
