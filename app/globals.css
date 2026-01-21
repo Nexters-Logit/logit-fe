@@ -1,0 +1,245 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-pretendard), system-ui, sans-serif;
+
+  /* Primary Colors */
+  --color-primary-20: #F5FAFF;
+  --color-primary-50: #E5F0FF;
+  --color-primary-70: #8DC9FF;
+  --color-primary-100: #40A5FF;
+  --color-primary-200: #2571EB;
+  --color-primary-300: #240991;
+  --color-primary-400: #6B7684;
+  --color-primary-500: #374151;
+  --color-primary-600: #333D4B;
+
+  /* Gray Scale */
+  --color-gray-20: #F7F9FC;
+  --color-gray-50: #F2F3F7;
+  --color-gray-70: #E1E4ED;
+  --color-gray-100: #BEC2D1;
+  --color-gray-200: #828699;
+  --color-gray-300: #6B6F84;
+  --color-gray-400: #262626;
+  --color-gray-black: #17181E;
+
+  /* Icon Colors */
+  --color-icon-1: #63DBD5;
+  --color-icon-2: #71D1F0;
+  --color-icon-3: #32B1FF;
+  --color-icon-4: #8B9AFF;
+  --color-icon-5: #8B83E6;
+  --color-icon-6: #A283E6;
+  --color-icon-7: #CF83E6;
+  --color-icon-8: #E683BE;
+
+  /* Semantic Colors */
+  --color-alert: #ED1728;
+
+  /* Font Sizes */
+  --text-headline-1: 32px;
+  --text-title-1: 28px;
+  --text-title-2: 24px;
+  --text-title-3: 22px;
+  --text-body-1: 20px;
+  --text-body-2: 19px;
+  --text-body-3: 18px;
+  --text-body-4: 17px;
+  --text-body-5: 16px;
+  --text-body-6: 15px;
+  --text-body-7: 14px;
+  --text-body-8: 13px;
+  --text-body-9: 12px;
+
+  /* Line Heights */
+  --leading-100: 1;
+  --leading-120: 1.2;
+  --leading-140: 1.4;
+  --leading-150: 1.5;
+  --leading-180: 1.8;
+}
+
+/* Typography Utility Classes */
+.text-headline-1 {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.text-title-1 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.text-title-2 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.text-title-2-2 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.48px;
+}
+
+.text-title-3 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.44px;
+}
+
+.text-body-1 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.text-body-2 {
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.text-body-3-1 {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.text-body-3-2 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.text-body-3-3 {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.text-body-4 {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.34px;
+}
+
+.text-body-5-1 {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.text-body-5-2 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.text-body-5-3 {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.text-body-5-4 {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.32px;
+}
+
+.text-body-5-5 {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.text-body-6-1 {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.8;
+  letter-spacing: -0.3px;
+}
+
+.text-body-6-2 {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.text-body-7-1 {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.text-body-7-2 {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.text-body-7-3 {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.text-body-8-1 {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.26px;
+}
+
+.text-body-8-2 {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.26px;
+}
+
+.text-body-9-1 {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.text-body-9-2 {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.text-body-9-3 {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-pretendard), system-ui, sans-serif;
+}
