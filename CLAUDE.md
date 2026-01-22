@@ -2,9 +2,61 @@
 
 ## Tech Stack
 
-- Next.js
+- Next.js 15 (App Router)
 - TypeScript
 - Tailwind CSS v4
+- React Query (서버 상태)
+- Zustand (UI 상태)
+- AI SDK + AI Elements (채팅 UI)
+- shadcn/ui (기본 UI 컴포넌트)
+
+## Code Principles
+
+### 사용하지 않는 코드 제거
+
+- 계획이 변경되어 더 이상 필요 없는 코드/파일은 즉시 삭제
+- 주석 처리된 코드, `// TODO: remove` 같은 잔재 금지
+- 미사용 import, 변수, 함수는 남기지 않음
+- backwards-compatibility를 위한 re-export나 `_unused` 변수 금지
+
+### 폴더 구조 규칙
+
+```
+app/
+├── (main)/
+│   └── [feature]/
+│       └── [dynamic]/
+│           ├── page.tsx
+│           ├── loading.tsx
+│           ├── _components/    # 페이지 전용 (라우팅 제외)
+│           ├── _hooks/         # 페이지 전용 훅
+│           ├── _apis/          # 페이지 전용 API
+│           └── _store/         # 페이지 전용 상태
+├── api/                        # API Routes
+└── layout.tsx
+
+components/
+├── ui/              # shadcn/ui 컴포넌트
+├── ai-elements/     # AI Elements 컴포넌트
+└── common/          # 2곳 이상에서 사용하는 공통 컴포넌트
+
+libs/                # 유틸리티, API 클라이언트
+types/               # 공통 타입 정의
+```
+
+| 규칙 | 설명 |
+|------|------|
+| `_` prefix | Next.js 라우팅에서 제외 |
+| 처음엔 페이지 내부에 | 해당 페이지에서만 쓰면 거기에 둠 |
+| 2곳 이상 사용 시 추출 | `components/common/`으로 이동 |
+
+### 타입 컨벤션
+
+```typescript
+// 탭/상태 상수는 대문자
+type PanelTab = 'EXPERIENCES' | 'DRAFT';
+type MessageRole = 'USER' | 'ASSISTANT';
+```
 
 ## Backend API
 
