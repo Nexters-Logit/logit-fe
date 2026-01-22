@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://api-dev.logit.ai.kr';
+export const API_BASE_URL = 'https://api-dev.logit.ai.kr';
 
 // ============================================================================
 // Token Management
