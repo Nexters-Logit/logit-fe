@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import StatusEmpty from "@/components/StatusEmpty";
+import { Header } from "@/components/common/Header";
 
 const experienceTypes = [
   {
@@ -43,46 +44,6 @@ const projects = [
   { id: 5, title: "라인 백엔드 엔지니어 자소서", date: "2024.01.05" },
   { id: 6, title: "쿠팡 데이터 분석가 포지션", date: "2024.01.03" },
 ];
-
-function Header() {
-  return (
-    <header className="flex items-center justify-between px-7.5 py-3.75 w-full max-w-360 mx-auto">
-      <div className="flex items-center gap-2">
-        <Image
-          src="/logos/logo-symbol-2d.svg"
-          alt="Logit"
-          width={24}
-          height={24}
-        />
-        <Image
-          src="/logos/logo-wordmark.svg"
-          alt="Logit"
-          width={52}
-          height={26}
-        />
-      </div>
-      <nav className="flex items-center gap-7">
-        <a
-          href="#"
-          className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-20"
-        >
-          <Image src="/icons/home.svg" alt="홈" width={26} height={26} />
-          <span className="text-body-3-3 text-primary-400">홈</span>
-        </a>
-        <a
-          href="#"
-          className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-20"
-        >
-          <Image src="/icons/report.svg" alt="리포트" width={26} height={26} />
-          <span className="text-body-3-3 text-primary-400">리포트</span>
-        </a>
-        <div className="w-10 h-10 rounded-full bg-primary-20 flex items-center justify-center">
-          <div className="w-8 h-8 rounded-full bg-primary-70" />
-        </div>
-      </nav>
-    </header>
-  );
-}
 
 function ExperienceCard({
   title,
