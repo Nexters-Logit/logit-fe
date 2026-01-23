@@ -1,4 +1,6 @@
-import { Header } from '@/components/common/Header';
+import { getChatHistory } from './_apis/chat';
+import { ChatPageClient } from './_components/ChatPageClient';
+import type { ChatHistoryResponse } from '@/types/api';
 
 interface ChatPageProps {
   params: Promise<{
@@ -6,55 +8,50 @@ interface ChatPageProps {
   }>;
 }
 
+// 채팅 히스토리 응답을 검증하고 기본값 적용
+function validateChatHistory(
+  questionId: string,
+  data: ChatHistoryResponse | null
+) {
+  return {
+    projectName: data?.project_name || '프로젝트',
+    questionText: data?.question || '문항을 불러오는 중...',
+    chats: data?.chats || [],
+    experienceIds: data?.experience_ids || [],
+  };
+}
+
 export default async function ChatPage({ params }: ChatPageProps) {
   const { questionId } = await params;
 
+  // 서버에서 초기 데이터 페칭
+  let rawChatHistory: ChatHistoryResponse | null = null;
+  try {
+    rawChatHistory = await getChatHistory(questionId);
+  } catch (error) {
+    console.error('Failed to fetch chat history:', error);
+  }
+
+  // 검증된 데이터
+  const chatHistory = validateChatHistory(questionId, rawChatHistory);
+
+  const currentQuestion = {
+    id: questionId,
+    question: chatHistory.questionText,
+    maxLength: 1000, // TODO: API 응답에서 가져오기
+  };
+
+  // TODO: 프로젝트의 전체 문항 목록 가져오기
+  const questions = [currentQuestion];
+
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      <Header />
-
-      <main className="flex-1 flex">
-        {/* 왼쪽: 채팅 영역 */}
-        <div className="flex-1 flex flex-col">
-          {/* 프로젝트 정보 */}
-          <div className="px-7.5 py-4 border-b border-gray-70">
-            <p className="text-body-7-3 text-gray-200">
-              Question ID: {questionId}
-            </p>
-          </div>
-
-          {/* 채팅 메시지 영역 (Phase 6에서 구현) */}
-          <div className="flex-1 p-7.5">
-            <p className="text-body-5-5 text-gray-300">
-              채팅 영역 - Phase 6에서 구현 예정
-            </p>
-          </div>
-
-          {/* 입력창 (Phase 6에서 구현) */}
-          <div className="p-7.5 border-t border-gray-70">
-            <p className="text-body-5-5 text-gray-300">
-              입력창 - Phase 6에서 구현 예정
-            </p>
-          </div>
-        </div>
-
-        {/* 오른쪽: 사이드 패널 */}
-        <aside className="w-80 border-l border-gray-70 flex flex-col">
-          {/* 패널 탭 (Phase 5에서 구현) */}
-          <div className="p-4 border-b border-gray-70">
-            <p className="text-body-5-5 text-gray-300">
-              패널 탭 - Phase 5에서 구현 예정
-            </p>
-          </div>
-
-          {/* 패널 콘텐츠 */}
-          <div className="flex-1 p-4">
-            <p className="text-body-5-5 text-gray-300">
-              경험 목록 / 자기소개서 - Phase 5에서 구현 예정
-            </p>
-          </div>
-        </aside>
-      </main>
-    </div>
+    <ChatPageClient
+      questionId={questionId}
+      company={chatHistory.projectName} // TODO: 별도 API에서 가져오기
+      jobPosition="직무" // TODO: 별도 API에서 가져오기
+      questions={questions}
+      currentQuestion={currentQuestion}
+      initialChats={chatHistory.chats}
+    />
   );
 }
