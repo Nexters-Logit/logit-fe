@@ -6,4 +6,6 @@ export { ChatPanelTabs } from './ChatPanelTabs';
 export { ExperienceList } from './ExperienceList';
 export { ExperienceCard } from './ExperienceCard';
 export { DraftPanel } from './DraftPanel';
+export { ChatMessageList } from './ChatMessageList';
+export { ChatInput } from './ChatInput';
 export { ChatPageClient } from './ChatPageClient';
