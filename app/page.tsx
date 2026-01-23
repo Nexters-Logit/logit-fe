@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import StatusEmpty from "@/components/StatusEmpty";
 import { Header } from "@/components/common/Header";
+import { TestChatButton } from "./_components/TestChatButton";
 
 const experienceTypes = [
   {
@@ -408,6 +409,11 @@ export default function Home() {
           >
             프로젝트 {showProjects ? "숨기기" : "보이기"}
           </button>
+        </div>
+
+        {/* 테스트 채팅 버튼 */}
+        <div className="mb-8">
+          <TestChatButton />
         </div>
 
         {/* 경험 유형 섹션 */}
