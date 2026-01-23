@@ -10,7 +10,12 @@ import { ChatPanel } from './ChatPanel';
 import { ChatMessageList } from './ChatMessageList';
 import { ChatInput } from './ChatInput';
 import { useChatStore } from '../_store/useChatStore';
-import { useExperiences, useChatHistory, useChatStream } from '../_hooks';
+import {
+  useExperiences,
+  useChatHistory,
+  useChatStream,
+  useUpdateAnswer,
+} from '../_hooks';
 import type { ChatHistoryItem } from '@/types/api';
 
 // 검증된 문항 정보 타입
@@ -71,6 +76,9 @@ export function ChatPageClient({
   const draftChat = chats.find((c) => c.is_draft);
   const draftContent = draftChat?.content;
 
+  // 답변 저장 mutation
+  const updateAnswerMutation = useUpdateAnswer();
+
   // AI SDK - 채팅 스트림
   const {
     messages,
@@ -83,9 +91,19 @@ export function ChatPageClient({
     questionId,
     experienceIds: selectedExperienceIds,
     initialMessages: convertToUIMessages(initialChats),
-    onFinish: () => {
+    onFinish: (message) => {
       // 스트리밍 완료 시 히스토리 갱신
       refetchHistory();
+
+      // 초안 메시지면 자기소개서 탭으로 자동 전환
+      // (메시지 parts에서 직접 metadata 확인)
+      const dataPart = message.parts.find((p) => p.type === 'data-chat-metadata');
+      if (dataPart && 'data' in dataPart) {
+        const metadata = dataPart.data as { is_draft?: boolean };
+        if (metadata?.is_draft) {
+          setActivePanelTab('DRAFT');
+        }
+      }
     },
   });
 
@@ -108,19 +126,36 @@ export function ChatPageClient({
   // 메시지에서 자기소개서 업데이트 (chatId 기반)
   const handleUpdateDraftFromMessage = useCallback(
     (chatId: string) => {
-      // Phase 7에서 useUpdateAnswer mutation으로 구현
-      console.log('Update draft from message:', chatId);
-      refetchHistory();
+      // 해당 메시지의 content 찾기
+      const message = messages.find((m) => {
+        const metadata = getMessageMetadata(m);
+        return metadata?.chat_id === chatId;
+      });
+
+      if (!message) return;
+
+      const textPart = message.parts.find((p) => p.type === 'text');
+      const content = textPart && 'text' in textPart ? textPart.text : '';
+
+      if (content) {
+        updateAnswerMutation.mutate(
+          { chatId, content },
+          { onSuccess: () => refetchHistory() }
+        );
+      }
     },
-    [refetchHistory]
+    [messages, getMessageMetadata, updateAnswerMutation, refetchHistory]
   );
 
   // 사이드바에서 자기소개서 업데이트
   const handleUpdateDraft = useCallback(() => {
     if (!draftChat) return;
-    // Phase 7에서 useUpdateAnswer mutation으로 구현
-    console.log('Update draft:', draftChat.id);
-  }, [draftChat]);
+
+    updateAnswerMutation.mutate(
+      { chatId: draftChat.id, content: draftChat.content },
+      { onSuccess: () => refetchHistory() }
+    );
+  }, [draftChat, updateAnswerMutation, refetchHistory]);
 
   return (
     <ChatLayout
