@@ -59,7 +59,7 @@ function ExperienceCard({
 }) {
   return (
     <div
-      className={`${bgColor} w-65.25 h-47.5 rounded-[20px] overflow-hidden relative shrink-0`}
+      className={`${bgColor} w-65.25 h-47.5 rounded-5 overflow-hidden relative shrink-0`}
     >
       <div className="p-6.5">
         <h3 className="text-body-1 text-primary-600">{title}</h3>
@@ -84,7 +84,7 @@ function SectionHeader({
   return (
     <div className="flex items-center justify-between w-full">
       <h2 className="text-title-2-2 text-gray-400">{title}</h2>
-      <button className="bg-primary-100 text-white text-body-3-2 px-6 py-3.5 rounded-[14px] h-11 flex items-center justify-center">
+      <button className="bg-primary-100 text-white text-body-3-2 px-6 py-3.5 rounded-3.5 h-11 flex items-center justify-center">
         {buttonText}
       </button>
     </div>

@@ -135,11 +135,51 @@ Tailwind의 spacing 단위는 `4px`를 기준으로 합니다. 예: `1 = 4px`, `
 | `max-w-[1104px]` | `max-w-276`     | 1104 ÷ 4 = 276  |
 | `max-w-[1440px]` | `max-w-360`     | 1440 ÷ 4 = 360  |
 
-#### 예외 사항
+#### Border Radius 규칙
 
-- `rounded-[20px]`과 같은 border-radius는 semantic token이 없는 경우 arbitrary value 사용 가능
-- 커스텀 색상 `bg-[#316ff6]`은 디자인 토큰에 정의되지 않은 경우 사용 가능
-- 디자인 토큰에 정의된 typography가 있다면 `text-[24px]` 대신 `text-title-2` 같은 토큰 사용
+Tailwind v4 내장 값 또는 `@theme`에 정의된 커스텀 변수 사용:
+
+| Pixel Value | Tailwind Class | 비고 |
+|-------------|----------------|------|
+| 8px | `rounded-lg` | 내장 |
+| 12px | `rounded-xl` | 내장 |
+| 14px | `rounded-3.5` | 커스텀 (`--radius-3.5`) |
+| 16px | `rounded-2xl` | 내장 |
+| 20px | `rounded-5` | 커스텀 (`--radius-5`) |
+| 24px | `rounded-3xl` | 내장 |
+| 30px | `rounded-7.5` | 커스텀 (`--radius-7.5`) |
+| 32px | `rounded-4xl` | 내장 |
+
+```tsx
+// Bad
+<div className="rounded-[14px]">
+
+// Good
+<div className="rounded-3.5">
+```
+
+#### Box Shadow 규칙
+
+`@theme`에 정의된 커스텀 shadow 변수 사용:
+
+| Shadow | Tailwind Class |
+|--------|----------------|
+| `0 4px 20px rgba(0,0,0,0.05)` | `shadow-chat` |
+
+```tsx
+// Bad
+<div className="shadow-[0px_4px_20px_0px_rgba(0,0,0,0.05)]">
+
+// Good
+<div className="shadow-chat">
+```
+
+#### Arbitrary Values 금지
+
+- `rounded-[Xpx]` 금지 → 내장 클래스 또는 `@theme` 변수 사용
+- `shadow-[...]` 금지 → `@theme` 변수 정의 후 사용
+- `text-[Xpx]` 금지 → 디자인 토큰 사용 (예: `text-body-6-1`)
+- `bg-[#...]` 금지 → 디자인 토큰 사용 (예: `bg-primary-100`)
 
 ### Best Practices
 

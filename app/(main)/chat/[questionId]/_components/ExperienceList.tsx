@@ -26,56 +26,46 @@ export function ExperienceList({
   const hasSelection = selectedIds.length > 0;
 
   const handleToggle = (id: string) => {
-    if (selectedIds.includes(id)) {
-      onDeselect(id);
-    } else if (canSelectMore) {
-      onSelect(id);
-    }
+    selectedIds.includes(id) ? onDeselect(id) : canSelectMore && onSelect(id);
   };
 
-  if (experiences.length === 0) {
-    return (
-      <div className="flex-1 flex flex-col items-center justify-center p-6">
-        <p className="text-body-5-5 text-gray-200 mb-4">
-          등록된 경험이 없어요
-        </p>
-        <button className="px-4 py-2 bg-primary-100 text-white text-body-5-5 rounded-lg hover:bg-primary-200 transition-colors">
-          + 경험 추가하기
-        </button>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex-1 flex flex-col">
-      {/* 선택 상태 헤더 */}
-      <div className="px-4 py-3 border-b border-gray-70 flex items-center justify-between">
-        <span className="text-body-5-5 text-gray-300">
-          {selectedIds.length}/{MAX_SELECTION} 선택됨
-        </span>
-        {hasSelection && (
-          <button
-            onClick={onGenerateDraft}
-            disabled={isLoading}
-            className="px-4 py-2 bg-primary-200 text-white text-body-5-5 rounded-lg hover:bg-primary-300 disabled:opacity-50 transition-colors"
-          >
-            {isLoading ? '생성 중...' : '초안 생성하기'}
-          </button>
+    <div className="flex-1 flex flex-col gap-5 pt-5 pb-8 overflow-hidden">
+      <p className="text-body-5-5 text-gray-400 opacity-60 px-7">
+        반영할 경험카드를 선택하세요 (최대 3개)
+      </p>
+
+      <div className="flex-1 flex flex-col gap-7 overflow-y-auto px-7">
+        <button className="w-full h-15 flex items-center justify-center bg-primary-50 rounded-3.5 hover:bg-primary-70 transition-colors shrink-0 cursor-pointer">
+          <span className="text-body-3-2 text-gray-300">+추가하기</span>
+        </button>
+
+        {experiences.length > 0 && (
+          <div className="flex flex-col gap-3">
+            {experiences.map((exp) => (
+              <ExperienceCard
+                key={exp.id}
+                experience={exp}
+                isSelected={selectedIds.includes(exp.id)}
+                onToggle={() => handleToggle(exp.id)}
+                disabled={!canSelectMore}
+              />
+            ))}
+          </div>
         )}
       </div>
 
-      {/* 경험 목록 */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {experiences.map((experience) => (
-          <ExperienceCard
-            key={experience.id}
-            experience={experience}
-            isSelected={selectedIds.includes(experience.id)}
-            onToggle={() => handleToggle(experience.id)}
-            disabled={!canSelectMore}
-          />
-        ))}
-      </div>
+      {hasSelection && (
+        <div className="px-7 shrink-0">
+          <button
+            onClick={onGenerateDraft}
+            disabled={isLoading}
+            className="w-full h-15 flex items-center justify-center bg-primary-200 text-white text-body-3-2 rounded-3.5 hover:bg-primary-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors"
+          >
+            {isLoading ? '생성 중...' : '초안 생성하기'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

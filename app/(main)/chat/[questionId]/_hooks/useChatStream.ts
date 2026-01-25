@@ -2,7 +2,6 @@
 
 import { useChat, UIMessage } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
-import { useState } from 'react';
 import type { ChatMessageMetadata } from '@/types/chat';
 
 interface UseChatStreamOptions {
@@ -18,9 +17,8 @@ export function useChatStream({
   initialMessages,
   onFinish,
 }: UseChatStreamOptions) {
-  const [input, setInput] = useState('');
-
   const { messages, sendMessage, status, error, stop } = useChat({
+    id: `chat-${questionId}`,
     messages: initialMessages,
     transport: new DefaultChatTransport({
       api: '/api/chat',
@@ -29,41 +27,22 @@ export function useChatStream({
         experience_ids: experienceIds.length > 0 ? experienceIds : null,
       },
     }),
-    onFinish: ({ message }) => {
-      onFinish?.(message);
-    },
+    onFinish: ({ message }) => onFinish?.(message),
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (input.trim()) {
-      sendMessage({ text: input });
-      setInput('');
-    }
-  };
+  const send = (text: string) => sendMessage({ text });
 
-  const sendText = (text: string) => {
-    sendMessage({ text });
-  };
-
-  // 메시지에서 메타데이터 추출 헬퍼
   const getMessageMetadata = (message: UIMessage): ChatMessageMetadata | undefined => {
-    const dataPart = message.parts.find(
-      (part) => part.type === 'data-chat-metadata'
-    );
+    const dataPart = message.parts.find((p) => p.type === 'data-chat-metadata');
     if (dataPart && 'data' in dataPart) {
-      return (dataPart as { type: string; data: ChatMessageMetadata }).data;
+      return dataPart.data as ChatMessageMetadata;
     }
     return undefined;
   };
 
   return {
     messages,
-    input,
-    setInput,
-    handleSubmit,
-    sendMessage: sendText,
-    isLoading: status === 'streaming' || status === 'submitted',
+    sendMessage: send,
     status,
     error,
     stop,

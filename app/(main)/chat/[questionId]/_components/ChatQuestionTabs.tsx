@@ -1,5 +1,7 @@
 'use client';
 
+import { Plus } from 'lucide-react';
+
 interface QuestionTabItem {
   id: string;
   question: string;
@@ -17,25 +19,28 @@ export function ChatQuestionTabs({
   onQuestionChange,
 }: ChatQuestionTabsProps) {
   return (
-    <div className="px-7.5 py-3 border-b border-gray-70 flex items-center gap-2 overflow-x-auto">
+    <div className="flex items-center gap-8">
       {questions.map((question, index) => {
         const isActive = question.id === activeQuestionId;
         return (
           <button
             key={question.id}
             onClick={() => onQuestionChange(question.id)}
-            className={`px-4 py-2 rounded-lg text-body-5-5 whitespace-nowrap transition-colors ${
-              isActive
-                ? 'bg-primary-100 text-white'
-                : 'bg-gray-50 text-gray-300 hover:bg-gray-70'
+            className={`flex flex-col items-center gap-3 h-12 justify-end transition-colors cursor-pointer ${
+              isActive ? 'text-primary-100' : 'text-gray-400'
             }`}
           >
-            문항 {index + 1}
+            <span className="text-body-3-3">Q{index + 1}</span>
+            <div
+              className={`h-0.5 w-full transition-colors ${
+                isActive ? 'bg-primary-100' : 'bg-transparent'
+              }`}
+            />
           </button>
         );
       })}
-      <button className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center text-gray-300 hover:bg-gray-70 transition-colors shrink-0">
-        <span className="text-lg">+</span>
+      <button className="flex items-center justify-center text-gray-300 hover:text-gray-400 transition-colors shrink-0 cursor-pointer">
+        <Plus className="w-4.5 h-4.5" strokeWidth={2} />
       </button>
     </div>
   );

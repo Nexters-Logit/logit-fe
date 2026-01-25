@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { cn } from "@/libs/utils";
 import { ArrowDownIcon } from "lucide-react";
 import type { ComponentProps } from "react";
@@ -11,7 +10,7 @@ export type ConversationProps = ComponentProps<typeof StickToBottom>;
 
 export const Conversation = ({ className, ...props }: ConversationProps) => (
   <StickToBottom
-    className={cn("relative flex-1 overflow-y-hidden", className)}
+    className={cn("relative h-full overflow-auto", className)}
     initial="smooth"
     resize="smooth"
     role="log"
@@ -68,7 +67,7 @@ export const ConversationEmptyState = ({
   </div>
 );
 
-export type ConversationScrollButtonProps = ComponentProps<typeof Button>;
+export type ConversationScrollButtonProps = ComponentProps<"button">;
 
 export const ConversationScrollButton = ({
   className,
@@ -82,19 +81,17 @@ export const ConversationScrollButton = ({
 
   return (
     !isAtBottom && (
-      <Button
+      <button
         className={cn(
-          "absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full dark:bg-background dark:hover:bg-muted",
+          "absolute bottom-4 left-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-white border border-gray-70 shadow-chat flex items-center justify-center cursor-pointer hover:bg-gray-20 hover:border-primary-100 transition-all",
           className
         )}
         onClick={handleScrollToBottom}
-        size="icon"
         type="button"
-        variant="outline"
         {...props}
       >
-        <ArrowDownIcon className="size-4" />
-      </Button>
+        <ArrowDownIcon className="w-4 h-4 text-gray-300" />
+      </button>
     )
   );
 };

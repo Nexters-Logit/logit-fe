@@ -1,6 +1,5 @@
 'use client';
 
-import { useCallback } from 'react';
 import { UIMessage } from '@ai-sdk/react';
 import { Header } from '@/components/common/Header';
 import { ChatLayout } from './ChatLayout';
@@ -18,7 +17,10 @@ import {
 } from '../_hooks';
 import type { ChatHistoryItem } from '@/types/api';
 
-// 검증된 문항 정보 타입
+// ============================================================================
+// Types
+// ============================================================================
+
 interface QuestionInfo {
   id: string;
   question: string;
@@ -35,7 +37,10 @@ interface ChatPageClientProps {
   initialChats: ChatHistoryItem[];
 }
 
-// ChatHistoryItem을 UIMessage로 변환
+// ============================================================================
+// Helpers
+// ============================================================================
+
 function convertToUIMessages(chats: ChatHistoryItem[]): UIMessage[] {
   return chats.map((chat) => ({
     id: chat.id,
@@ -44,6 +49,23 @@ function convertToUIMessages(chats: ChatHistoryItem[]): UIMessage[] {
     createdAt: new Date(chat.created_at),
   }));
 }
+
+function extractDraftMetadata(message: UIMessage): { is_draft?: boolean } | null {
+  const dataPart = message.parts.find((p) => p.type === 'data-chat-metadata');
+  if (dataPart && 'data' in dataPart) {
+    return dataPart.data as { is_draft?: boolean };
+  }
+  return null;
+}
+
+function getMessageContent(message: UIMessage): string {
+  const textPart = message.parts.find((p) => p.type === 'text');
+  return textPart && 'text' in textPart ? textPart.text : '';
+}
+
+// ============================================================================
+// Main Component
+// ============================================================================
 
 export function ChatPageClient({
   questionId,
@@ -54,109 +76,66 @@ export function ChatPageClient({
   currentQuestion,
   initialChats,
 }: ChatPageClientProps) {
-  // Zustand store
-  const {
-    selectedExperienceIds,
-    selectExperience,
-    deselectExperience,
-    activePanelTab,
-    setActivePanelTab,
-  } = useChatStore();
+  // Store
+  const store = useChatStore();
 
-  // React Query - 경험 목록
+  // Data Fetching
   const { data: experiencesData } = useExperiences();
-  const experiences = experiencesData || [];
-
-  // React Query - 채팅 히스토리 (클라이언트 갱신용)
-  const { data: chatHistoryData, refetch: refetchHistory } =
-    useChatHistory(questionId);
-  const chats = chatHistoryData?.chats || initialChats;
-
-  // 초안 찾기
-  const draftChat = chats.find((c) => c.is_draft);
-  const draftContent = draftChat?.content;
-
-  // 답변 저장 mutation
+  const { data: chatHistoryData, refetch: refetchHistory } = useChatHistory(questionId);
   const updateAnswerMutation = useUpdateAnswer();
 
-  // AI SDK - 채팅 스트림
-  const {
-    messages,
-    sendMessage,
-    isLoading,
-    status,
-    stop,
-    getMessageMetadata,
-  } = useChatStream({
+  // Derived State
+  const experiences = experiencesData || [];
+  const chats = chatHistoryData?.chats || initialChats;
+  const draftChat = chats.find((c) => c.is_draft);
+
+  // Chat Stream
+  const chat = useChatStream({
     questionId,
-    experienceIds: selectedExperienceIds,
+    experienceIds: store.selectedExperienceIds,
     initialMessages: convertToUIMessages(initialChats),
     onFinish: (message) => {
-      // 스트리밍 완료 시 히스토리 갱신
       refetchHistory();
-
-      // 초안 메시지면 자기소개서 탭으로 자동 전환
-      // (메시지 parts에서 직접 metadata 확인)
-      const dataPart = message.parts.find((p) => p.type === 'data-chat-metadata');
-      if (dataPart && 'data' in dataPart) {
-        const metadata = dataPart.data as { is_draft?: boolean };
-        if (metadata?.is_draft) {
-          setActivePanelTab('DRAFT');
-        }
+      const metadata = extractDraftMetadata(message);
+      if (metadata?.is_draft) {
+        store.setActivePanelTab('DRAFT');
       }
     },
   });
 
-  // 초안 생성 핸들러
-  const handleGenerateDraft = useCallback(() => {
-    if (selectedExperienceIds.length === 0) return;
+  // Handlers
+  const handleGenerateDraft = () => {
+    if (store.selectedExperienceIds.length === 0) return;
+    chat.sendMessage('선택한 경험을 바탕으로 자기소개서 초안을 작성해줘.');
+    store.setActivePanelTab('DRAFT');
+  };
 
-    // 선택한 경험을 바탕으로 초안 생성 요청
-    sendMessage('선택한 경험을 바탕으로 자기소개서 초안을 작성해줘.');
-
-    // 자기소개서 탭으로 전환
-    setActivePanelTab('DRAFT');
-  }, [selectedExperienceIds, sendMessage, setActivePanelTab]);
-
-  // 문항 변경 핸들러
   const handleQuestionChange = (newQuestionId: string) => {
     window.location.href = `/chat/${newQuestionId}`;
   };
 
-  // 메시지에서 자기소개서 업데이트 (chatId 기반)
-  const handleUpdateDraftFromMessage = useCallback(
-    (chatId: string) => {
-      // 해당 메시지의 content 찾기
-      const message = messages.find((m) => {
-        const metadata = getMessageMetadata(m);
-        return metadata?.chat_id === chatId;
-      });
+  const handleUpdateDraftFromMessage = (chatId: string) => {
+    const message = chat.messages.find((m) => {
+      const metadata = chat.getMessageMetadata(m);
+      return metadata?.chat_id === chatId;
+    });
+    if (!message) return;
 
-      if (!message) return;
+    const content = getMessageContent(message);
+    if (content) {
+      updateAnswerMutation.mutate({ chatId, content }, { onSuccess: () => refetchHistory() });
+    }
+  };
 
-      const textPart = message.parts.find((p) => p.type === 'text');
-      const content = textPart && 'text' in textPart ? textPart.text : '';
-
-      if (content) {
-        updateAnswerMutation.mutate(
-          { chatId, content },
-          { onSuccess: () => refetchHistory() }
-        );
-      }
-    },
-    [messages, getMessageMetadata, updateAnswerMutation, refetchHistory]
-  );
-
-  // 사이드바에서 자기소개서 업데이트
-  const handleUpdateDraft = useCallback(() => {
+  const handleUpdateDraft = () => {
     if (!draftChat) return;
-
     updateAnswerMutation.mutate(
       { chatId: draftChat.id, content: draftChat.content },
       { onSuccess: () => refetchHistory() }
     );
-  }, [draftChat, updateAnswerMutation, refetchHistory]);
+  };
 
+  // Render
   return (
     <ChatLayout
       header={<Header />}
@@ -176,32 +155,31 @@ export function ChatPageClient({
       }
       chatArea={
         <ChatMessageList
-          messages={messages}
-          isLoading={isLoading}
-          getMessageMetadata={getMessageMetadata}
+          messages={chat.messages}
+          status={chat.status}
+          getMessageMetadata={chat.getMessageMetadata}
           onUpdateDraft={handleUpdateDraftFromMessage}
         />
       }
       inputArea={
         <ChatInput
-          onSubmit={sendMessage}
-          status={status}
-          onStop={stop}
-          placeholder={`${currentQuestion.question.slice(0, 50)}...에 대해 질문하세요`}
+          onSubmit={chat.sendMessage}
+          status={chat.status}
+          onStop={chat.stop}
         />
       }
       sidePanel={
         <ChatPanel
-          activeTab={activePanelTab}
-          onTabChange={setActivePanelTab}
+          activeTab={store.activePanelTab}
+          onTabChange={store.setActivePanelTab}
           experiences={experiences}
-          selectedExperienceIds={selectedExperienceIds}
-          onSelectExperience={selectExperience}
-          onDeselectExperience={deselectExperience}
+          selectedExperienceIds={store.selectedExperienceIds}
+          onSelectExperience={store.selectExperience}
+          onDeselectExperience={store.deselectExperience}
           onGenerateDraft={handleGenerateDraft}
-          draftContent={draftContent}
+          draftContent={draftChat?.content}
           maxLength={currentQuestion.maxLength}
-          onUpdateDraft={draftContent ? handleUpdateDraft : undefined}
+          onUpdateDraft={draftChat?.content ? handleUpdateDraft : undefined}
         />
       }
     />
