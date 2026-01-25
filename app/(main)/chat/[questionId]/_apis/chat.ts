@@ -19,18 +19,6 @@ export async function getExperiencesServer(): Promise<Experience[]> {
 }
 
 /**
- * 경험 목록 조회 (클라이언트용 - 프록시 API 사용)
- */
-export async function getExperiences(): Promise<Experience[]> {
-  const response = await fetch('/api/experiences');
-  if (!response.ok) {
-    throw new Error('Failed to fetch experiences');
-  }
-  const data: ExperienceListResponse = await response.json();
-  return data.experiences;
-}
-
-/**
  * 답변 업데이트 (초안 → 답변 저장)
  */
 export async function updateAnswer(
