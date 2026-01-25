@@ -1,13 +1,14 @@
 'use client';
 
+import { useChatStore } from '../_store/useChatStore';
+
 interface DraftPanelProps {
-  content?: string;
   maxLength?: number;
-  onUpdate?: () => void;
 }
 
-export function DraftPanel({ content, maxLength }: DraftPanelProps) {
-  const charCount = content?.length || 0;
+export function DraftPanel({ maxLength }: DraftPanelProps) {
+  const draftContent = useChatStore((s) => s.draftContent);
+  const charCount = draftContent?.length || 0;
 
   return (
     <div className="flex-1 flex flex-col gap-8 px-7 pt-5 pb-8 overflow-hidden">
@@ -20,9 +21,9 @@ export function DraftPanel({ content, maxLength }: DraftPanelProps) {
 
       {/* 내용 */}
       <div className="flex-1 overflow-y-auto">
-        {content ? (
+        {draftContent ? (
           <p className="text-body-6-1 text-gray-400 whitespace-pre-wrap">
-            {content}
+            {draftContent}
           </p>
         ) : (
           <p className="text-body-5-5 text-gray-200">

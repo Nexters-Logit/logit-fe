@@ -1,18 +1,16 @@
 'use client';
 
 import { List, FileText } from 'lucide-react';
-import type { PanelTab } from '@/types/chat';
+import { useChatStore } from '../_store/useChatStore';
 
-interface ChatPanelTabsProps {
-  activeTab: PanelTab;
-  onTabChange: (tab: PanelTab) => void;
-}
+export function ChatPanelTabs() {
+  const activeTab = useChatStore((s) => s.activePanelTab);
+  const setActivePanelTab = useChatStore((s) => s.setActivePanelTab);
 
-export function ChatPanelTabs({ activeTab, onTabChange }: ChatPanelTabsProps) {
   return (
     <div className="flex items-center gap-9 px-7 pt-10 shrink-0">
       <button
-        onClick={() => onTabChange('EXPERIENCES')}
+        onClick={() => setActivePanelTab('EXPERIENCES')}
         className={`flex items-center gap-1 transition-colors cursor-pointer ${
           activeTab === 'EXPERIENCES'
             ? 'text-gray-400'
@@ -23,7 +21,7 @@ export function ChatPanelTabs({ activeTab, onTabChange }: ChatPanelTabsProps) {
         <span className="text-body-1">경험 목록</span>
       </button>
       <button
-        onClick={() => onTabChange('DRAFT')}
+        onClick={() => setActivePanelTab('DRAFT')}
         className={`flex items-center gap-1 transition-colors cursor-pointer ${
           activeTab === 'DRAFT'
             ? 'text-gray-400'

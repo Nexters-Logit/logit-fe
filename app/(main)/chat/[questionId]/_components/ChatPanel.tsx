@@ -1,62 +1,30 @@
 'use client';
 
-import type { Experience } from '@/types/api';
-import type { PanelTab } from '@/types/chat';
+import { ReactNode } from 'react';
 import { ChatPanelTabs } from './ChatPanelTabs';
-import { ExperienceList } from './ExperienceList';
+import { ExperienceListShell } from './ExperienceListShell';
 import { DraftPanel } from './DraftPanel';
+import { useChatStore } from '../_store/useChatStore';
 
 interface ChatPanelProps {
-  // 탭 상태
-  activeTab: PanelTab;
-  onTabChange: (tab: PanelTab) => void;
-
-  // 경험 목록
-  experiences: Experience[];
-  selectedExperienceIds: string[];
-  onSelectExperience: (id: string) => void;
-  onDeselectExperience: (id: string) => void;
-  onGenerateDraft: () => void;
-  isGenerating?: boolean;
-
-  // 자기소개서 (초안)
-  draftContent?: string;
   maxLength?: number;
-  onUpdateDraft?: () => void;
+  experienceCards?: ReactNode;
 }
 
-export function ChatPanel({
-  activeTab,
-  onTabChange,
-  experiences,
-  selectedExperienceIds,
-  onSelectExperience,
-  onDeselectExperience,
-  onGenerateDraft,
-  isGenerating,
-  draftContent,
-  maxLength,
-  onUpdateDraft,
-}: ChatPanelProps) {
+export function ChatPanel({ maxLength, experienceCards }: ChatPanelProps) {
+  const activeTab = useChatStore((s) => s.activePanelTab);
+  const storeMaxLength = useChatStore((s) => s.maxLength);
+
+  const effectiveMaxLength = maxLength ?? storeMaxLength;
+
   return (
     <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-      <ChatPanelTabs activeTab={activeTab} onTabChange={onTabChange} />
+      <ChatPanelTabs />
 
       {activeTab === 'EXPERIENCES' ? (
-        <ExperienceList
-          experiences={experiences}
-          selectedIds={selectedExperienceIds}
-          onSelect={onSelectExperience}
-          onDeselect={onDeselectExperience}
-          onGenerateDraft={onGenerateDraft}
-          isLoading={isGenerating}
-        />
+        <ExperienceListShell>{experienceCards}</ExperienceListShell>
       ) : (
-        <DraftPanel
-          content={draftContent}
-          maxLength={maxLength}
-          onUpdate={onUpdateDraft}
-        />
+        <DraftPanel maxLength={effectiveMaxLength} />
       )}
     </div>
   );

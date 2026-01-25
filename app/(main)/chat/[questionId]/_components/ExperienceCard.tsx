@@ -2,44 +2,15 @@
 
 import Image from 'next/image';
 import type { Experience } from '@/types/api';
-
-// ============================================================================
-// Constants
-// ============================================================================
-
-const CATEGORY_CONFIG: Record<string, { bg: string; icon: string; label: string }> = {
-  '고객 가치 지향': { bg: 'bg-icon-bg-1', icon: '/icons/category/icon-1.svg', label: '고객이해력' },
-  '기술적 전문성': { bg: 'bg-icon-bg-2', icon: '/icons/category/icon-2.svg', label: '전문성' },
-  '협력적 소통': { bg: 'bg-icon-bg-3', icon: '/icons/category/icon-3.svg', label: '소통력' },
-  '주도적 실행력': { bg: 'bg-icon-bg-4', icon: '/icons/category/icon-4.svg', label: '실행력' },
-  '논리적 분석력': { bg: 'bg-icon-bg-5', icon: '/icons/category/icon-5.svg', label: '분석력' },
-  '창의적 문제해결': { bg: 'bg-icon-bg-6', icon: '/icons/category/icon-6.svg', label: '문제해결력' },
-  '유연한 적응력': { bg: 'bg-icon-bg-7', icon: '/icons/category/icon-7.svg', label: '적응력' },
-  '끈기있는 책임감': { bg: 'bg-icon-bg-8', icon: '/icons/category/icon-8.svg', label: '책임감' },
-};
-
-const DEFAULT_CATEGORY = CATEGORY_CONFIG['고객 가치 지향'];
-
-// ============================================================================
-// Helpers
-// ============================================================================
-
-function parseTags(tags: string): string[] {
-  if (!tags) return [];
-  try {
-    const parsed = JSON.parse(tags);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return tags.split(',').map((t) => t.trim()).filter(Boolean);
-  }
-}
+import { getCategoryConfig } from '../_constants';
+import { parseTags } from '../_utils';
 
 // ============================================================================
 // Sub Components
 // ============================================================================
 
 function CategoryTag({ category }: { category: string }) {
-  const config = CATEGORY_CONFIG[category] || DEFAULT_CATEGORY;
+  const config = getCategoryConfig(category);
 
   return (
     <div className={`flex items-center gap-1.5 h-6.5 px-1.5 rounded-lg ${config.bg}`}>

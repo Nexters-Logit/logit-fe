@@ -11,6 +11,14 @@ export async function getChatHistory(
 }
 
 /**
+ * 경험 목록 조회 (서버용 - 직접 API 호출)
+ */
+export async function getExperiencesServer(): Promise<Experience[]> {
+  const data = await apiFetch<ExperienceListResponse>(API_ENDPOINTS.experiences);
+  return data.experiences;
+}
+
+/**
  * 경험 목록 조회 (클라이언트용 - 프록시 API 사용)
  */
 export async function getExperiences(): Promise<Experience[]> {
