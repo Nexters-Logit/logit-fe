@@ -84,10 +84,10 @@ export function ChatPageClient({
   const { data: chatHistoryData, refetch: refetchHistory } = useChatHistory(questionId);
   const updateAnswerMutation = useUpdateAnswer();
 
-  // Derived State
+  // Derived State (기본)
   const experiences = experiencesData || [];
   const chats = chatHistoryData?.chats || initialChats;
-  const draftChat = chats.find((c) => c.is_draft);
+  const draftChat = chats.findLast((c) => c.is_draft);
 
   // Chat Stream
   const chat = useChatStream({
@@ -102,6 +102,23 @@ export function ChatPageClient({
       }
     },
   });
+
+  // 스트리밍 메시지에서 최신 draft content 추출 (실시간 반영용)
+  const latestDraftFromStream = (() => {
+    for (let i = chat.messages.length - 1; i >= 0; i--) {
+      const message = chat.messages[i];
+      if (message.role !== 'assistant') continue;
+
+      const metadata = chat.getMessageMetadata(message);
+      if (metadata?.is_draft) {
+        return getMessageContent(message);
+      }
+    }
+    return null;
+  })();
+
+  // 스트리밍 메시지 우선, 없으면 서버 데이터 사용
+  const draftContent = latestDraftFromStream || draftChat?.content;
 
   // Handlers
   const handleGenerateDraft = () => {
@@ -177,7 +194,7 @@ export function ChatPageClient({
           onSelectExperience={store.selectExperience}
           onDeselectExperience={store.deselectExperience}
           onGenerateDraft={handleGenerateDraft}
-          draftContent={draftChat?.content}
+          draftContent={draftContent}
           maxLength={currentQuestion.maxLength}
           onUpdateDraft={draftChat?.content ? handleUpdateDraft : undefined}
         />
