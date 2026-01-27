@@ -12,13 +12,13 @@ export function InitialActionButton() {
     <button
       onClick={() => hasSelection && generateDraft?.()}
       disabled={!hasSelection || !generateDraft}
-      className={`w-full h-11 rounded-3.5 text-body-3-2 transition-colors ${
+      className={`w-full px-6 py-3.5 rounded-3.5 text-body-3-2 text-white transition-colors ${
         hasSelection
-          ? 'bg-primary-100 text-white hover:bg-primary-200 cursor-pointer'
-          : 'bg-gray-100 text-white cursor-not-allowed'
+          ? 'bg-primary-100 hover:bg-primary-200 cursor-pointer'
+          : 'bg-gray-100 cursor-not-allowed'
       }`}
     >
-      경험을 선택해주세요
+      {hasSelection ? '초안 생성하기' : '경험을 선택해주세요'}
     </button>
   );
 }
