@@ -1,17 +1,7 @@
-import { Suspense } from 'react';
-import { getProjects } from './_actions/projects';
-import { HomeClient } from './_components/HomeClient';
-import { ProjectList, ProjectListSkeleton } from './_components/ProjectList';
-
-// 프로젝트 목록 서버 컴포넌트 (async)
-async function ProjectListServer() {
-  const projects = await getProjects().catch((error) => {
-    console.error('Failed to fetch projects:', error);
-    return [];
-  });
-
-  return <ProjectList projects={projects} />;
-}
+import { Suspense } from "react";
+import { HomeClient } from "./_components/HomeClient";
+import { ProjectListServer } from "./_components/ProjectListServer";
+import { ProjectListSkeleton } from "./_components/ProjectListSkeleton";
 
 export default function Home() {
   return (

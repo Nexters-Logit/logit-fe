@@ -12,6 +12,30 @@
 
 ## Code Principles
 
+### 하나의 파일에 하나의 컴포넌트
+
+- 각 `.tsx` 파일에는 **하나의 React 컴포넌트**만 export
+- 서브 컴포넌트는 별도 파일로 분리
+- **예외**: `components/ui/` (shadcn/ui), `components/ai-elements/` (라이브러리 패턴)
+
+```tsx
+// Bad - 한 파일에 여러 컴포넌트
+// ProjectList.tsx
+function ProjectRow() { ... }
+export function ProjectList() { ... }
+export function ProjectListSkeleton() { ... }
+
+// Good - 파일당 하나의 컴포넌트
+// ProjectRow.tsx
+export function ProjectRow() { ... }
+
+// ProjectList.tsx
+export function ProjectList() { ... }
+
+// ProjectListSkeleton.tsx
+export function ProjectListSkeleton() { ... }
+```
+
 ### 사용하지 않는 코드 제거
 
 - 계획이 변경되어 더 이상 필요 없는 코드/파일은 즉시 삭제

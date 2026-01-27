@@ -1,36 +1,9 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import type { Experience } from '@/types/api';
-import { getCategoryConfig } from '../_constants';
-import { parseTags } from '../_utils';
-
-// ============================================================================
-// Sub Components
-// ============================================================================
-
-function CategoryTag({ category }: { category: string }) {
-  const config = getCategoryConfig(category);
-
-  return (
-    <div className={`flex items-center gap-1.5 h-6.5 px-1.5 rounded-lg ${config.bg}`}>
-      <Image src={config.icon} alt="" width={11} height={11} />
-      <span className="text-body-9-3 text-primary-600">{config.label}</span>
-    </div>
-  );
-}
-
-function HashtagBadge({ tag, highlighted }: { tag: string; highlighted: boolean }) {
-  return (
-    <div className={`h-6.5 px-2 rounded-lg ${highlighted ? 'bg-primary-50' : 'bg-gray-20'}`}>
-      <span className="text-body-9-3 text-gray-300">{tag}</span>
-    </div>
-  );
-}
-
-// ============================================================================
-// Main Component
-// ============================================================================
+import type { Experience } from "@/types/api";
+import { parseTags } from "../_utils";
+import { CategoryTag } from "./CategoryTag";
+import { HashtagBadge } from "./HashtagBadge";
 
 interface ExperienceCardProps {
   experience: Experience;
@@ -45,16 +18,16 @@ export function ExperienceCard({
   onToggle,
   disabled,
 }: ExperienceCardProps) {
-  const tags = parseTags(experience.tags || '');
+  const tags = parseTags(experience.tags || "");
   const isDisabled = disabled && !isSelected;
 
   const cardStyles = [
-    'w-full h-24 px-6 py-5 rounded-3.5 border text-left transition-all',
+    "w-full h-24 px-6 py-5 rounded-3.5 border text-left transition-all",
     isSelected
-      ? 'bg-primary-10 border-gray-80 ring-1 ring-primary-300'
-      : 'bg-white border-gray-80 hover:border-gray-100',
-    isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
-  ].join(' ');
+      ? "bg-primary-10 border-gray-80 ring-1 ring-primary-300"
+      : "bg-white border-gray-80 hover:border-gray-100",
+    isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
+  ].join(" ");
 
   return (
     <button onClick={onToggle} disabled={isDisabled} className={cardStyles}>
