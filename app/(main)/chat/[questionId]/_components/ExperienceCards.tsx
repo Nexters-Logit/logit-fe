@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { ExperienceCard } from './ExperienceCard';
-import { useChatStore } from '../_store/useChatStore';
-import { MAX_EXPERIENCE_SELECTION } from '../_constants';
-import type { Experience } from '@/types/api';
+import { ExperienceCard } from "./ExperienceCard";
+import { useChatStore } from "../_store/useChatStore";
+import { MAX_EXPERIENCE_SELECTION } from "../_constants";
+import type { Experience } from "@/types/api";
 
 interface ExperienceCardsProps {
   experiences: Experience[];
@@ -20,7 +20,7 @@ export function ExperienceCards({ experiences }: ExperienceCardsProps) {
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 py-2">
       {experiences.map((exp) => (
         <ExperienceCard
           key={exp.id}
