@@ -148,7 +148,7 @@ export function ChatAreaClient({
 
       {/* 입력 영역 */}
       <div className="shrink-0">
-        {chatHistory.chats.length > 0 ? (
+        {chat.messages.length > 0 ? (
           <ChatInput
             onSubmit={chat.sendMessage}
             status={chat.status}
