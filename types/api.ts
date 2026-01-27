@@ -75,6 +75,13 @@ export interface Project {
   deleted_at?: string | null;
 }
 
+export interface ProjectListItem {
+  id: string;
+  company: string;
+  job_position: string;
+  updated_at: string;
+}
+
 // ============================================================================
 // Question
 // ============================================================================
@@ -127,4 +134,33 @@ export interface ChatRequest {
 export interface UpdateAnswerResponse {
   question_id: string;
   answer: string;
+}
+
+// ============================================================================
+// Create Types
+// ============================================================================
+
+export interface QuestionCreate {
+  question: string;
+  max_length?: number | null;
+}
+
+export interface ProjectCreate {
+  company: string;
+  job_position: string;
+  recruit_notice: string;
+  due_date?: string | null;
+  questions?: QuestionCreate[];
+}
+
+export interface ExperienceCreate {
+  title: string;
+  start_date: string;
+  end_date: string;
+  experience_type: ExperienceType;
+  situation: string;
+  task: string;
+  action: string;
+  result: string;
+  category: ExperienceCategory;
 }
