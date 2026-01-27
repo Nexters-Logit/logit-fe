@@ -80,6 +80,7 @@ export interface ProjectListItem {
   company: string;
   job_position: string;
   updated_at: string;
+  question_id: string;
 }
 
 // ============================================================================

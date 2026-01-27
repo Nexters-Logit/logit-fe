@@ -26,6 +26,8 @@ import type { ChatHistoryItem } from "@/types/api";
 
 interface ChatHistory {
   projectName: string;
+  company: string;
+  jobPosition: string;
   questionText: string;
   chats: ChatHistoryItem[];
   experienceIds: string[];
@@ -124,8 +126,8 @@ export function ChatAreaClient({
       {/* 프로젝트 정보 + 문항 탭 */}
       <div className="flex flex-col gap-5 shrink-0">
         <ChatProjectSummary
-          company={chatHistory.projectName}
-          jobPosition="직무" // TODO: API에서 가져오기
+          company={chatHistory.company}
+          jobPosition={chatHistory.jobPosition}
         />
         <ChatQuestionTabs
           questions={questions}
