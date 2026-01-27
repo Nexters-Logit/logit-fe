@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef, useCallback } from 'react';
 import { useChat, UIMessage } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
 import type { ChatMessageMetadata } from '@/types/chat';
@@ -17,6 +18,8 @@ export function useChatStream({
   initialMessages,
   onFinish,
 }: UseChatStreamOptions) {
+  const lastMessageRef = useRef<string | null>(null);
+
   const { messages, sendMessage, status, error, stop } = useChat({
     id: `chat-${questionId}`,
     messages: initialMessages,
@@ -30,7 +33,16 @@ export function useChatStream({
     onFinish: ({ message }) => onFinish?.(message),
   });
 
-  const send = (text: string) => sendMessage({ text });
+  const send = useCallback((text: string) => {
+    lastMessageRef.current = text;
+    sendMessage({ text });
+  }, [sendMessage]);
+
+  const retry = useCallback(() => {
+    if (lastMessageRef.current) {
+      sendMessage({ text: lastMessageRef.current });
+    }
+  }, [sendMessage]);
 
   const getMessageMetadata = (message: UIMessage): ChatMessageMetadata | undefined => {
     const dataPart = message.parts.find((p) => p.type === 'data-chat-metadata');
@@ -46,6 +58,7 @@ export function useChatStream({
     status,
     error,
     stop,
+    retry,
     getMessageMetadata,
   };
 }
