@@ -103,7 +103,7 @@ export interface QuestionListItem {
 
 export interface ChatHistoryItem {
   id: string;
-  role: 'user' | 'ai';
+  role: 'user' | 'assistant';
   content: string;
   is_draft: boolean;
   created_at: string;
