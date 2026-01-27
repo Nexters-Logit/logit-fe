@@ -1,11 +1,16 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import StatusEmpty from "@/components/StatusEmpty";
 import { Header } from "@/components/common/Header";
-import { TestChatButton } from "./TestChatButton";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselPrevious,
+  CarouselNext,
+} from "@/components/ui/carousel";
 import { useCreateProject, useCreateExperience } from "../_hooks";
 import { getRandomProject, getRandomExperience } from "../_data/dummy";
 
@@ -372,11 +377,11 @@ interface HomeClientProps {
 
 export function HomeClient({ projectListSlot }: HomeClientProps) {
   const router = useRouter();
-  const [showExperiences, setShowExperiences] = useState(true);
 
   const createProject = useCreateProject();
   const createExperience = useCreateExperience();
 
+  // TODO: 모달을 띄워서 사용자 input을 받아 프로젝트 생성 (현재는 더미 데이터로 테스트)
   const handleCreateProject = () => {
     createProject.mutate(getRandomProject(), {
       onSuccess: () => {
@@ -386,6 +391,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
     });
   };
 
+  // TODO: 모달을 띄워서 사용자 input을 받아 경험 등록 (현재는 더미 데이터로 테스트)
   const handleCreateExperience = () => {
     createExperience.mutate(getRandomExperience(), {
       onSuccess: () => {
@@ -406,25 +412,6 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
           어떤 자기소개서를 작성하시겠어요?
         </h1>
 
-        {/* 토글 버튼 (임시) */}
-        <div className="mb-8 flex gap-4">
-          <button
-            onClick={() => setShowExperiences(!showExperiences)}
-            className={`px-4 py-2 rounded-lg text-body-7-3 transition-colors ${
-              showExperiences
-                ? "bg-primary-100 text-white"
-                : "bg-gray-50 text-gray-300"
-            }`}
-          >
-            경험 {showExperiences ? "숨기기" : "보이기"}
-          </button>
-        </div>
-
-        {/* 테스트 채팅 버튼 */}
-        <div className="mb-8">
-          <TestChatButton />
-        </div>
-
         {/* 경험 유형 섹션 */}
         <section className="mb-21.25">
           <SectionHeader
@@ -434,59 +421,31 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
             isPending={createExperience.isPending}
             pendingText="등록 중..."
           />
-          {showExperiences ? (
-            <div className="mt-5 flex items-center gap-7.5">
-              <button className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center hover:bg-gray-70 transition-colors">
-                <svg
-                  width="8"
-                  height="16"
-                  viewBox="0 0 8 16"
-                  fill="none"
-                  className="text-gray-300"
-                >
-                  <path
-                    d="M7 1L1 8L7 15"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-              <div className="flex gap-5 overflow-x-auto">
+          <Carousel
+            opts={{ align: "start" }}
+            className="mt-5"
+          >
+            <div className="flex items-center gap-7.5">
+              <CarouselPrevious
+                className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200"
+              />
+              <CarouselContent className="-ml-5">
                 {experienceTypes.map((type) => (
-                  <ExperienceCard
-                    key={type.id}
-                    title={type.title}
-                    count={type.count}
-                    bgColor={type.bgColor}
-                    illustration={type.illustration}
-                  />
+                  <CarouselItem key={type.id} className="pl-5 basis-auto">
+                    <ExperienceCard
+                      title={type.title}
+                      count={type.count}
+                      bgColor={type.bgColor}
+                      illustration={type.illustration}
+                    />
+                  </CarouselItem>
                 ))}
-              </div>
-              <button className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center hover:bg-gray-70 transition-colors">
-                <svg
-                  width="8"
-                  height="16"
-                  viewBox="0 0 8 16"
-                  fill="none"
-                  className="text-gray-300"
-                >
-                  <path
-                    d="M1 1L7 8L1 15"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
+              </CarouselContent>
+              <CarouselNext
+                className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200"
+              />
             </div>
-          ) : (
-            <div className="mt-5 flex justify-center py-10">
-              <StatusEmpty message="등록된 경험이 없어요" />
-            </div>
-          )}
+          </Carousel>
         </section>
 
         {/* 프로젝트 목록 섹션 */}
