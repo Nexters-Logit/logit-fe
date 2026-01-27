@@ -11,19 +11,16 @@ function formatDate(dateString: string): string {
 interface ProjectRowProps {
   project: ProjectListItem;
   onClick: () => void;
-  isLoading: boolean;
 }
 
-export function ProjectRow({ project, onClick, isLoading }: ProjectRowProps) {
+export function ProjectRow({ project, onClick }: ProjectRowProps) {
   const title = `${project.company} ${project.job_position} 자기소개서`;
   const date = formatDate(project.updated_at);
 
   return (
     <div
       onClick={onClick}
-      className={`flex items-center justify-between py-3.5 border-b border-gray-70 w-full cursor-pointer hover:bg-gray-20 transition-colors ${
-        isLoading ? "opacity-50" : ""
-      }`}
+      className={`flex items-center justify-between py-3.5 border-b border-gray-70 w-full cursor-pointer hover:bg-gray-20 transition-colors`}
     >
       <div className="flex items-center gap-6">
         <div className="w-1.25 h-8 bg-primary-70 rounded-lg" />

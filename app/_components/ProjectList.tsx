@@ -13,11 +13,9 @@ interface ProjectListProps {
 
 export function ProjectList({ projects }: ProjectListProps) {
   const router = useRouter();
-  const [loadingProjectId, setLoadingProjectId] = useState<string | null>(null);
 
   const handleProjectClick = async (projectId: string) => {
     try {
-      setLoadingProjectId(projectId);
       const questions = await getQuestions(projectId);
 
       if (questions.length === 0) {
@@ -29,8 +27,6 @@ export function ProjectList({ projects }: ProjectListProps) {
     } catch (error) {
       console.error("Failed to navigate to chat:", error);
       alert("채팅 페이지로 이동할 수 없습니다.");
-    } finally {
-      setLoadingProjectId(null);
     }
   };
 
@@ -49,7 +45,6 @@ export function ProjectList({ projects }: ProjectListProps) {
           key={project.id}
           project={project}
           onClick={() => handleProjectClick(project.id)}
-          isLoading={loadingProjectId === project.id}
         />
       ))}
     </div>
