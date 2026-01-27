@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import StatusEmpty from '@/components/StatusEmpty';
-import type { ProjectListItem, QuestionListItem } from '@/types/api';
+import { getQuestions } from '@/app/_actions/projects';
+import type { ProjectListItem } from '@/types/api';
 
 // 날짜 포맷 유틸리티
 function formatDate(dateString: string): string {
@@ -12,13 +13,6 @@ function formatDate(dateString: string): string {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}.${month}.${day}`;
-}
-
-// 프로젝트의 문항 목록 조회
-async function fetchQuestions(projectId: string): Promise<QuestionListItem[]> {
-  const response = await fetch(`/api/projects/${projectId}/questions`);
-  if (!response.ok) throw new Error('Failed to fetch questions');
-  return response.json();
 }
 
 function ProjectRow({
@@ -62,7 +56,7 @@ export function ProjectList({ projects }: ProjectListProps) {
   const handleProjectClick = async (projectId: string) => {
     try {
       setLoadingProjectId(projectId);
-      const questions = await fetchQuestions(projectId);
+      const questions = await getQuestions(projectId);
 
       if (questions.length === 0) {
         alert('이 프로젝트에 문항이 없습니다.');

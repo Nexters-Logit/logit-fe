@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { getProjects, getQuestions } from '@/app/_actions/projects';
 
 export function TestChatButton() {
   const router = useRouter();
@@ -14,11 +15,7 @@ export function TestChatButton() {
 
     try {
       // 1. 기존 프로젝트 목록 가져오기
-      const projectsRes = await fetch('/api/projects');
-      if (!projectsRes.ok) {
-        throw new Error('프로젝트 목록을 가져올 수 없습니다');
-      }
-      const projects = await projectsRes.json();
+      const projects = await getProjects();
 
       if (!projects || projects.length === 0) {
         throw new Error('사용 가능한 프로젝트가 없습니다');
@@ -26,11 +23,7 @@ export function TestChatButton() {
 
       // 2. 첫 번째 프로젝트의 문항 가져오기
       const projectId = projects[0].id;
-      const questionsRes = await fetch(`/api/projects/${projectId}/questions`);
-      if (!questionsRes.ok) {
-        throw new Error('문항 목록을 가져올 수 없습니다');
-      }
-      const questions = await questionsRes.json();
+      const questions = await getQuestions(projectId);
 
       if (!questions || questions.length === 0) {
         throw new Error('사용 가능한 문항이 없습니다');
