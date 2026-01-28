@@ -11,25 +11,27 @@
   --font-sans: var(--font-pretendard), system-ui, sans-serif;
 
   /* Primary Colors */
+  --color-primary-10: #eff6ff;
   --color-primary-20: #f5faff;
   --color-primary-50: #e5f0ff;
   --color-primary-70: #8dc9ff;
   --color-primary-100: #40a5ff;
   --color-primary-200: #2571eb;
-  --color-primary-300: #240991;
+  --color-primary-300: #3d83f6;
   --color-primary-400: #6b7684;
   --color-primary-500: #374151;
   --color-primary-600: #333d4b;
 
   /* Gray Scale */
-  --color-gray-20: #f7f9fc;
+  --color-gray-20: #f5f7fa;
   --color-gray-50: #f2f3f7;
   --color-gray-70: #e1e4ed;
+  --color-gray-80: #edeef0;
   --color-gray-100: #bec2d1;
   --color-gray-200: #828699;
   --color-gray-300: #6b6f84;
   --color-gray-400: #262626;
-  --color-gray-black: #17181e;
+  --color-gray-500: #17181e;
 
   /* Icon Colors */
   --color-icon-1: #63dbd5;
@@ -41,8 +43,27 @@
   --color-icon-7: #cf83e6;
   --color-icon-8: #e683be;
 
+  /* Icon Background Colors (light versions) */
+  --color-icon-bg-1: #ebf7f7;
+  --color-icon-bg-2: #e1f6fc;
+  --color-icon-bg-3: #e3f5ff;
+  --color-icon-bg-4: #f2f4ff;
+  --color-icon-bg-5: #f3f2ff;
+  --color-icon-bg-6: #f7f2ff;
+  --color-icon-bg-7: #fcf2ff;
+  --color-icon-bg-8: #fcf2f8;
+
   /* Semantic Colors */
   --color-alert: #ed1728;
+
+  /* Border Radius (Tailwind v4 theme variables) */
+  /* 내장: rounded-lg=8px, rounded-xl=12px, rounded-2xl=16px, rounded-3xl=24px, rounded-4xl=32px */
+  --radius-3\.5: 0.875rem; /* 14px */
+  --radius-5: 1.25rem; /* 20px */
+  --radius-7\.5: 1.875rem; /* 30px */
+
+  /* Box Shadow */
+  --shadow-chat: 0 4px 20px rgba(0, 0, 0, 0.05);
 
   /* Font Sizes */
   --text-headline-1: 32px;
@@ -100,6 +121,12 @@
   letter-spacing: -0.44px;
 }
 
+.text-title-4 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
 .text-body-1 {
   font-size: 20px;
   font-weight: 700;
@@ -135,6 +162,13 @@
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.34px;
+}
+
+.text-body-5 {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.8;
+  letter-spacing: -0.3px;
 }
 
 .text-body-5-1 {
@@ -229,6 +263,12 @@
   font-size: 12px;
   font-weight: 400;
   line-height: 1.4;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
