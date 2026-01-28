@@ -1,7 +1,7 @@
 'use client';
 
 import { List, FileText } from 'lucide-react';
-import { useChatStore } from '../_store/useChatStore';
+import { useChatStore } from '../../_store/useChatStore';
 
 export function ChatPanelTabs() {
   const activeTab = useChatStore((s) => s.activePanelTab);

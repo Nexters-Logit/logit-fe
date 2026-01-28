@@ -1,4 +1,4 @@
-import { getExperiencesServer } from '../_apis/chat';
+import { getExperiencesServer } from '../../_apis/chat';
 import { ExperienceCards } from './ExperienceCards';
 
 export async function ExperienceCardsServer() {

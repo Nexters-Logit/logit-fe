@@ -1,23 +1,23 @@
 "use client";
 
 import { useCallback } from "react";
-import { ChatProjectSummary } from "./ChatProjectSummary";
-import { ChatQuestionTabs } from "./ChatQuestionTabs";
-import { ChatMessageList } from "./ChatMessageList";
-import { ChatInput } from "./ChatInput";
-import { InitialActionButton } from "./InitialActionButton";
-import { useChatStore } from "../_store/useChatStore";
+import { ChatProjectSummary } from "../Layout/ChatProjectSummary";
+import { ChatQuestionTabs } from "../Layout/ChatQuestionTabs";
+import { ChatMessageList } from "../ChatMessage/ChatMessageList";
+import { ChatInput } from "../ChatInput/ChatInput";
+import { InitialActionButton } from "../ChatInput/InitialActionButton";
+import { useChatStore } from "../../_store/useChatStore";
 import {
   useChatStream,
   useUpdateAnswer,
   useDraftContent,
   useSyncChatStore,
-} from "../_hooks";
+} from "../../_hooks";
 import {
   convertToUIMessages,
   extractDraftMetadata,
   getMessageContent,
-} from "../_utils";
+} from "../../_utils";
 import type { ChatHistoryItem } from "@/types/api";
 
 // ============================================================================

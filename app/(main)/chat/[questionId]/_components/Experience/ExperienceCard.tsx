@@ -1,7 +1,7 @@
 "use client";
 
 import type { Experience } from "@/types/api";
-import { parseTags } from "../_utils";
+import { parseTags } from "../../_utils";
 import { CategoryTag } from "./CategoryTag";
 import { HashtagBadge } from "./HashtagBadge";
 

@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react';
 import { ChatPanel } from './ChatPanel';
-import { useChatStore } from '../_store/useChatStore';
+import { useChatStore } from '../../_store/useChatStore';
 
 interface SidePanelClientProps {
   experienceCards: ReactNode;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useChatStore } from '../_store/useChatStore';
+import { useChatStore } from '../../_store/useChatStore';
 
 interface DraftPanelProps {
   maxLength?: number;

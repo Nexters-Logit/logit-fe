@@ -1,5 +1,5 @@
-import { getChatHistory, getProjectAndQuestionInfo } from '../_apis/chat';
-import { validateChatHistory } from '../_utils';
+import { getChatHistory, getProjectAndQuestionInfo } from '../../_apis/chat';
+import { validateChatHistory } from '../../_utils';
 import { ChatAreaClient } from './ChatAreaClient';
 
 interface ChatAreaServerProps {

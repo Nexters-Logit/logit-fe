@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getCategoryConfig } from "../_constants";
+import { getCategoryConfig } from "../../_constants";
 
 interface CategoryTagProps {
   category: string;

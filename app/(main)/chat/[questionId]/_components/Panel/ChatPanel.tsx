@@ -2,9 +2,9 @@
 
 import { ReactNode } from 'react';
 import { ChatPanelTabs } from './ChatPanelTabs';
-import { ExperienceListShell } from './ExperienceListShell';
+import { ExperienceListShell } from '../Experience/ExperienceListShell';
 import { DraftPanel } from './DraftPanel';
-import { useChatStore } from '../_store/useChatStore';
+import { useChatStore } from '../../_store/useChatStore';
 
 interface ChatPanelProps {
   maxLength?: number;

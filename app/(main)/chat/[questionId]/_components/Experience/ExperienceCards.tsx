@@ -1,8 +1,8 @@
 "use client";
 
 import { ExperienceCard } from "./ExperienceCard";
-import { useChatStore } from "../_store/useChatStore";
-import { MAX_EXPERIENCE_SELECTION } from "../_constants";
+import { useChatStore } from "../../_store/useChatStore";
+import { MAX_EXPERIENCE_SELECTION } from "../../_constants";
 import type { Experience } from "@/types/api";
 
 interface ExperienceCardsProps {
