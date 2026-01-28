@@ -7,6 +7,7 @@ import { HashtagBadge } from "./HashtagBadge";
 
 interface ExperienceCardProps {
   experience: Experience;
+  similarityScore: number;
   isSelected: boolean;
   onToggle: () => void;
   disabled?: boolean;
@@ -14,11 +15,13 @@ interface ExperienceCardProps {
 
 export function ExperienceCard({
   experience,
+  similarityScore,
   isSelected,
   onToggle,
   disabled,
 }: ExperienceCardProps) {
   const tags = parseTags(experience.tags || "");
+  const scorePercent = Math.round(similarityScore * 100);
   const isDisabled = disabled && !isSelected;
 
   const cardStyles = [
@@ -36,7 +39,7 @@ export function ExperienceCard({
           <h4 className="text-body-4 text-primary-500 flex-1 truncate">
             {experience.title}
           </h4>
-          <span className="text-body-8-1 text-primary-200 shrink-0">98점</span>
+          <span className="text-body-8-1 text-primary-200 shrink-0">{scorePercent}점</span>
         </div>
         <div className="flex items-center gap-1.5 flex-wrap">
           <CategoryTag category={experience.category} />

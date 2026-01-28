@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { Header } from "@/components/common/Header";
 import {
@@ -10,8 +10,9 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "@/components/ui/carousel";
-import { useCreateProject, useCreateExperience } from "../_hooks";
-import { getRandomProject, getRandomExperience } from "../_data/dummy";
+import { useCreateProject } from "../_hooks";
+import { getRandomProject, DUMMY_EXPERIENCES } from "../_data/dummy";
+import { createExperience } from "../_actions/experiences";
 import { ExperienceCard } from "./ExperienceCard";
 import { SectionHeader } from "./SectionHeader";
 import { DesignTokensTest } from "./DesignTokensTest";
@@ -53,9 +54,9 @@ interface HomeClientProps {
 
 export function HomeClient({ projectListSlot }: HomeClientProps) {
   const router = useRouter();
+  const [isCreatingExperiences, setIsCreatingExperiences] = useState(false);
 
   const createProject = useCreateProject();
-  const createExperience = useCreateExperience();
 
   // TODO: 모달을 띄워서 사용자 input을 받아 프로젝트 생성 (현재는 더미 데이터로 테스트)
   const handleCreateProject = () => {
@@ -67,16 +68,19 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
     });
   };
 
-  // TODO: 모달을 띄워서 사용자 input을 받아 경험 등록 (현재는 더미 데이터로 테스트)
-  const handleCreateExperience = () => {
-    createExperience.mutate(getRandomExperience(), {
-      onSuccess: () => {
-        alert("경험이 등록되었습니다.");
-      },
-      onError: () => {
-        alert("에러발생");
-      },
-    });
+  // 모든 더미 경험을 병렬로 등록
+  const handleCreateExperience = async () => {
+    setIsCreatingExperiences(true);
+    try {
+      const results = await Promise.all(
+        DUMMY_EXPERIENCES.map((exp) => createExperience(exp))
+      );
+      alert(`${results.length}개의 경험이 등록되었습니다.`);
+    } catch {
+      alert("경험 등록 중 에러가 발생했습니다.");
+    } finally {
+      setIsCreatingExperiences(false);
+    }
   };
 
   return (
@@ -94,7 +98,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
             title="경험 유형"
             buttonText="경험 등록"
             onClick={handleCreateExperience}
-            isPending={createExperience.isPending}
+            isPending={isCreatingExperiences}
             pendingText="등록 중..."
           />
           <Carousel opts={{ align: "start" }} className="mt-5">

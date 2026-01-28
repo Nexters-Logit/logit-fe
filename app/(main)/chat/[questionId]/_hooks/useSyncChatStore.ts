@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useChatStore } from '../_store/useChatStore';
 import type { Experience } from '@/types/api';
 
@@ -8,6 +8,7 @@ interface UseSyncChatStoreOptions {
   experiences?: Experience[];
   draftContent?: string | null;
   generateDraft?: () => void;
+  initialExperienceIds?: string[];
 }
 
 /**
@@ -18,10 +19,23 @@ export function useSyncChatStore({
   experiences,
   draftContent,
   generateDraft,
+  initialExperienceIds,
 }: UseSyncChatStoreOptions) {
   const setExperiences = useChatStore((s) => s.setExperiences);
   const setDraftContent = useChatStore((s) => s.setDraftContent);
   const setGenerateDraft = useChatStore((s) => s.setGenerateDraft);
+  const setSelectedExperienceIds = useChatStore(
+    (s) => s.setSelectedExperienceIds
+  );
+
+  // 초기 experienceIds는 마운트 시 한 번만 설정
+  const isInitialized = useRef(false);
+  useEffect(() => {
+    if (!isInitialized.current && initialExperienceIds !== undefined) {
+      setSelectedExperienceIds(initialExperienceIds);
+      isInitialized.current = true;
+    }
+  }, [initialExperienceIds, setSelectedExperienceIds]);
 
   useEffect(() => {
     if (experiences !== undefined) {

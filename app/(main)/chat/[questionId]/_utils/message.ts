@@ -9,7 +9,13 @@ export function convertToUIMessages(chats: ChatHistoryItem[]): UIMessage[] {
   return chats.map((chat) => ({
     id: chat.id,
     role: chat.role as 'user' | 'assistant',
-    parts: [{ type: 'text' as const, text: chat.content }],
+    parts: [
+      { type: 'text' as const, text: chat.content },
+      {
+        type: 'data-chat-metadata' as const,
+        data: { chat_id: chat.id, is_draft: chat.is_draft },
+      },
+    ],
     createdAt: new Date(chat.created_at),
   }));
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useCallback } from 'react';
+import { useRef } from 'react';
 import { useChat, UIMessage } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
 import type { ChatMessageMetadata } from '@/types/chat';
@@ -25,24 +25,36 @@ export function useChatStream({
     messages: initialMessages,
     transport: new DefaultChatTransport({
       api: '/api/chat',
-      body: {
-        question_id: questionId,
-        experience_ids: experienceIds.length > 0 ? experienceIds : null,
-      },
     }),
     onFinish: ({ message }) => onFinish?.(message),
   });
 
-  const send = useCallback((text: string) => {
+  const send = (text: string) => {
     lastMessageRef.current = text;
-    sendMessage({ text });
-  }, [sendMessage]);
+    sendMessage(
+      { text },
+      {
+        body: {
+          question_id: questionId,
+          experience_ids: experienceIds.length > 0 ? experienceIds : null,
+        },
+      }
+    );
+  };
 
-  const retry = useCallback(() => {
+  const retry = () => {
     if (lastMessageRef.current) {
-      sendMessage({ text: lastMessageRef.current });
+      sendMessage(
+        { text: lastMessageRef.current },
+        {
+          body: {
+            question_id: questionId,
+            experience_ids: experienceIds.length > 0 ? experienceIds : null,
+          },
+        }
+      );
     }
-  }, [sendMessage]);
+  };
 
   const getMessageMetadata = (message: UIMessage): ChatMessageMetadata | undefined => {
     const dataPart = message.parts.find((p) => p.type === 'data-chat-metadata');
