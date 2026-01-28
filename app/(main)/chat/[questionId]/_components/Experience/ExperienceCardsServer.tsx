@@ -1,11 +1,19 @@
-import { getExperiencesServer } from '../../_apis/chat';
+import { getMatchedExperiences } from '../../_apis/chat';
 import { ExperienceCards } from './ExperienceCards';
 
-export async function ExperienceCardsServer() {
-  const experiences = await getExperiencesServer().catch((error) => {
-    console.error('Failed to fetch experiences:', error);
-    return [];
-  });
+interface ExperienceCardsServerProps {
+  questionId: string;
+}
 
-  return <ExperienceCards experiences={experiences} />;
+export async function ExperienceCardsServer({
+  questionId,
+}: ExperienceCardsServerProps) {
+  const matchedExperiences = await getMatchedExperiences(questionId).catch(
+    (error) => {
+      console.error('Failed to fetch matched experiences:', error);
+      return [];
+    }
+  );
+
+  return <ExperienceCards matchedExperiences={matchedExperiences} />;
 }

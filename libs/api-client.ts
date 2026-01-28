@@ -87,7 +87,8 @@ export const API_ENDPOINTS = {
   experiences: '/api/v1/experiences',
   experienceSearch: (q: string) =>
     `/api/v1/experiences/search?q=${encodeURIComponent(q)}`,
-
+  matchQuestion: (questionId: string) =>
+    `/api/v1/experiences/match-question/${questionId}`,
   // Projects & Questions
   projects: '/api/v1/projects/',
   project: (id: string) => `/api/v1/projects/${id}`,
