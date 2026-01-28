@@ -3,30 +3,31 @@
 import { ExperienceCard } from "./ExperienceCard";
 import { useChatStore } from "../../_store/useChatStore";
 import { MAX_EXPERIENCE_SELECTION } from "../../_constants";
-import type { Experience } from "@/types/api";
+import type { MatchedExperience } from "@/types/api";
 
 interface ExperienceCardsProps {
-  experiences: Experience[];
+  matchedExperiences: MatchedExperience[];
 }
 
-export function ExperienceCards({ experiences }: ExperienceCardsProps) {
+export function ExperienceCards({ matchedExperiences }: ExperienceCardsProps) {
   const selectedIds = useChatStore((s) => s.selectedExperienceIds);
   const toggleExperience = useChatStore((s) => s.toggleExperience);
 
   const canSelectMore = selectedIds.length < MAX_EXPERIENCE_SELECTION;
 
-  if (experiences.length === 0) {
+  if (matchedExperiences.length === 0) {
     return null;
   }
 
   return (
     <div className="flex flex-col gap-3 py-2">
-      {experiences.map((exp) => (
+      {matchedExperiences.map(({ experience, similarity_score }) => (
         <ExperienceCard
-          key={exp.id}
-          experience={exp}
-          isSelected={selectedIds.includes(exp.id)}
-          onToggle={() => toggleExperience(exp.id)}
+          key={experience.id}
+          experience={experience}
+          similarityScore={similarity_score}
+          isSelected={selectedIds.includes(experience.id)}
+          onToggle={() => toggleExperience(experience.id)}
           disabled={!canSelectMore}
         />
       ))}
