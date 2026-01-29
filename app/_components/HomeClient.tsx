@@ -2,7 +2,6 @@
 
 import { useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { Header } from "@/components/common/Header";
 import {
   Carousel,
   CarouselContent,
@@ -84,10 +83,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-
-      <main className="max-w-276 mx-auto pt-10 pb-25">
+    <main className="max-w-276 mx-auto pt-10 pb-25 flex-1 overflow-y-auto">
         <h1 className="text-headline-1 text-gray-400 mb-16">
           어떤 자기소개서를 작성하시겠어요?
         </h1>
@@ -135,7 +131,6 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
 
         {/* 디자인 토큰 테스트 섹션 */}
         <DesignTokensTest />
-      </main>
-    </div>
+    </main>
   );
 }
