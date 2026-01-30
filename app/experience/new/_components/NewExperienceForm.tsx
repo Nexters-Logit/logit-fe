@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useImperativeHandle, forwardRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -41,12 +41,22 @@ interface NewExperienceFormProps {
   onStepChange?: (step: 1 | 2) => void;
 }
 
-export function NewExperienceForm({
-  onSubmit,
-  onCancel,
-  isPending = false,
-  onStepChange,
-}: NewExperienceFormProps) {
+export interface NewExperienceFormRef {
+  fillWithExample: (data: ExperienceCreate) => void;
+}
+
+/** ExperienceCreate의 날짜(YYYY-MM-DD)를 폼 형식(YYYY.MM.DD)으로 변환 */
+function toFormDate(date: string): string {
+  return date ? date.replace(/-/g, ".") : "";
+}
+
+export const NewExperienceForm = forwardRef<
+  NewExperienceFormRef,
+  NewExperienceFormProps
+>(function NewExperienceForm(
+  { onSubmit, onCancel, isPending = false, onStepChange },
+  ref,
+) {
   const [step, setStep] = useState<1 | 2>(1);
   const [hasAttemptedStep2Submit, setHasAttemptedStep2Submit] = useState(false);
 
@@ -59,6 +69,7 @@ export function NewExperienceForm({
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<ExperienceFormValues>({
     resolver: zodResolver(experienceFormSchema),
@@ -75,7 +86,25 @@ export function NewExperienceForm({
     },
   });
 
-  const handleNext = () => {
+  useImperativeHandle(ref, () => ({
+    fillWithExample(data: ExperienceCreate) {
+      reset({
+        title: data.title,
+        start_date: toFormDate(data.start_date),
+        end_date: toFormDate(data.end_date),
+        experience_type: data.experience_type,
+        category: data.category,
+        situation: data.situation,
+        task: data.task,
+        action: data.action,
+        result: data.result,
+      });
+    },
+  }));
+
+  const handleNext = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
     goToStep(2);
   };
 
@@ -382,4 +411,4 @@ export function NewExperienceForm({
       </div>
     </form>
   );
-}
+});
