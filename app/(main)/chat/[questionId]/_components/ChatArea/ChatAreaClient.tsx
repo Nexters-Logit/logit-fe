@@ -138,6 +138,7 @@ export function ChatAreaClient({
           onQuestionChange={handleQuestionChange}
         />
       </div>
+      <h1 className="text-title-3 text-gray-400">{currentQuestion.question}</h1>
 
       {/* 채팅 메시지 영역 */}
       <div className="flex-1 min-h-0 overflow-hidden">
