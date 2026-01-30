@@ -19,7 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 const experienceFormSchema = z.object({
   title: z.string().min(1, "제목을 입력해주세요"),
@@ -188,76 +187,74 @@ export function NewExperienceForm({
           </div>
 
           {/* 경험 유형 & 카테고리 */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2">
-              <label
-                htmlFor="experience_type"
-                className="text-body-7-2 text-gray-400"
-              >
-                경험 유형
-              </label>
-              <Controller
-                name="experience_type"
-                control={control}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger
-                      id="experience_type"
-                      className="h-11 w-full text-body-5-4"
-                      aria-invalid={!!errors.experience_type}
-                    >
-                      <SelectValue placeholder="선택해주세요" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.entries(EXPERIENCE_TYPE).map(([key, value]) => (
-                        <SelectItem key={key} value={value}>
-                          {value}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-              {errors.experience_type && (
-                <p className="text-body-9-3 text-alert">
-                  {errors.experience_type.message}
-                </p>
+
+          <div className="flex flex-col gap-2">
+            <label
+              htmlFor="experience_type"
+              className="text-body-7-2 text-gray-400"
+            >
+              경험의 종류<span className="text-alert">*</span>
+            </label>
+            <Controller
+              name="experience_type"
+              control={control}
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger
+                    id="experience_type"
+                    className="h-11 w-full text-body-5-4"
+                    aria-invalid={!!errors.experience_type}
+                  >
+                    <SelectValue placeholder="선택해주세요" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(EXPERIENCE_TYPE).map(([key, value]) => (
+                      <SelectItem key={key} value={value}>
+                        {value}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               )}
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="category" className="text-body-7-2 text-gray-400">
-                카테고리
-              </label>
-              <Controller
-                name="category"
-                control={control}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger
-                      id="category"
-                      className="h-11 w-full text-body-5-4"
-                      aria-invalid={!!errors.category}
-                    >
-                      <SelectValue placeholder="선택해주세요" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.entries(EXPERIENCE_CATEGORY).map(
-                        ([key, value]) => (
-                          <SelectItem key={key} value={value}>
-                            {value}
-                          </SelectItem>
-                        ),
-                      )}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-              {errors.category && (
-                <p className="text-body-9-3 text-alert">
-                  {errors.category.message}
-                </p>
+            />
+            {errors.experience_type && (
+              <p className="text-body-9-3 text-alert">
+                {errors.experience_type.message}
+              </p>
+            )}
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="category" className="text-body-7-2 text-gray-400">
+              작성하신 내용과 적합한 경험 유형을 선택해주세요
+              <span className="text-alert">*</span>
+            </label>
+            <Controller
+              name="category"
+              control={control}
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger
+                    id="category"
+                    className="h-11 w-full text-body-5-4"
+                    aria-invalid={!!errors.category}
+                  >
+                    <SelectValue placeholder="선택해주세요" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(EXPERIENCE_CATEGORY).map(([key, value]) => (
+                      <SelectItem key={key} value={value}>
+                        {value}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               )}
-            </div>
+            />
+            {errors.category && (
+              <p className="text-body-9-3 text-alert">
+                {errors.category.message}
+              </p>
+            )}
           </div>
         </div>
       )}
@@ -348,8 +345,8 @@ export function NewExperienceForm({
       )}
 
       {/* 버튼 영역 */}
-      <div className="-mx-8 mt-8 flex items-center justify-between border-t border-gray-70 bg-gray-20 px-8 py-5">
-        <div>
+      <div className="-mx-8 mt-8 flex items-center justify-center px-8 py-5">
+        {/* <div>
           {step === 2 ? (
             <Button
               type="button"
@@ -372,16 +369,16 @@ export function NewExperienceForm({
               취소
             </Button>
           )}
-        </div>
+        </div> */}
         <div>
           {step === 1 ? (
             <Button
               type="button"
               onClick={handleNext}
-              className="h-11 gap-2 px-5 text-body-5-2"
+              className="h-11 gap-2 px-5 text-body-5-2 text-white"
             >
-              다음
-              <ChevronRightIcon className="size-4" />
+              다음으로
+              {/* <ChevronRightIcon className="size-4" /> */}
             </Button>
           ) : (
             <Button
