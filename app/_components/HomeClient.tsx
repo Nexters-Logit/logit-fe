@@ -10,8 +10,8 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "@/components/ui/carousel";
-import { useCreateProject, useCreateExperience } from "../_hooks";
-import { getRandomProject, getRandomExperience } from "../_data/dummy";
+import { useCreateProject } from "../_hooks";
+import { getRandomProject } from "../_data/dummy";
 import { ExperienceCard } from "./ExperienceCard";
 import { SectionHeader } from "./SectionHeader";
 import { DesignTokensTest } from "./DesignTokensTest";
@@ -55,7 +55,6 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
   const router = useRouter();
 
   const createProject = useCreateProject();
-  const createExperience = useCreateExperience();
 
   // TODO: 모달을 띄워서 사용자 input을 받아 프로젝트 생성 (현재는 더미 데이터로 테스트)
   const handleCreateProject = () => {
@@ -67,16 +66,8 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
     });
   };
 
-  // TODO: 모달을 띄워서 사용자 input을 받아 경험 등록 (현재는 더미 데이터로 테스트)
   const handleCreateExperience = () => {
-    createExperience.mutate(getRandomExperience(), {
-      onSuccess: () => {
-        alert("경험이 등록되었습니다.");
-      },
-      onError: () => {
-        alert("에러발생");
-      },
-    });
+    router.push("/experience/new");
   };
 
   return (
@@ -94,13 +85,14 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
             title="경험 유형"
             buttonText="경험 등록"
             onClick={handleCreateExperience}
-            isPending={createExperience.isPending}
-            pendingText="등록 중..."
           />
-          <Carousel opts={{ align: "start" }} className="mt-5">
-            <div className="flex items-center gap-7.5">
+          <Carousel
+            opts={{ align: "start" }}
+            className="mt-5 w-[1244px] ml-[-70px]"
+          >
+            <div className="flex items-center gap-7.5 ">
               <CarouselPrevious className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200" />
-              <CarouselContent className="-ml-5">
+              <CarouselContent className="-ml-5 ">
                 {experienceTypes.map((type) => (
                   <CarouselItem key={type.id} className="pl-5 basis-auto">
                     <ExperienceCard
