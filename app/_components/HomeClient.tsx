@@ -10,8 +10,6 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "@/components/ui/carousel";
-import { useCreateProject } from "../_hooks";
-import { getRandomProject } from "../_data/dummy";
 import { ExperienceCard } from "./ExperienceCard";
 import { SectionHeader } from "./SectionHeader";
 import { DesignTokensTest } from "./DesignTokensTest";
@@ -54,16 +52,8 @@ interface HomeClientProps {
 export function HomeClient({ projectListSlot }: HomeClientProps) {
   const router = useRouter();
 
-  const createProject = useCreateProject();
-
-  // TODO: 모달을 띄워서 사용자 input을 받아 프로젝트 생성 (현재는 더미 데이터로 테스트)
   const handleCreateProject = () => {
-    createProject.mutate(getRandomProject(), {
-      onSuccess: () => {
-        alert("프로젝트가 생성되었습니다.");
-        router.refresh();
-      },
-    });
+    router.push("/project/new");
   };
 
   const handleCreateExperience = () => {
@@ -115,8 +105,6 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
             title="프로젝트 목록"
             buttonText="프로젝트 생성"
             onClick={handleCreateProject}
-            isPending={createProject.isPending}
-            pendingText="생성 중..."
           />
           {projectListSlot}
         </section>

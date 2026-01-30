@@ -157,7 +157,8 @@ export function NewExperienceForm({
               </span>
               <div className="flex flex-col gap-2 flex-1">
                 <label className="text-body-7-2 text-gray-400">
-                  종료 날짜<span className="text-alert">*</span>
+                  종료 날짜
+                  <span className="text-gray-200 text-body-7-2">(선택)</span>
                 </label>
 
                 <Controller

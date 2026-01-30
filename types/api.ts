@@ -150,6 +150,7 @@ export interface ProjectCreate {
   company: string;
   job_position: string;
   recruit_notice: string;
+  ideal_candidate_profile?: string | null;
   due_date?: string | null;
   questions?: QuestionCreate[];
 }
