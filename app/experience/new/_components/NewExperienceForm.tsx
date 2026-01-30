@@ -48,6 +48,7 @@ export function NewExperienceForm({
   onStepChange,
 }: NewExperienceFormProps) {
   const [step, setStep] = useState<1 | 2>(1);
+  const [hasAttemptedStep2Submit, setHasAttemptedStep2Submit] = useState(false);
 
   const goToStep = (newStep: 1 | 2) => {
     setStep(newStep);
@@ -275,7 +276,7 @@ export function NewExperienceForm({
               aria-invalid={!!errors.situation}
               {...register("situation")}
             />
-            {errors.situation && (
+            {hasAttemptedStep2Submit && errors.situation && (
               <p className="text-body-9-3 text-alert">
                 {errors.situation.message}
               </p>
@@ -285,7 +286,8 @@ export function NewExperienceForm({
           {/* 과제 */}
           <div className="flex flex-col gap-2">
             <label htmlFor="task" className="text-body-7-2 text-gray-400">
-              Task (과제/목표)를 입력해주세요*
+              Task (과제/목표)를 입력해주세요
+              <span className="text-alert">*</span>
             </label>
             <Textarea
               id="task"
@@ -294,7 +296,7 @@ export function NewExperienceForm({
               aria-invalid={!!errors.task}
               {...register("task")}
             />
-            {errors.task && (
+            {hasAttemptedStep2Submit && errors.task && (
               <p className="text-body-9-3 text-alert">{errors.task.message}</p>
             )}
           </div>
@@ -302,7 +304,7 @@ export function NewExperienceForm({
           {/* 행동 */}
           <div className="flex flex-col gap-2">
             <label htmlFor="action" className="text-body-7-2 text-gray-400">
-              Action (행동)을 입력해주세요*
+              Action (행동)을 입력해주세요<span className="text-alert">*</span>
             </label>
             <Textarea
               id="action"
@@ -311,7 +313,7 @@ export function NewExperienceForm({
               aria-invalid={!!errors.action}
               {...register("action")}
             />
-            {errors.action && (
+            {hasAttemptedStep2Submit && errors.action && (
               <p className="text-body-9-3 text-alert">
                 {errors.action.message}
               </p>
@@ -321,7 +323,7 @@ export function NewExperienceForm({
           {/* 결과 */}
           <div className="flex flex-col gap-2">
             <label htmlFor="result" className="text-body-7-2 text-gray-400">
-              Result (결과)를 입력해주세요*
+              Result (결과)를 입력해주세요<span className="text-alert">*</span>
             </label>
             <Textarea
               id="result"
@@ -330,7 +332,7 @@ export function NewExperienceForm({
               aria-invalid={!!errors.result}
               {...register("result")}
             />
-            {errors.result && (
+            {hasAttemptedStep2Submit && errors.result && (
               <p className="text-body-9-3 text-alert">
                 {errors.result.message}
               </p>
@@ -368,6 +370,7 @@ export function NewExperienceForm({
             <Button
               type="submit"
               disabled={isPending}
+              onClick={() => setHasAttemptedStep2Submit(true)}
               //TODO: 버튼 텍스트 font-color 사이 클래스명 충돌 존재
               className="h-11 px-6 text-body-5-2 text-white"
             >
