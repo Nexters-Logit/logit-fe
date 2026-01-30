@@ -12,3 +12,7 @@ export async function createExperience(data: ExperienceCreate) {
     body: JSON.stringify(data),
   });
 }
+
+export async function getMatchQuestion(questionId: string) {
+  return apiFetch(API_ENDPOINTS.matchQuestion(questionId));
+}

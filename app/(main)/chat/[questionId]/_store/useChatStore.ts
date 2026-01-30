@@ -10,6 +10,7 @@ interface ChatStore {
 
   // 경험 선택 (최대 3개)
   selectedExperienceIds: string[];
+  setSelectedExperienceIds: (ids: string[]) => void;
   selectExperience: (id: string) => void;
   deselectExperience: (id: string) => void;
   toggleExperience: (id: string) => void;
@@ -39,6 +40,9 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
   // 경험 선택 상태
   selectedExperienceIds: [],
+
+  setSelectedExperienceIds: (ids) =>
+    set({ selectedExperienceIds: ids.slice(0, MAX_EXPERIENCE_SELECTION) }),
 
   selectExperience: (id) =>
     set((state) => {

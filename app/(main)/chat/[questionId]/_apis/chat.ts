@@ -1,8 +1,8 @@
 import { apiFetch, API_ENDPOINTS } from '@/libs/api-client';
 import type {
   ChatHistoryResponse,
-  Experience,
-  ExperienceListResponse,
+  MatchedExperience,
+  MatchedExperienceResponse,
   ProjectListItem,
   QuestionListItem,
 } from '@/types/api';
@@ -17,10 +17,14 @@ export async function getChatHistory(
 }
 
 /**
- * 경험 목록 조회 (서버용 - 직접 API 호출)
+ * 문항과 매칭되는 경험 목록 조회 (서버용)
  */
-export async function getExperiencesServer(): Promise<Experience[]> {
-  const data = await apiFetch<ExperienceListResponse>(API_ENDPOINTS.experiences);
+export async function getMatchedExperiences(
+  questionId: string
+): Promise<MatchedExperience[]> {
+  const data = await apiFetch<MatchedExperienceResponse>(
+    API_ENDPOINTS.matchQuestion(questionId)
+  );
   return data.experiences;
 }
 

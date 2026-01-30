@@ -59,6 +59,16 @@ export interface ExperienceListResponse {
   offset: number;
 }
 
+export interface MatchedExperience {
+  experience: Experience;
+  similarity_score: number;
+}
+
+export interface MatchedExperienceResponse {
+  experiences: MatchedExperience[];
+  total: number;
+}
+
 // ============================================================================
 // Project
 // ============================================================================

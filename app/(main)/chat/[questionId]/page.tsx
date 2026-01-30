@@ -28,7 +28,7 @@ export default async function ChatPage({ params }: ChatPageProps) {
         <SidePanelClient
           experienceCards={
             <Suspense fallback={<ExperienceCardsSkeleton />}>
-              <ExperienceCardsServer />
+              <ExperienceCardsServer questionId={questionId} />
             </Suspense>
           }
         />

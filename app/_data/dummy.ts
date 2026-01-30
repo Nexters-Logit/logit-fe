@@ -150,18 +150,10 @@ export const DUMMY_EXPERIENCES: ExperienceCreate[] = [
 
 // 순차적으로 더미 데이터 선택하는 카운터
 let projectCounter = 0;
-let experienceCounter = 0;
 
 // 순차적으로 더미 데이터 선택 (매번 다른 데이터 반환)
 export function getRandomProject(): ProjectCreate {
   const project = DUMMY_PROJECTS[projectCounter % DUMMY_PROJECTS.length];
   projectCounter++;
   return project;
-}
-
-export function getRandomExperience(): ExperienceCreate {
-  const experience =
-    DUMMY_EXPERIENCES[experienceCounter % DUMMY_EXPERIENCES.length];
-  experienceCounter++;
-  return experience;
 }

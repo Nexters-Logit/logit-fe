@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback } from "react";
 import { ChatProjectSummary } from "../Layout/ChatProjectSummary";
 import { ChatQuestionTabs } from "../Layout/ChatQuestionTabs";
 import { ChatMessageList } from "../ChatMessage/ChatMessageList";
@@ -86,16 +85,17 @@ export function ChatAreaClient({
   });
 
   // Generate Draft Handler
-  const handleGenerateDraft = useCallback(() => {
+  const handleGenerateDraft = () => {
     if (selectedExperienceIds.length === 0) return;
     chat.sendMessage("선택한 경험을 바탕으로 자기소개서 초안을 작성해줘.");
     setActivePanelTab("DRAFT");
-  }, [selectedExperienceIds, chat, setActivePanelTab]);
+  };
 
   // Store 동기화
   useSyncChatStore({
     draftContent,
     generateDraft: handleGenerateDraft,
+    initialExperienceIds: chatHistory.experienceIds,
   });
 
   // maxLength 동기화
