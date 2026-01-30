@@ -262,18 +262,16 @@ export function NewExperienceForm({
       {/* 2페이지: STAR */}
       {step === 2 && (
         <div className="flex flex-col gap-5">
-          <h3 className="text-title-4 text-gray-400">경험 상세 (STAR)</h3>
-
           {/* 상황 */}
           <div className="flex flex-col gap-2">
             <label htmlFor="situation" className="text-body-7-2 text-gray-400">
-              상황 (Situation)
+              Situation (상황)을 입력해주세요
+              <span className="text-alert">*</span>
             </label>
             <Textarea
               id="situation"
-              placeholder="어떤 상황이었나요?"
-              rows={3}
-              className="min-h-24 resize-none text-body-5-4"
+              placeholder="구체적인 상황 정보 (언제, 어디서, 누구와, 어떻게 등) 처음 보는 사람도 이해할 수 있도록 작성해주세요)"
+              rows={2}
               aria-invalid={!!errors.situation}
               {...register("situation")}
             />
@@ -287,13 +285,12 @@ export function NewExperienceForm({
           {/* 과제 */}
           <div className="flex flex-col gap-2">
             <label htmlFor="task" className="text-body-7-2 text-gray-400">
-              과제 (Task)
+              Task (과제/목표)를 입력해주세요*
             </label>
             <Textarea
               id="task"
-              placeholder="어떤 과제가 있었나요?"
-              rows={3}
-              className="min-h-24 resize-none text-body-5-4"
+              placeholder="인식한 과제와 목표에 대해 작성해주세요"
+              rows={2}
               aria-invalid={!!errors.task}
               {...register("task")}
             />
@@ -305,13 +302,12 @@ export function NewExperienceForm({
           {/* 행동 */}
           <div className="flex flex-col gap-2">
             <label htmlFor="action" className="text-body-7-2 text-gray-400">
-              행동 (Action)
+              Action (행동)을 입력해주세요*
             </label>
             <Textarea
               id="action"
-              placeholder="어떤 행동을 취했나요?"
-              rows={3}
-              className="min-h-24 resize-none text-body-5-4"
+              placeholder="과제 해결 또는 목푣 달성을 위한 구체적 행동과 이유를 작성해주세요"
+              rows={2}
               aria-invalid={!!errors.action}
               {...register("action")}
             />
@@ -325,13 +321,12 @@ export function NewExperienceForm({
           {/* 결과 */}
           <div className="flex flex-col gap-2">
             <label htmlFor="result" className="text-body-7-2 text-gray-400">
-              결과 (Result)
+              Result (결과)를 입력해주세요*
             </label>
             <Textarea
               id="result"
-              placeholder="어떤 결과를 얻었나요?"
-              rows={3}
-              className="min-h-24 resize-none text-body-5-4"
+              placeholder="경험(행동)의 결과와 그로 인해 배운 점과 아쉬운 점 등을 작성해주세요"
+              rows={2}
               aria-invalid={!!errors.result}
               {...register("result")}
             />
@@ -345,31 +340,20 @@ export function NewExperienceForm({
       )}
 
       {/* 버튼 영역 */}
-      <div className="-mx-8 mt-8 flex items-center justify-center px-8 py-5">
-        {/* <div>
-          {step === 2 ? (
+      <div className="-mx-8 flex items-center justify-center px-8 py-5 gap-4 mt-3">
+        <div>
+          {step === 2 && (
             <Button
               type="button"
-              variant="primary"
+              variant="secondary"
               onClick={handlePrev}
               disabled={isPending}
-              className="h-11 gap-2 px-5 text-body-5-2"
+              className="h-11 gap-2 px-5 text-body-5-2 text-primary-200"
             >
-              <ChevronLeftIcon className="size-4" />
-              이전
-            </Button>
-          ) : (
-            <Button
-              type="button"
-              variant="primary"
-              onClick={onCancel}
-              disabled={isPending}
-              className="h-11 px-5 text-body-5-2"
-            >
-              취소
+              이전으로
             </Button>
           )}
-        </div> */}
+        </div>
         <div>
           {step === 1 ? (
             <Button
@@ -384,9 +368,10 @@ export function NewExperienceForm({
             <Button
               type="submit"
               disabled={isPending}
-              className="h-11 px-6 text-body-5-2"
+              //TODO: 버튼 텍스트 font-color 사이 클래스명 충돌 존재
+              className="h-11 px-6 text-body-5-2 text-white"
             >
-              {isPending ? "등록 중..." : "등록"}
+              {isPending ? "등록 중..." : "경험 등록하기"}
             </Button>
           )}
         </div>

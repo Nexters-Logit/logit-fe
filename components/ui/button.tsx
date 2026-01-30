@@ -5,12 +5,12 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/libs/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-body-3-2 font-semibold transition-all disabled:pointer-events-none disabled:bg-gray-100 disabled:text-white [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-2 aria-invalid:ring-destructive/20 aria-invalid:border-alert cursor-pointer w-[165px] h-[44px]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap font-semibold transition-all disabled:pointer-events-none disabled:bg-gray-100 disabled:text-white [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-2 aria-invalid:ring-destructive/20 aria-invalid:border-alert cursor-pointer w-[165px] h-[44px] rounded-3.5",
   {
     variants: {
       variant: {
-        primary: "bg-primary-100 text-white rounded-3.5 ",
-        secondary: "bg-primary -20 text-primary-200",
+        primary: "bg-primary-100 text-white",
+        secondary: "bg-primary-50 text-primary-200",
         tertiary: "bg-primary-50 text-gray-300",
       },
       size: {
@@ -45,7 +45,10 @@ function Button({
       data-slot="button"
       data-variant={variant}
       data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(
+        "text-body-3-2",
+        buttonVariants({ variant, size, className }),
+      )}
       {...props}
     />
   );
