@@ -14,8 +14,14 @@ import { useCreateExperience } from "@/app/_hooks/useCreateExperience";
 import type { ExperienceCreate } from "@/types/api";
 
 const STEP_TITLES = {
-  1: { title: "새 경험 등록", description: "기본 정보를 입력해주세요." },
-  2: { title: "경험 상세 작성", description: "STAR 방식으로 경험을 구체적으로 작성해주세요." },
+  1: {
+    title: "새 경험 등록",
+    description: "등록하는 경험의 정보를 알려주세요.",
+  },
+  2: {
+    title: "경험 상세 작성",
+    description: "STAR 방식으로 경험을 구체적으로 작성해주세요.",
+  },
 } as const;
 
 export default function NewExperiencePage() {
@@ -54,19 +60,27 @@ export default function NewExperiencePage() {
         onEscapeKeyDown={() => router.back()}
       >
         {/* 헤더 */}
-        <div className="shrink-0 border-b border-gray-70 px-8 pt-6 pb-5">
+        <div className="shrink-0 px-8 pt-6 pb-7 gap-1.5">
           <DialogHeader>
-            <DialogTitle className="text-title-3 text-gray-400">
+            <p className="text-body-7-2 text-primary-400 font-semibold">
+              {step}/2
+            </p>
+            <DialogTitle className="text-title-2-2 text-gray-400">
               {title}
             </DialogTitle>
-            <DialogDescription className="mt-1 text-body-5-4 text-gray-200">
-              {description}
-            </DialogDescription>
+            <div className="flex justify-between items-center">
+              <DialogDescription className="text-body-7-2 text-primary-400">
+                {description}
+              </DialogDescription>
+              <button className="rounded-lg px-3.5 py-0.5 text-body-7-3 text-primary-400 border border-gray-70 bg-gray-20 cursor-pointer">
+                예시 불러오기
+              </button>
+            </div>
           </DialogHeader>
         </div>
 
         {/* 컨텐츠 */}
-        <div className="flex-1 overflow-y-auto px-8 py-6">
+        <div className="flex-1 overflow-y-auto px-8 pb-6">
           <NewExperienceForm
             onSubmit={handleSubmit}
             onCancel={() => router.back()}

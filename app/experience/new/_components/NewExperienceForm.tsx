@@ -83,9 +83,21 @@ export function NewExperienceForm({
     goToStep(1);
   };
 
+  const formatDateInput = (value: string) => {
+    const digits = value.replace(/\D/g, "").slice(0, 8);
+    if (digits.length <= 4) return digits;
+    if (digits.length <= 6) return `${digits.slice(0, 4)}.${digits.slice(4)}`;
+    return `${digits.slice(0, 4)}.${digits.slice(4, 6)}.${digits.slice(6)}`;
+  };
+
+  const normalizeDate = (date: string) =>
+    date ? date.replace(/\./g, "-") : date;
+
   const handleFormSubmit = (data: ExperienceFormValues) => {
     onSubmit({
       ...data,
+      start_date: normalizeDate(data.start_date),
+      end_date: normalizeDate(data.end_date),
       experience_type:
         data.experience_type as ExperienceCreate["experience_type"],
       category: data.category as ExperienceCreate["category"],
@@ -94,42 +106,17 @@ export function NewExperienceForm({
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col">
-      {/* 스텝 인디케이터 */}
-      <div className="mb-6 flex items-center gap-2">
-        <div
-          className={`flex h-8 w-8 items-center justify-center rounded-full text-body-7-2 ${
-            step >= 1 ? "bg-primary-100 text-white" : "bg-gray-70 text-gray-200"
-          }`}
-        >
-          1
-        </div>
-        <div
-          className={`h-0.5 w-12 rounded-full ${
-            step >= 2 ? "bg-primary-100" : "bg-gray-70"
-          }`}
-        />
-        <div
-          className={`flex h-8 w-8 items-center justify-center rounded-full text-body-7-2 ${
-            step >= 2 ? "bg-primary-100 text-white" : "bg-gray-70 text-gray-200"
-          }`}
-        >
-          2
-        </div>
-      </div>
-
       {/* 1페이지: 기본정보 */}
       {step === 1 && (
         <div className="flex flex-col gap-5">
-          <h3 className="text-title-4 text-gray-400">기본 정보</h3>
-
           {/* 제목 */}
           <div className="flex flex-col gap-2">
             <label htmlFor="title" className="text-body-7-2 text-gray-400">
-              제목
+              경험 제목<span className="text-alert">*</span>
             </label>
             <Input
               id="title"
-              placeholder="경험 제목을 입력해주세요"
+              placeholder="예 ) 로짓 데이터 분석을 통한 이탈율 개선"
               className="h-11 text-body-5-4"
               aria-invalid={!!errors.title}
               {...register("title")}
@@ -141,22 +128,58 @@ export function NewExperienceForm({
 
           {/* 기간 */}
           <div className="flex flex-col gap-2">
-            <label className="text-body-7-2 text-gray-400">기간</label>
-            <div className="flex items-center gap-3">
-              <Input
-                type="date"
-                className="h-11 flex-1 text-body-5-4"
-                aria-invalid={!!errors.start_date}
-                {...register("start_date")}
-              />
-              <span className="text-body-5-4 text-gray-200">~</span>
-              <Input
-                type="date"
-                className="h-11 flex-1 text-body-5-4"
-                aria-invalid={!!errors.end_date}
-                {...register("end_date")}
-              />
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex flex-col gap-2 flex-1">
+                <label className="text-body-7-2 text-gray-400">
+                  시작 날짜<span className="text-alert">*</span>
+                </label>
+
+                <Controller
+                  name="start_date"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      type="text"
+                      placeholder="YYYY.MM.DD"
+                      className="h-11 flex-1 text-body-5-4"
+                      aria-invalid={!!errors.start_date}
+                      {...field}
+                      value={field.value}
+                      onChange={(e) =>
+                        field.onChange(formatDateInput(e.target.value))
+                      }
+                    />
+                  )}
+                />
+              </div>
+              <span className="text-body-5-4 text-gray-200 relative top-3">
+                ~
+              </span>
+              <div className="flex flex-col gap-2 flex-1">
+                <label className="text-body-7-2 text-gray-400">
+                  종료 날짜<span className="text-alert">*</span>
+                </label>
+
+                <Controller
+                  name="end_date"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      type="text"
+                      placeholder="YYYY.MM.DD"
+                      className="h-11 flex-1 text-body-5-4"
+                      aria-invalid={!!errors.end_date}
+                      {...field}
+                      value={field.value}
+                      onChange={(e) =>
+                        field.onChange(formatDateInput(e.target.value))
+                      }
+                    />
+                  )}
+                />
+              </div>
             </div>
+
             {(errors.start_date || errors.end_date) && (
               <p className="text-body-9-3 text-alert">
                 {errors.start_date?.message ?? errors.end_date?.message}
@@ -330,7 +353,7 @@ export function NewExperienceForm({
           {step === 2 ? (
             <Button
               type="button"
-              variant="outline"
+              variant="primary"
               onClick={handlePrev}
               disabled={isPending}
               className="h-11 gap-2 px-5 text-body-5-2"
@@ -341,7 +364,7 @@ export function NewExperienceForm({
           ) : (
             <Button
               type="button"
-              variant="outline"
+              variant="primary"
               onClick={onCancel}
               disabled={isPending}
               className="h-11 px-5 text-body-5-2"
