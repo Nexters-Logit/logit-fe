@@ -120,9 +120,6 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
           />
           {projectListSlot}
         </section>
-
-        {/* 디자인 토큰 테스트 섹션 */}
-        <DesignTokensTest />
       </main>
     </div>
   );

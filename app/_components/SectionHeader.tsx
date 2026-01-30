@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 interface SectionHeaderProps {
   title: string;
   buttonText: string;
@@ -16,13 +17,13 @@ export function SectionHeader({
   return (
     <div className="flex items-center justify-between w-full">
       <h2 className="text-title-2-2 text-gray-400">{title}</h2>
-      <button
+      <Button
         onClick={onClick}
         disabled={isPending}
-        className="bg-primary-100 text-white text-body-3-2 px-6 py-3.5 rounded-3.5 h-11 flex items-center justify-center disabled:opacity-50"
+        // className="bg-primary-100 text-white w-[165px] text-body-3-2 px-6 py-3.5 rounded-3.5 h-11 flex items-center justify-center disabled:opacity-50"
       >
         {isPending ? pendingText : buttonText}
-      </button>
+      </Button>
     </div>
   );
 }
