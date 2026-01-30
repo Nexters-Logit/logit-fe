@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense } from "react";
 import {
   ChatPageShell,
   ChatAreaServer,
@@ -6,7 +6,7 @@ import {
   ExperienceCardsServer,
   ExperienceCardsSkeleton,
   SidePanelClient,
-} from './_components';
+} from "./_components";
 
 interface ChatPageProps {
   params: Promise<{

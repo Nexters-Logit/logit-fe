@@ -61,50 +61,52 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
   };
 
   return (
-    <main className="max-w-276 mx-auto pt-10 pb-25 flex-1 overflow-y-auto">
-      <h1 className="text-headline-1 text-gray-400 mb-16">
-        어떤 자기소개서를 작성하시겠어요?
-      </h1>
+    <main className="w-full mx-auto pt-10 pb-25 flex-1 overflow-y-auto scrollbar-hide">
+      <div className="max-w-267 mx-auto">
+        <h1 className="text-headline-1 text-gray-400 mb-16">
+          어떤 자기소개서를 작성하시겠어요?
+        </h1>
 
-      {/* 경험 유형 섹션 */}
-      <section className="mb-21.25">
-        <SectionHeader
-          title="경험 유형"
-          buttonText="경험 등록"
-          onClick={handleCreateExperience}
-        />
-        <Carousel
-          opts={{ align: "start" }}
-          className="mt-5 w-[1244px] ml-[-70px]"
-        >
-          <div className="flex items-center gap-7.5 ">
-            <CarouselPrevious className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200" />
-            <CarouselContent className="-ml-5 ">
-              {experienceTypes.map((type) => (
-                <CarouselItem key={type.id} className="pl-5 basis-auto">
-                  <ExperienceCard
-                    title={type.title}
-                    count={type.count}
-                    bgColor={type.bgColor}
-                    illustration={type.illustration}
-                  />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselNext className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200" />
-          </div>
-        </Carousel>
-      </section>
+        {/* 경험 유형 섹션 */}
+        <section className="mb-21.25">
+          <SectionHeader
+            title="경험 유형"
+            buttonText="경험 등록"
+            onClick={handleCreateExperience}
+          />
+          <Carousel
+            opts={{ align: "start" }}
+            className="mt-5 w-[1244px] ml-[-70px]"
+          >
+            <div className="flex items-center gap-7.5 ">
+              <CarouselPrevious className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200" />
+              <CarouselContent className="-ml-5 ">
+                {experienceTypes.map((type) => (
+                  <CarouselItem key={type.id} className="pl-5 basis-auto">
+                    <ExperienceCard
+                      title={type.title}
+                      count={type.count}
+                      bgColor={type.bgColor}
+                      illustration={type.illustration}
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselNext className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200" />
+            </div>
+          </Carousel>
+        </section>
 
-      {/* 프로젝트 목록 섹션 */}
-      <section>
-        <SectionHeader
-          title="프로젝트 목록"
-          buttonText="프로젝트 생성"
-          onClick={handleCreateProject}
-        />
-        {projectListSlot}
-      </section>
+        {/* 프로젝트 목록 섹션 */}
+        <section>
+          <SectionHeader
+            title="프로젝트 목록"
+            buttonText="프로젝트 생성"
+            onClick={handleCreateProject}
+          />
+          {projectListSlot}
+        </section>
+      </div>
     </main>
   );
 }
