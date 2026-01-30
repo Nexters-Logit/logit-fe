@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import type { ProjectCreate, QuestionCreate } from "@/types/api";
@@ -13,7 +13,8 @@ const projectFormSchema = z.object({
   company: z.string().min(1, "회사명을 입력해주세요"),
   job_position: z.string().min(1, "직무를 입력해주세요"),
   recruit_notice: z.string().min(1, "채용 공고를 입력해주세요"),
-  ideal_candidate_profile: z.string().optional(),
+  company_talent: z.string().optional(),
+  due_date: z.string().optional(),
   questions: z.array(
     z.object({
       question: z.string(),
@@ -56,7 +57,8 @@ export function NewProjectForm({
       company: "",
       job_position: "",
       recruit_notice: "",
-      ideal_candidate_profile: "",
+      company_talent: "",
+      due_date: "",
       questions: [{ question: "", max_length: null }],
     },
   });
@@ -67,6 +69,11 @@ export function NewProjectForm({
   });
 
   const handleFormSubmit = (data: ProjectFormValues) => {
+    if (step === 1) {
+      goToStep(2);
+      return;
+    }
+
     const questions: QuestionCreate[] = data.questions
       .filter((q) => q.question.trim())
       .map((q) => ({
@@ -79,9 +86,10 @@ export function NewProjectForm({
       company: data.company,
       job_position: data.job_position,
       recruit_notice: data.recruit_notice,
-      ideal_candidate_profile: data.ideal_candidate_profile?.trim()
-        ? data.ideal_candidate_profile
-        : null,
+      company_talent: data.company_talent?.trim()
+        ? data.company_talent
+        : undefined,
+
       questions: questions.length > 0 ? questions : undefined,
     });
   };
@@ -153,14 +161,17 @@ export function NewProjectForm({
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="due_date" className="text-body-7-2 text-gray-400">
+            <label
+              htmlFor="company_talent"
+              className="text-body-7-2 text-gray-400"
+            >
               기업의 인재상을 입력해주세요
             </label>
             <Input
               id="ideal_candidate_profile"
               placeholder="공식 홈페이지의 '인재상'이나 '핵심 가치' 를 입력해주세요."
               className="h-11 text-body-5-4"
-              {...register("ideal_candidate_profile")}
+              {...register("company_talent")}
             />
           </div>
         </div>
@@ -234,7 +245,11 @@ export function NewProjectForm({
           {step === 1 ? (
             <Button
               type="button"
-              onClick={() => goToStep(2)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                goToStep(2);
+              }}
               className="h-11 gap-2 px-5 text-body-5-2 text-white"
             >
               다음으로
