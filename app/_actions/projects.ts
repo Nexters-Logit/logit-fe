@@ -5,9 +5,17 @@ import type { ProjectCreate, ProjectListItem, QuestionListItem } from '@/types/a
 
 /**
  * 프로젝트 목록 조회
+ * @param skip - 건너뛸 항목 수 (페이지네이션)
+ * @param limit - 최대 반환 항목 수
  */
-export async function getProjects(): Promise<ProjectListItem[]> {
-  return apiFetch<ProjectListItem[]>(API_ENDPOINTS.projects);
+export async function getProjects(params?: {
+  skip?: number;
+  limit?: number;
+}): Promise<ProjectListItem[]> {
+  const endpoint = params
+    ? API_ENDPOINTS.projectsList(params)
+    : API_ENDPOINTS.projects;
+  return apiFetch<ProjectListItem[]>(endpoint);
 }
 
 /**

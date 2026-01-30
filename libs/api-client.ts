@@ -90,6 +90,13 @@ export const API_ENDPOINTS = {
 
   // Projects & Questions
   projects: '/api/v1/projects/',
+  projectsList: (params: { skip?: number; limit?: number }) => {
+    const searchParams = new URLSearchParams();
+    if (params.skip !== undefined) searchParams.set('skip', String(params.skip));
+    if (params.limit !== undefined) searchParams.set('limit', String(params.limit));
+    const query = searchParams.toString();
+    return `/api/v1/projects/${query ? `?${query}` : ''}`;
+  },
   project: (id: string) => `/api/v1/projects/${id}`,
   questions: (projectId: string) =>
     `/api/v1/projects/${projectId}/questions/`,
