@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { ChatProjectSummary } from "../Layout/ChatProjectSummary";
 import { ChatQuestionTabs } from "../Layout/ChatQuestionTabs";
 import { ChatMessageList } from "../ChatMessage/ChatMessageList";
@@ -98,8 +99,10 @@ export function ChatAreaClient({
     initialExperienceIds: chatHistory.experienceIds,
   });
 
-  // maxLength 동기화
-  setMaxLength(currentQuestion.maxLength);
+  // maxLength 동기화 (렌더 중 setState 방지)
+  useEffect(() => {
+    setMaxLength(currentQuestion.maxLength);
+  }, [currentQuestion.maxLength, setMaxLength]);
 
   // Handlers
   const questions = [currentQuestion];
@@ -135,6 +138,7 @@ export function ChatAreaClient({
           onQuestionChange={handleQuestionChange}
         />
       </div>
+      <h1 className="text-title-3 text-gray-400">{currentQuestion.question}</h1>
 
       {/* 채팅 메시지 영역 */}
       <div className="flex-1 min-h-0 overflow-hidden">
