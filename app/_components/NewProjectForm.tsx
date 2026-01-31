@@ -216,6 +216,7 @@ export function NewProjectForm({
             ))}
 
             <Button
+              type="button"
               variant="tertiary"
               className="w-full text-gray-200"
               onClick={() => append({ question: "", max_length: null })}
