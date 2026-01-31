@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { Header } from '@/components/common/Header';
-import { Button } from '@/components/ui/button';
-import { AlertCircle, RefreshCw } from 'lucide-react';
+import { useEffect } from "react";
+import { Header } from "@/components/common/Header";
+import { Button } from "@/components/ui/button";
+import { AlertCircle, RefreshCw } from "lucide-react";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -12,13 +12,11 @@ interface ErrorProps {
 
 export default function ChatError({ error, reset }: ErrorProps) {
   useEffect(() => {
-    console.error('[Chat Page Error]', error);
+    console.error("[Chat Page Error]", error);
   }, [error]);
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      <Header />
-
       <main className="flex-1 flex items-center justify-center p-7.5">
         <div className="text-center max-w-md">
           <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-red-50 flex items-center justify-center">
