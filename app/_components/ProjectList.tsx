@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import StatusEmpty from "@/components/StatusEmpty";
-import { getQuestions } from "@/app/_actions/projects";
 import type { ProjectListItem } from "@/types/api";
 import { ProjectRow } from "./ProjectRow";
 
@@ -14,20 +12,8 @@ interface ProjectListProps {
 export function ProjectList({ projects }: ProjectListProps) {
   const router = useRouter();
 
-  const handleProjectClick = async (projectId: string) => {
-    try {
-      const questions = await getQuestions(projectId);
-
-      if (questions.length === 0) {
-        alert("이 프로젝트에 문항이 없습니다.");
-        return;
-      }
-
-      router.push(`/chat/${questions[0].id}`);
-    } catch (error) {
-      console.error("Failed to navigate to chat:", error);
-      alert("채팅 페이지로 이동할 수 없습니다.");
-    }
+  const handleProjectClick = (projectId: string, questionId: string) => {
+    router.push(`/chat/${projectId}/${questionId}`);
   };
 
   if (projects.length === 0) {
@@ -44,7 +30,7 @@ export function ProjectList({ projects }: ProjectListProps) {
         <ProjectRow
           key={project.id}
           project={project}
-          onClick={() => handleProjectClick(project.id)}
+          onClick={() => handleProjectClick(project.id, project.question_id)}
         />
       ))}
     </div>

@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import { ChatProjectSummary } from "../Layout/ChatProjectSummary";
-import { ChatQuestionTabs } from "../Layout/ChatQuestionTabs";
 import { ChatMessageList } from "../ChatMessage/ChatMessageList";
 import { ChatInput } from "../ChatInput/ChatInput";
 import { InitialActionButton } from "../ChatInput/InitialActionButton";
 import { useChatStore } from "../../_store/useChatStore";
+import { useProjectContext } from "../../_context";
 import {
   useChatStream,
   useUpdateAnswer,
@@ -26,23 +25,14 @@ import type { ChatHistoryItem } from "@/types/api";
 
 interface ChatHistory {
   projectName: string;
-  company: string;
-  jobPosition: string;
   questionText: string;
   chats: ChatHistoryItem[];
   experienceIds: string[];
 }
 
-interface QuestionInfo {
-  id: string;
-  question: string;
-  maxLength: number;
-}
-
 interface ChatAreaClientProps {
   questionId: string;
   chatHistory: ChatHistory;
-  currentQuestion: QuestionInfo;
 }
 
 // ============================================================================
@@ -52,8 +42,10 @@ interface ChatAreaClientProps {
 export function ChatAreaClient({
   questionId,
   chatHistory,
-  currentQuestion,
 }: ChatAreaClientProps) {
+  // Context (layout에서 fetch한 데이터)
+  const { questions } = useProjectContext();
+
   // Store
   const selectedExperienceIds = useChatStore((s) => s.selectedExperienceIds);
   const setActivePanelTab = useChatStore((s) => s.setActivePanelTab);
@@ -100,16 +92,12 @@ export function ChatAreaClient({
   });
 
   // maxLength 동기화 (렌더 중 setState 방지)
+  const currentQuestion = questions.find((q) => q.id === questionId);
+  const maxLength = currentQuestion?.max_length ?? 1000;
+
   useEffect(() => {
-    setMaxLength(currentQuestion.maxLength);
-  }, [currentQuestion.maxLength, setMaxLength]);
-
-  // Handlers
-  const questions = [currentQuestion];
-
-  const handleQuestionChange = (newQuestionId: string) => {
-    window.location.href = `/chat/${newQuestionId}`;
-  };
+    setMaxLength(maxLength);
+  }, [maxLength, setMaxLength]);
 
   const handleUpdateDraftFromMessage = (chatId: string) => {
     const message = chat.messages.find((m) => {
@@ -126,20 +114,6 @@ export function ChatAreaClient({
 
   return (
     <>
-      {/* 프로젝트 정보 + 문항 탭 */}
-      <div className="flex flex-col gap-5 shrink-0">
-        <ChatProjectSummary
-          company={chatHistory.company}
-          jobPosition={chatHistory.jobPosition}
-        />
-        <ChatQuestionTabs
-          questions={questions}
-          activeQuestionId={questionId}
-          onQuestionChange={handleQuestionChange}
-        />
-      </div>
-      <h1 className="text-title-3 text-gray-400">{currentQuestion.question}</h1>
-
       {/* 채팅 메시지 영역 */}
       <div className="flex-1 min-h-0 overflow-hidden">
         <ChatMessageList
