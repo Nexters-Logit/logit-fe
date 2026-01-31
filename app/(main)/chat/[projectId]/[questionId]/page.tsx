@@ -1,15 +1,17 @@
 import { Suspense } from "react";
 import {
   ChatPageShell,
+  ChatHeader,
   ChatAreaServer,
   ChatAreaSkeleton,
   ExperienceCardsServer,
   ExperienceCardsSkeleton,
   SidePanelClient,
-} from "./_components";
+} from "../_components";
 
 interface ChatPageProps {
   params: Promise<{
+    projectId: string;
     questionId: string;
   }>;
 }
@@ -19,6 +21,7 @@ export default async function ChatPage({ params }: ChatPageProps) {
 
   return (
     <ChatPageShell
+      header={<ChatHeader />}
       chatArea={
         <Suspense fallback={<ChatAreaSkeleton />}>
           <ChatAreaServer questionId={questionId} />
