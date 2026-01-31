@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
 import {
   Carousel,
   CarouselContent,
@@ -11,7 +10,8 @@ import {
 } from "@/components/ui/carousel";
 import { ExperienceCard } from "./ExperienceCard";
 import { SectionHeader } from "./SectionHeader";
-import { DesignTokensTest } from "./DesignTokensTest";
+import { NewProjectModal } from "./NewProjectModal";
+import { NewExperienceModal } from "./NewExperienceModal";
 
 const experienceTypes = [
   {
@@ -49,16 +49,8 @@ interface HomeClientProps {
 }
 
 export function HomeClient({ projectListSlot }: HomeClientProps) {
-  const router = useRouter();
-  const [isCreatingExperiences, setIsCreatingExperiences] = useState(false);
-
-  const handleCreateProject = () => {
-    router.push("/project/new");
-  };
-
-  const handleCreateExperience = () => {
-    router.push("/experience/new");
-  };
+  const [isProjectModalOpen, setProjectModalOpen] = useState(false);
+  const [isExperienceModalOpen, setExperienceModalOpen] = useState(false);
 
   return (
     <main className="w-full mx-auto pt-10 pb-25 flex-1 overflow-y-auto scrollbar-hide">
@@ -72,14 +64,14 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
           <SectionHeader
             title="경험 유형"
             buttonText="경험 등록"
-            onClick={handleCreateExperience}
+            onClick={() => setExperienceModalOpen(true)}
           />
           <Carousel
             opts={{ align: "start" }}
             className="mt-5 w-[1244px] ml-[-70px]"
           >
             <div className="flex items-center gap-7.5 ">
-              <CarouselPrevious className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200" />
+              <CarouselPrevious className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200 cursor-pointer" />
               <CarouselContent className="-ml-5 ">
                 {experienceTypes.map((type) => (
                   <CarouselItem key={type.id} className="pl-5 basis-auto">
@@ -92,7 +84,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselNext className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200" />
+              <CarouselNext className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200 cursor-pointer" />
             </div>
           </Carousel>
         </section>
@@ -102,11 +94,20 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
           <SectionHeader
             title="프로젝트 목록"
             buttonText="프로젝트 생성"
-            onClick={handleCreateProject}
+            onClick={() => setProjectModalOpen(true)}
           />
           {projectListSlot}
         </section>
       </div>
+
+      <NewProjectModal
+        open={isProjectModalOpen}
+        onOpenChange={setProjectModalOpen}
+      />
+      <NewExperienceModal
+        open={isExperienceModalOpen}
+        onOpenChange={setExperienceModalOpen}
+      />
     </main>
   );
 }

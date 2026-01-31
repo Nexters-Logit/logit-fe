@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -12,11 +11,10 @@ import {
 import {
   NewExperienceForm,
   type NewExperienceFormRef,
-} from "./_components/NewExperienceForm";
+} from "./NewExperienceForm";
 import { useCreateExperience } from "@/app/_hooks/useCreateExperience";
 import type { ExperienceCreate } from "@/types/api";
 
-/** 예시 불러오기용 데이터 (필요 시 수정) */
 const EXAMPLE_EXPERIENCE: ExperienceCreate = {
   title: "주식회사 로짓 컴퍼니",
   start_date: "2025-01-01",
@@ -43,25 +41,30 @@ const STEP_TITLES = {
   },
 } as const;
 
-export default function NewExperiencePage() {
-  const router = useRouter();
+interface NewExperienceModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function NewExperienceModal({
+  open,
+  onOpenChange,
+}: NewExperienceModalProps) {
   const createExperience = useCreateExperience();
   const formRef = useRef<NewExperienceFormRef>(null);
   const [step, setStep] = useState<1 | 2>(1);
   const { title, description } = STEP_TITLES[step];
 
-  const handleOpenChange = (open: boolean) => {
-    if (!open) {
-      router.back();
-    }
+  const handleClose = () => {
+    onOpenChange(false);
+    setStep(1);
   };
 
   const handleSubmit = (data: ExperienceCreate) => {
     createExperience.mutate(data, {
       onSuccess: () => {
         alert("경험이 등록되었습니다.");
-        router.back();
-        router.refresh();
+        handleClose();
       },
       onError: () => {
         alert("등록 중 오류가 발생했습니다.");
@@ -70,14 +73,14 @@ export default function NewExperiencePage() {
   };
 
   return (
-    <Dialog open onOpenChange={handleOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className="flex max-h-[90vh] flex-col overflow-hidden rounded-2xl border-0 p-0 shadow-chat sm:max-w-2xl"
         onPointerDownOutside={(e) => {
           e.preventDefault();
-          router.back();
+          handleClose();
         }}
-        onEscapeKeyDown={() => router.back()}
+        onEscapeKeyDown={handleClose}
       >
         {/* 헤더 */}
         <div className="shrink-0 px-8 pt-6 pb-7 gap-1.5">
@@ -110,7 +113,7 @@ export default function NewExperiencePage() {
           <NewExperienceForm
             ref={formRef}
             onSubmit={handleSubmit}
-            onCancel={() => router.back()}
+            onCancel={handleClose}
             isPending={createExperience.isPending}
             onStepChange={setStep}
           />

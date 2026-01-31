@@ -394,14 +394,12 @@ export const NewExperienceForm = forwardRef<
               className="h-11 gap-2 px-5 text-body-5-2 text-white"
             >
               다음으로
-              {/* <ChevronRightIcon className="size-4" /> */}
             </Button>
           ) : (
             <Button
               type="submit"
               disabled={isPending}
               onClick={() => setHasAttemptedStep2Submit(true)}
-              //TODO: 버튼 텍스트 font-color 사이 클래스명 충돌 존재
               className="h-11 px-6 text-body-5-2 text-white"
             >
               {isPending ? "등록 중..." : "경험 등록하기"}

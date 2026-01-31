@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { NewProjectForm } from "./_components/NewProjectForm";
+import { NewProjectForm } from "./NewProjectForm";
 import { useCreateProject } from "@/app/_hooks/useCreateProject";
 import type { ProjectCreate } from "@/types/api";
 
@@ -24,24 +23,26 @@ const STEP_TITLES = {
   },
 } as const;
 
-export default function NewProjectPage() {
-  const router = useRouter();
+interface NewProjectModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const createProject = useCreateProject();
   const [step, setStep] = useState<1 | 2>(1);
   const { title, description } = STEP_TITLES[step];
 
-  const handleOpenChange = (open: boolean) => {
-    if (!open) {
-      router.back();
-    }
+  const handleClose = () => {
+    onOpenChange(false);
+    setStep(1);
   };
 
   const handleSubmit = (data: ProjectCreate) => {
     createProject.mutate(data, {
       onSuccess: () => {
         alert("프로젝트가 생성되었습니다.");
-        router.back();
-        router.refresh();
+        handleClose();
       },
       onError: () => {
         alert("생성 중 오류가 발생했습니다.");
@@ -50,14 +51,14 @@ export default function NewProjectPage() {
   };
 
   return (
-    <Dialog open onOpenChange={handleOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className="flex max-h-[90vh] flex-col overflow-hidden rounded-2xl border-0 p-0 shadow-chat sm:max-w-2xl"
         onPointerDownOutside={(e) => {
           e.preventDefault();
-          router.back();
+          handleClose();
         }}
-        onEscapeKeyDown={() => router.back()}
+        onEscapeKeyDown={handleClose}
       >
         {/* 헤더 */}
         <div className="shrink-0 px-8 pt-6 pb-7 gap-1.5">
@@ -78,7 +79,7 @@ export default function NewProjectPage() {
         <div className="flex-1 overflow-y-auto px-8 pb-6">
           <NewProjectForm
             onSubmit={handleSubmit}
-            onCancel={() => router.back()}
+            onCancel={handleClose}
             isPending={createProject.isPending}
             onStepChange={setStep}
           />
