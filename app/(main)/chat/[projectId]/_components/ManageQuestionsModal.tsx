@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -41,6 +42,7 @@ export function ManageQuestionsModal({
   currentQuestionId,
   onQuestionChange,
 }: ManageQuestionsModalProps) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [fields, setFields] = useState<QuestionField[]>([]);
 
@@ -90,24 +92,20 @@ export function ManageQuestionsModal({
 
     if (!field.id) return;
 
-    startTransition(async () => {
-      try {
-        await deleteQuestion(projectId, field.id!);
+    const remainingFields = fields.filter((_, i) => i !== index);
 
-        const remainingFields = fields.filter((_, i) => i !== index);
-        setFields(remainingFields);
-
-        if (field.id === currentQuestionId) {
-          const nextQuestion = remainingFields.find((f) => !f.isNew && f.id);
-          if (nextQuestion?.id) {
-            onQuestionChange(nextQuestion.id);
-          }
-        }
-
-        handleClose();
-      } catch {
-        alert("문항 삭제 중 오류가 발생했습니다.");
+    if (field.id === currentQuestionId) {
+      const nextQuestion = remainingFields.find((f) => !f.isNew && f.id);
+      if (nextQuestion?.id) {
+        onQuestionChange(nextQuestion.id);
       }
+    }
+
+    handleClose();
+
+    deleteQuestion(projectId, field.id).catch(() => {
+      alert("문항 삭제 중 오류가 발생했습니다. 페이지를 새로고침합니다.");
+      router.refresh();
     });
   };
 
@@ -124,41 +122,48 @@ export function ManageQuestionsModal({
   };
 
   const handleSave = () => {
-    startTransition(async () => {
-      try {
-        for (const field of fields) {
-          if (field.isNew) {
-            if (!field.question.trim()) continue;
-
-            const result = await createQuestion(projectId, {
-              question: field.question,
-              max_length: field.max_length ?? null,
-            });
-
-            onQuestionChange(result.id);
-            handleClose();
-            return;
-          } else if (field.id) {
-            const original = questions.find((q) => q.id === field.id);
-            const isChanged =
-              original &&
-              (field.question !== original.question ||
-                field.max_length !== original.max_length);
-
-            if (isChanged) {
-              await updateQuestion(projectId, field.id, {
-                question: field.question,
-                max_length: field.max_length ?? null,
-              });
-            }
-          }
-        }
-
-        handleClose();
-      } catch {
-        alert("문항 저장 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
-      }
+    const newField = fields.find((f) => f.isNew && f.question.trim());
+    const changedFields = fields.filter((field) => {
+      if (field.isNew || !field.id) return false;
+      const original = questions.find((q) => q.id === field.id);
+      return (
+        original &&
+        (field.question !== original.question ||
+          field.max_length !== original.max_length)
+      );
     });
+
+    if (newField) {
+      startTransition(async () => {
+        try {
+          const result = await createQuestion(projectId, {
+            question: newField.question,
+            max_length: newField.max_length ?? null,
+          });
+          onQuestionChange(result.id);
+          handleClose();
+        } catch {
+          alert("문항 생성 중 오류가 발생했습니다.");
+        }
+      });
+      return;
+    }
+
+    if (changedFields.length > 0) {
+      handleClose();
+
+      Promise.all(
+        changedFields.map((field) =>
+          updateQuestion(projectId, field.id!, {
+            question: field.question,
+            max_length: field.max_length ?? null,
+          }),
+        ),
+      ).catch(() => {
+        alert("문항 수정 중 오류가 발생했습니다. 페이지를 새로고침합니다.");
+        router.refresh();
+      });
+    }
   };
 
   const hasChanges = (() => {
