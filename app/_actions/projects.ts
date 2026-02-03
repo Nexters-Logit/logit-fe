@@ -5,7 +5,10 @@ import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import type {
   ProjectCreate,
   ProjectListItem,
+  Question,
+  QuestionCreate,
   QuestionListItem,
+  QuestionUpdate,
 } from "@/types/api";
 
 /**
@@ -45,4 +48,35 @@ export async function getQuestions(
   projectId: string,
 ): Promise<QuestionListItem[]> {
   return apiFetch<QuestionListItem[]>(API_ENDPOINTS.questions(projectId));
+}
+
+/**
+ * 문항 생성
+ */
+export async function createQuestion(
+  projectId: string,
+  data: QuestionCreate,
+): Promise<QuestionListItem> {
+  const result = await apiFetch<QuestionListItem>(
+    API_ENDPOINTS.questions(projectId),
+    { method: "POST", body: JSON.stringify(data) },
+  );
+  revalidatePath(`/chat/${projectId}`);
+  return result;
+}
+
+/**
+ * 문항 수정
+ */
+export async function updateQuestion(
+  projectId: string,
+  questionId: string,
+  data: QuestionUpdate,
+): Promise<Question> {
+  const result = await apiFetch<Question>(
+    API_ENDPOINTS.question(projectId, questionId),
+    { method: "PATCH", body: JSON.stringify(data) },
+  );
+  revalidatePath(`/chat/${projectId}`);
+  return result;
 }
