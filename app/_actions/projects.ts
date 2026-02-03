@@ -80,3 +80,16 @@ export async function updateQuestion(
   revalidatePath(`/chat/${projectId}`);
   return result;
 }
+
+/**
+ * 문항 삭제
+ */
+export async function deleteQuestion(
+  projectId: string,
+  questionId: string,
+): Promise<void> {
+  await apiFetch<void>(API_ENDPOINTS.question(projectId, questionId), {
+    method: "DELETE",
+  });
+  revalidatePath(`/chat/${projectId}`);
+}

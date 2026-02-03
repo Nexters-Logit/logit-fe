@@ -23,10 +23,6 @@ export function ChatHeader() {
     router.push(`/chat/${projectId}/${newQuestionId}`);
   };
 
-  const handleQuestionAdded = (newQuestionId: string) => {
-    router.push(`/chat/${projectId}/${newQuestionId}`);
-  };
-
   return (
     <>
       <div className="flex flex-col gap-5 shrink-0">
@@ -45,7 +41,8 @@ export function ChatHeader() {
         onOpenChange={setIsModalOpen}
         projectId={projectId}
         questions={questions}
-        onQuestionAdded={handleQuestionAdded}
+        currentQuestionId={questionId}
+        onQuestionChange={handleQuestionChange}
       />
     </>
   );

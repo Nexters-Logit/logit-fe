@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,11 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { QuestionFieldItem } from "@/app/_components/QuestionFieldItem";
-import { createQuestion, updateQuestion } from "@/app/_actions/projects";
+import {
+  createQuestion,
+  updateQuestion,
+  deleteQuestion,
+} from "@/app/_actions/projects";
 import type { QuestionListItem } from "@/types/api";
 
 interface QuestionField {
@@ -18,7 +22,6 @@ interface QuestionField {
   question: string;
   max_length: number | null;
   isNew: boolean;
-  isDirty: boolean;
 }
 
 interface ManageQuestionsModalProps {
@@ -26,7 +29,8 @@ interface ManageQuestionsModalProps {
   onOpenChange: (open: boolean) => void;
   projectId: string;
   questions: QuestionListItem[];
-  onQuestionAdded: (newQuestionId: string) => void;
+  currentQuestionId: string;
+  onQuestionChange: (questionId: string) => void;
 }
 
 export function ManageQuestionsModal({
@@ -34,18 +38,24 @@ export function ManageQuestionsModal({
   onOpenChange,
   projectId,
   questions,
-  onQuestionAdded,
+  currentQuestionId,
+  onQuestionChange,
 }: ManageQuestionsModalProps) {
   const [isPending, startTransition] = useTransition();
-  const [fields, setFields] = useState<QuestionField[]>(() =>
-    questions.map((q) => ({
-      id: q.id,
-      question: q.question,
-      max_length: q.max_length,
-      isNew: false,
-      isDirty: false,
-    })),
-  );
+  const [fields, setFields] = useState<QuestionField[]>([]);
+
+  useEffect(() => {
+    if (open) {
+      setFields(
+        questions.map((q) => ({
+          id: q.id,
+          question: q.question,
+          max_length: q.max_length,
+          isNew: false,
+        })),
+      );
+    }
+  }, [open, questions]);
 
   const resetFields = () => {
     setFields(
@@ -54,7 +64,6 @@ export function ManageQuestionsModal({
         question: q.question,
         max_length: q.max_length,
         isNew: false,
-        isDirty: false,
       })),
     );
   };
@@ -67,36 +76,57 @@ export function ManageQuestionsModal({
   const handleAddField = () => {
     setFields((prev) => [
       ...prev,
-      { id: null, question: "", max_length: null, isNew: true, isDirty: true },
+      { id: null, question: "", max_length: null, isNew: true },
     ]);
   };
 
   const handleRemoveField = (index: number) => {
-    setFields((prev) => prev.filter((_, i) => i !== index));
+    const field = fields[index];
+
+    if (field.isNew) {
+      setFields((prev) => prev.filter((_, i) => i !== index));
+      return;
+    }
+
+    if (!field.id) return;
+
+    startTransition(async () => {
+      try {
+        await deleteQuestion(projectId, field.id!);
+
+        const remainingFields = fields.filter((_, i) => i !== index);
+        setFields(remainingFields);
+
+        if (field.id === currentQuestionId) {
+          const nextQuestion = remainingFields.find((f) => !f.isNew && f.id);
+          if (nextQuestion?.id) {
+            onQuestionChange(nextQuestion.id);
+          }
+        }
+
+        handleClose();
+      } catch {
+        alert("문항 삭제 중 오류가 발생했습니다.");
+      }
+    });
   };
 
   const handleQuestionChange = (index: number, value: string) => {
     setFields((prev) =>
-      prev.map((f, i) =>
-        i === index ? { ...f, question: value, isDirty: true } : f,
-      ),
+      prev.map((f, i) => (i === index ? { ...f, question: value } : f)),
     );
   };
 
   const handleMaxLengthChange = (index: number, value: number | null) => {
     setFields((prev) =>
-      prev.map((f, i) =>
-        i === index ? { ...f, max_length: value, isDirty: true } : f,
-      ),
+      prev.map((f, i) => (i === index ? { ...f, max_length: value } : f)),
     );
   };
 
   const handleSave = () => {
     startTransition(async () => {
       try {
-        const dirtyFields = fields.filter((f) => f.isDirty);
-
-        for (const field of dirtyFields) {
+        for (const field of fields) {
           if (field.isNew) {
             if (!field.question.trim()) continue;
 
@@ -105,14 +135,22 @@ export function ManageQuestionsModal({
               max_length: field.max_length ?? null,
             });
 
-            onQuestionAdded(result.id);
+            onQuestionChange(result.id);
             handleClose();
             return;
           } else if (field.id) {
-            await updateQuestion(projectId, field.id, {
-              question: field.question,
-              max_length: field.max_length ?? null,
-            });
+            const original = questions.find((q) => q.id === field.id);
+            const isChanged =
+              original &&
+              (field.question !== original.question ||
+                field.max_length !== original.max_length);
+
+            if (isChanged) {
+              await updateQuestion(projectId, field.id, {
+                question: field.question,
+                max_length: field.max_length ?? null,
+              });
+            }
           }
         }
 
@@ -123,8 +161,18 @@ export function ManageQuestionsModal({
     });
   };
 
-  const hasDirtyFields = fields.some((f) => f.isDirty);
-  const hasNewFields = fields.some((f) => f.isNew);
+  const hasChanges = (() => {
+    if (fields.length !== questions.length) return true;
+
+    return fields.some((field, index) => {
+      const original = questions[index];
+      if (!original) return true;
+      if (field.id !== original.id) return true;
+      if (field.question !== original.question) return true;
+      if (field.max_length !== original.max_length) return true;
+      return false;
+    });
+  })();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -160,7 +208,11 @@ export function ManageQuestionsModal({
                   handleMaxLengthChange(index, value)
                 }
                 onRemove={() => handleRemoveField(index)}
-                showRemoveButton={fields.length > 1}
+                showRemoveButton={
+                  field.isNew
+                    ? fields.length > 1
+                    : fields.filter((f) => !f.isNew).length > 1
+                }
               />
             ))}
 
@@ -189,10 +241,10 @@ export function ManageQuestionsModal({
           <Button
             type="button"
             onClick={handleSave}
-            disabled={isPending || !hasDirtyFields}
+            disabled={isPending || !hasChanges}
             className="h-11 px-5 text-body-5-2 text-white"
           >
-            {isPending ? "저장 중..." : hasNewFields ? "문항 추가" : "저장"}
+            {isPending ? "저장 중..." : "업데이트"}
           </Button>
         </div>
       </DialogContent>
