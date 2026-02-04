@@ -40,7 +40,8 @@ export interface Experience {
   id: string;
   user_id: string;
   title: string;
-  date: string;
+  start_date: string;
+  end_date: string;
   experience_type: ExperienceType;
   situation: string;
   task: string;
@@ -180,4 +181,16 @@ export interface ExperienceCreate {
 export interface QuestionUpdate {
   question: string;
   max_length?: number | null;
+}
+
+export interface ExperienceUpdate {
+  title: string;
+  start_date: string;
+  end_date: string;
+  experience_type: ExperienceType;
+  situation: string;
+  task: string;
+  action: string;
+  result: string;
+  category: ExperienceCategory;
 }

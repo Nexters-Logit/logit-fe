@@ -1,7 +1,7 @@
 'use server';
 
 import { apiFetch, API_ENDPOINTS } from '@/libs/api-client';
-import type { ExperienceCreate } from '@/types/api';
+import type { ExperienceCreate, ExperienceUpdate, Experience } from '@/types/api';
 
 /**
  * 경험 생성
@@ -10,6 +10,25 @@ export async function createExperience(data: ExperienceCreate) {
   return apiFetch(API_ENDPOINTS.experiences, {
     method: 'POST',
     body: JSON.stringify(data),
+  });
+}
+
+/**
+ * 경험 수정
+ */
+export async function updateExperience(id: string, data: ExperienceUpdate): Promise<Experience> {
+  return apiFetch<Experience>(API_ENDPOINTS.experience(id), {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+}
+
+/**
+ * 경험 삭제
+ */
+export async function deleteExperience(id: string): Promise<void> {
+  return apiFetch<void>(API_ENDPOINTS.experience(id), {
+    method: 'DELETE',
   });
 }
 

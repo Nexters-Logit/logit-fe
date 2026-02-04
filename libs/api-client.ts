@@ -39,13 +39,18 @@ export async function apiFetch<T>(
 ): Promise<T> {
   const token = getAuthToken();
 
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${token}`,
+    ...options.headers,
+  };
+
+  if (options.body) {
+    headers['Content-Type'] = 'application/json';
+  }
+
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      ...options.headers,
-    },
+    headers,
   });
 
   if (!response.ok) {
@@ -85,6 +90,7 @@ export class ApiError extends Error {
 export const API_ENDPOINTS = {
   // Experiences
   experiences: '/api/v1/experiences',
+  experience: (id: string) => `/api/v1/experiences/${id}`,
   experienceSearch: (q: string) =>
     `/api/v1/experiences/search?q=${encodeURIComponent(q)}`,
   matchQuestion: (questionId: string) =>

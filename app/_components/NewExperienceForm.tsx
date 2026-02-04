@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useImperativeHandle, forwardRef } from "react";
+import { useState, useImperativeHandle, forwardRef, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -8,6 +8,7 @@ import {
   EXPERIENCE_CATEGORY,
   EXPERIENCE_TYPE,
   type ExperienceCreate,
+  type Experience,
 } from "@/types/api";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,7 +24,7 @@ import {
 const experienceFormSchema = z.object({
   title: z.string().min(1, "제목을 입력해주세요"),
   start_date: z.string().min(1, "시작일을 선택해주세요"),
-  end_date: z.string().min(1, "종료일을 선택해주세요"),
+  end_date: z.string(), // 선택 사항
   experience_type: z.string().min(1, "경험 유형을 선택해주세요"),
   category: z.string().min(1, "카테고리를 선택해주세요"),
   situation: z.string().min(1, "상황을 입력해주세요"),
@@ -39,6 +40,8 @@ interface NewExperienceFormProps {
   onCancel: () => void;
   isPending?: boolean;
   onStepChange?: (step: 1 | 2) => void;
+  mode?: "create" | "edit";
+  initialData?: Experience;
 }
 
 export interface NewExperienceFormRef {
@@ -50,11 +53,12 @@ function toFormDate(date: string): string {
   return date ? date.replace(/-/g, ".") : "";
 }
 
+
 export const NewExperienceForm = forwardRef<
   NewExperienceFormRef,
   NewExperienceFormProps
 >(function NewExperienceForm(
-  { onSubmit, onCancel, isPending = false, onStepChange },
+  { onSubmit, onCancel, isPending = false, onStepChange, mode = "create", initialData },
   ref,
 ) {
   const [step, setStep] = useState<1 | 2>(1);
@@ -65,15 +69,21 @@ export const NewExperienceForm = forwardRef<
     onStepChange?.(newStep);
   };
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors },
-  } = useForm<ExperienceFormValues>({
-    resolver: zodResolver(experienceFormSchema),
-    defaultValues: {
+  const getDefaultValues = (): ExperienceFormValues => {
+    if (initialData) {
+      return {
+        title: initialData.title,
+        start_date: toFormDate(initialData.start_date || ""),
+        end_date: toFormDate(initialData.end_date || ""),
+        experience_type: initialData.experience_type,
+        category: initialData.category,
+        situation: initialData.situation,
+        task: initialData.task,
+        action: initialData.action,
+        result: initialData.result,
+      };
+    }
+    return {
       title: "",
       start_date: "",
       end_date: "",
@@ -83,8 +93,36 @@ export const NewExperienceForm = forwardRef<
       task: "",
       action: "",
       result: "",
-    },
+    };
+  };
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm<ExperienceFormValues>({
+    resolver: zodResolver(experienceFormSchema),
+    defaultValues: getDefaultValues(),
   });
+
+  // edit 모드에서 initialData가 변경되면 폼을 reset
+  useEffect(() => {
+    if (mode === "edit" && initialData) {
+      reset({
+        title: initialData.title,
+        start_date: toFormDate(initialData.start_date || ""),
+        end_date: toFormDate(initialData.end_date || ""),
+        experience_type: initialData.experience_type,
+        category: initialData.category,
+        situation: initialData.situation,
+        task: initialData.task,
+        action: initialData.action,
+        result: initialData.result,
+      });
+    }
+  }, [mode, initialData, reset]);
 
   useImperativeHandle(ref, () => ({
     fillWithExample(data: ExperienceCreate) {
@@ -133,8 +171,12 @@ export const NewExperienceForm = forwardRef<
     });
   };
 
+  const onValidationError = (errors: unknown) => {
+    console.error("Form validation errors:", errors);
+  };
+
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col">
+    <form onSubmit={handleSubmit(handleFormSubmit, onValidationError)} className="flex flex-col">
       {/* 1페이지: 기본정보 */}
       {step === 1 && (
         <div className="flex flex-col gap-5">
@@ -402,7 +444,13 @@ export const NewExperienceForm = forwardRef<
               onClick={() => setHasAttemptedStep2Submit(true)}
               className="h-11 px-6 text-body-5-2 text-white"
             >
-              {isPending ? "등록 중..." : "경험 등록하기"}
+              {isPending
+                ? mode === "edit"
+                  ? "수정 중..."
+                  : "등록 중..."
+                : mode === "edit"
+                  ? "경험 수정하기"
+                  : "경험 등록하기"}
             </Button>
           )}
         </div>
