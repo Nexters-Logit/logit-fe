@@ -176,3 +176,8 @@ export interface ExperienceCreate {
   result: string;
   category: ExperienceCategory;
 }
+
+export interface QuestionUpdate {
+  question: string;
+  max_length?: number | null;
+}

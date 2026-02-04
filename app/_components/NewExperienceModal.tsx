@@ -44,11 +44,13 @@ const STEP_TITLES = {
 interface NewExperienceModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSuccess?: () => void;
 }
 
 export function NewExperienceModal({
   open,
   onOpenChange,
+  onSuccess,
 }: NewExperienceModalProps) {
   const createExperience = useCreateExperience();
   const formRef = useRef<NewExperienceFormRef>(null);
@@ -65,6 +67,7 @@ export function NewExperienceModal({
       onSuccess: () => {
         alert("경험이 등록되었습니다.");
         handleClose();
+        onSuccess?.();
       },
       onError: () => {
         alert("등록 중 오류가 발생했습니다.");
