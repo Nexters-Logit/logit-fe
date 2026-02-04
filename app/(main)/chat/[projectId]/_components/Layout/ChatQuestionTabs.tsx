@@ -11,12 +11,14 @@ interface ChatQuestionTabsProps {
   questions: QuestionTabItem[];
   activeQuestionId: string;
   onQuestionChange: (questionId: string) => void;
+  onAddClick: () => void;
 }
 
 export function ChatQuestionTabs({
   questions,
   activeQuestionId,
   onQuestionChange,
+  onAddClick,
 }: ChatQuestionTabsProps) {
   return (
     <div className="flex items-center gap-8">
@@ -39,7 +41,10 @@ export function ChatQuestionTabs({
           </button>
         );
       })}
-      <button className="flex items-center justify-center text-gray-300 hover:text-gray-400 transition-colors shrink-0 cursor-pointer">
+      <button
+        onClick={onAddClick}
+        className="flex items-center justify-center text-gray-300 hover:text-gray-400 transition-colors shrink-0 cursor-pointer"
+      >
         <Plus className="w-4.5 h-4.5" strokeWidth={2} />
       </button>
     </div>
