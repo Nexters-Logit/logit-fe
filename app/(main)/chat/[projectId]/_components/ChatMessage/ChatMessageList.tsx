@@ -41,12 +41,17 @@ export function ChatMessageList({
   }
 
   const isWaitingForResponse = status === "submitted";
+  const isStreaming = status === "streaming";
   const hasError = error && status === "error";
+
+  const lastAIMessageIndex = messages.findLastIndex(
+    (msg) => msg.role === "assistant",
+  );
 
   return (
     <Conversation className="h-full">
       <ConversationContent className="flex flex-col gap-10 p-0">
-        {messages.map((message) => {
+        {messages.map((message, index) => {
           const metadata = getMessageMetadata?.(message);
           const content = getMessageText(message);
 
@@ -54,12 +59,15 @@ export function ChatMessageList({
             return <UserMessage key={message.id} content={content} />;
           }
 
+          const isLastAIMessage = index === lastAIMessageIndex;
+
           return (
             <AIMessage
               key={message.id}
               content={content}
               isDraft={metadata?.is_draft}
               chatId={metadata?.chat_id}
+              isStreaming={isStreaming && isLastAIMessage}
               onUpdateDraft={onUpdateDraft}
             />
           );

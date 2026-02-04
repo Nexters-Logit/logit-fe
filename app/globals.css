@@ -276,3 +276,25 @@ body {
   color: var(--foreground);
   font-family: var(--font-pretendard), system-ui, sans-serif;
 }
+
+/* Streaming Text Effect */
+@keyframes shimmer {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+.streaming-text {
+  background: linear-gradient(-45deg, #6e7cd0 0%, #43b3c7 50%, #6e7cd0 100%);
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
