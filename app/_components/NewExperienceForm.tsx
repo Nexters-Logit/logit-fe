@@ -4,6 +4,7 @@ import { useState, useImperativeHandle, forwardRef, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import Image from "next/image";
 import {
   EXPERIENCE_CATEGORY,
   EXPERIENCE_TYPE,
@@ -20,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getCategoryConfig } from "@/app/(main)/chat/[projectId]/_constants";
 
 const experienceFormSchema = z.object({
   title: z.string().min(1, "제목을 입력해주세요"),
@@ -62,6 +64,7 @@ export const NewExperienceForm = forwardRef<
   ref,
 ) {
   const [step, setStep] = useState<1 | 2>(1);
+  const [hasAttemptedStep1Next, setHasAttemptedStep1Next] = useState(false);
   const [hasAttemptedStep2Submit, setHasAttemptedStep2Submit] = useState(false);
 
   const goToStep = (newStep: 1 | 2) => {
@@ -101,6 +104,7 @@ export const NewExperienceForm = forwardRef<
     handleSubmit,
     control,
     reset,
+    trigger,
     formState: { errors },
   } = useForm<ExperienceFormValues>({
     resolver: zodResolver(experienceFormSchema),
@@ -140,10 +144,16 @@ export const NewExperienceForm = forwardRef<
     },
   }));
 
-  const handleNext = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleNext = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    goToStep(2);
+    setHasAttemptedStep1Next(true);
+
+    // Step 1의 필수 필드 검증
+    const isValid = await trigger(["title", "start_date", "experience_type", "category"]);
+    if (isValid) {
+      goToStep(2);
+    }
   };
 
   const handlePrev = () => {
@@ -192,8 +202,8 @@ export const NewExperienceForm = forwardRef<
               aria-invalid={!!errors.title}
               {...register("title")}
             />
-            {errors.title && (
-              <p className="text-body-9-3 text-alert">{errors.title.message}</p>
+            {hasAttemptedStep1Next && errors.title && (
+              <p className="text-body-7-3 text-alert">필수 입력 항목입니다.</p>
             )}
           </div>
 
@@ -252,10 +262,8 @@ export const NewExperienceForm = forwardRef<
               </div>
             </div>
 
-            {(errors.start_date || errors.end_date) && (
-              <p className="text-body-9-3 text-alert">
-                {errors.start_date?.message ?? errors.end_date?.message}
-              </p>
+            {hasAttemptedStep1Next && errors.start_date && (
+              <p className="text-body-7-3 text-alert">필수 입력 항목입니다.</p>
             )}
           </div>
 
@@ -290,10 +298,8 @@ export const NewExperienceForm = forwardRef<
                 </Select>
               )}
             />
-            {errors.experience_type && (
-              <p className="text-body-9-3 text-alert">
-                {errors.experience_type.message}
-              </p>
+            {hasAttemptedStep1Next && errors.experience_type && (
+              <p className="text-body-7-3 text-alert">필수 입력 항목입니다.</p>
             )}
           </div>
           <div className="flex flex-col gap-2">
@@ -314,19 +320,27 @@ export const NewExperienceForm = forwardRef<
                     <SelectValue placeholder="선택해주세요" />
                   </SelectTrigger>
                   <SelectContent>
-                    {Object.entries(EXPERIENCE_CATEGORY).map(([key, value]) => (
-                      <SelectItem key={key} value={value}>
-                        {value}
-                      </SelectItem>
-                    ))}
+                    {Object.entries(EXPERIENCE_CATEGORY).map(([key, value]) => {
+                      const config = getCategoryConfig(value);
+                      return (
+                        <SelectItem key={key} value={value}>
+                          <Image
+                            src={config.icon}
+                            alt=""
+                            width={18}
+                            height={18}
+                            className="shrink-0"
+                          />
+                          {value}
+                        </SelectItem>
+                      );
+                    })}
                   </SelectContent>
                 </Select>
               )}
             />
-            {errors.category && (
-              <p className="text-body-9-3 text-alert">
-                {errors.category.message}
-              </p>
+            {hasAttemptedStep1Next && errors.category && (
+              <p className="text-body-7-3 text-alert">필수 입력 항목입니다.</p>
             )}
           </div>
         </div>
