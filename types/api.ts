@@ -130,11 +130,15 @@ export interface ChatHistoryItem {
 
 export interface ChatHistoryResponse {
   project_name: string;
-  created_at: string;
+  project_created_at: string;
   question_id: string;
   question: string;
+  answer: string | null;
   chats: ChatHistoryItem[];
   experience_ids: string[];
+  next_cursor: string | null;
+  has_more: boolean;
+  remaining_chats: number;
 }
 
 export interface ChatRequest {

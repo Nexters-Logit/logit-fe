@@ -1,4 +1,4 @@
-import { getChatHistory } from "../../_apis/chat";
+import { getChatHistory, CHAT_HISTORY_PAGE_SIZE } from "../../_apis/chat";
 import { validateChatHistory } from "../../_utils";
 import { ChatAreaClient } from "./ChatAreaClient";
 
@@ -7,7 +7,9 @@ interface ChatAreaServerProps {
 }
 
 export async function ChatAreaServer({ questionId }: ChatAreaServerProps) {
-  const rawChatHistory = await getChatHistory(questionId).catch((error) => {
+  const rawChatHistory = await getChatHistory(questionId, {
+    size: CHAT_HISTORY_PAGE_SIZE,
+  }).catch((error) => {
     console.error("Failed to fetch chat history:", error);
     return null;
   });

@@ -1,6 +1,24 @@
 export const API_BASE_URL = 'https://api-dev.logit.ai.kr';
 
 // ============================================================================
+// Query String Utility
+// ============================================================================
+
+type QueryParams = Record<string, string | number | boolean | undefined | null>;
+
+function buildQueryString(params?: QueryParams): string {
+  if (!params) return '';
+  const entries = Object.entries(params).filter(
+    ([, v]) => v !== undefined && v !== null
+  );
+  if (entries.length === 0) return '';
+  const searchParams = new URLSearchParams(
+    entries.map(([k, v]) => [k, String(v)])
+  );
+  return `?${searchParams.toString()}`;
+}
+
+// ============================================================================
 // Token Management
 // ============================================================================
 
@@ -97,13 +115,8 @@ export const API_ENDPOINTS = {
     `/api/v1/experiences/match-question/${questionId}`,
   // Projects & Questions
   projects: '/api/v1/projects/',
-  projectsList: (params: { skip?: number; limit?: number }) => {
-    const searchParams = new URLSearchParams();
-    if (params.skip !== undefined) searchParams.set('skip', String(params.skip));
-    if (params.limit !== undefined) searchParams.set('limit', String(params.limit));
-    const query = searchParams.toString();
-    return `/api/v1/projects/${query ? `?${query}` : ''}`;
-  },
+  projectsList: (params?: { skip?: number; limit?: number }) =>
+    `/api/v1/projects/${buildQueryString(params)}`,
   project: (id: string) => `/api/v1/projects/${id}`,
   questions: (projectId: string) =>
     `/api/v1/projects/${projectId}/questions/`,
@@ -112,8 +125,8 @@ export const API_ENDPOINTS = {
 
   // Chats
   chats: '/api/v1/projects/chats',
-  chatHistory: (questionId: string) =>
-    `/api/v1/projects/chats/${questionId}`,
+  chatHistory: (questionId: string, params?: { cursor?: string; size?: number }) =>
+    `/api/v1/projects/chats/${questionId}${buildQueryString(params)}`,
   updateAnswer: (chatId: string) =>
     `/api/v1/projects/chats/${chatId}/answer`,
 } as const;
