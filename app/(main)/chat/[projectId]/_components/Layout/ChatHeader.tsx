@@ -34,7 +34,7 @@ export function ChatHeader() {
           onAddClick={() => setIsModalOpen(true)}
         />
       </div>
-      <h1 className="text-title-3 text-gray-400">{currentQuestionText}</h1>
+      <h1 className="text-title-3 text-gray-400 break-keep">{currentQuestionText}</h1>
 
       <ManageQuestionsModal
         open={isModalOpen}

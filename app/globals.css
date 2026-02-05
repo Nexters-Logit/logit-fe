@@ -14,6 +14,7 @@
   --color-primary-10: #eff6ff;
   --color-primary-20: #f5faff;
   --color-primary-50: #e5f0ff;
+  --color-primary-60: #c3dcff;
   --color-primary-70: #8dc9ff;
   --color-primary-100: #40a5ff;
   --color-primary-200: #2571eb;
@@ -296,5 +297,5 @@ body {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: shimmer 1.5s ease-in-out infinite;
+  animation: shimmer 2.5s ease-in-out infinite;
 }

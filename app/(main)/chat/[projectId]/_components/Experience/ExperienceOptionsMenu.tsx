@@ -1,6 +1,5 @@
 "use client";
 
-import { PenLine, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,20 +42,30 @@ export function ExperienceOptionsMenu({
             e.stopPropagation();
             onEdit();
           }}
-          className="px-5 py-3.75 gap-3 cursor-pointer focus:bg-gray-30"
+          className="px-5 py-3.75 gap-3 cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
         >
-          <PenLine className="size-4.5 text-gray-300" />
-          <span className="text-body-5 font-medium text-gray-300">수정</span>
+          <Image
+            src="/icons/icon-edit.svg"
+            alt=""
+            width={18}
+            height={18}
+          />
+          <span className="text-body-5-3 text-primary-600">수정</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={(e) => {
             e.stopPropagation();
             onDelete();
           }}
-          className="px-5 py-3.75 gap-3 cursor-pointer focus:bg-gray-30"
+          className="px-5 py-3.75 gap-3 cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
         >
-          <Trash2 className="size-4.5 text-gray-300" />
-          <span className="text-body-5 font-medium text-gray-300">삭제</span>
+          <Image
+            src="/icons/icon-trash.svg"
+            alt=""
+            width={18}
+            height={18}
+          />
+          <span className="text-body-5-3 text-primary-600">삭제</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -17,7 +17,7 @@ export function ExperienceListShell({ children, onAddClick }: ExperienceListShel
       <div className="flex-1 flex flex-col gap-7 overflow-y-auto px-7">
         <button
           onClick={onAddClick}
-          className="group w-full h-15 flex items-center justify-center bg-primary-50 rounded-3.5 hover:bg-primary-70 transition-colors shrink-0 cursor-pointer"
+          className="group w-full h-15 flex items-center justify-center bg-primary-50 rounded-3.5 hover:bg-primary-60 transition-colors shrink-0 cursor-pointer"
         >
           <span className="text-body-3-2 text-gray-300 group-hover:text-gray-400 transition-colors">+추가하기</span>
         </button>

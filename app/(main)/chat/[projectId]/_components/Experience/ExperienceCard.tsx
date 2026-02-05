@@ -8,9 +8,21 @@ import { ExperienceOptionsMenu } from "./ExperienceOptionsMenu";
 
 function CheckIcon({ selected }: { selected: boolean }) {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="27"
+      height="27"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <circle cx="12" cy="12" r="10" fill={selected ? "#0066FF" : "#E1E4ED"} />
-      <path d="M8 12L11 15L16 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M8 12L11 15L16 9"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -41,7 +53,7 @@ export function ExperienceCard({
   const isDisabled = disabled && !isSelected;
 
   const cardStyles = [
-    "relative w-full px-6 py-5 rounded-3.5 text-left transition-all border-2",
+    "relative w-full px-5 py-4 rounded-3.5 text-left transition-all border-2",
     isSelected
       ? "bg-primary-10 border-primary-100"
       : "bg-white border-transparent hover:border-gray-80",
@@ -64,7 +76,7 @@ export function ExperienceCard({
   return (
     <div className={cardStyles} onClick={handleCardClick}>
       <div className="flex flex-col gap-4">
-        <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 flex-1 min-w-0">
             <span className="text-body-8-1 text-primary-200 shrink-0">
               {scorePercent}점

@@ -224,7 +224,7 @@ export function ManageQuestionsModal({
             <button
               type="button"
               onClick={handleAddField}
-              className="group w-full h-11 flex items-center justify-center bg-primary-50 rounded-3.5 hover:bg-primary-70 transition-colors cursor-pointer"
+              className="group w-full h-11 flex items-center justify-center bg-primary-50 rounded-3.5 hover:bg-primary-60 transition-colors cursor-pointer"
             >
               <span className="text-body-5-2 text-gray-300 group-hover:text-gray-400 transition-colors">
                 + 추가하기
