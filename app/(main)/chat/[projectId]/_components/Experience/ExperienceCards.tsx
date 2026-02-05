@@ -32,7 +32,10 @@ export function ExperienceCards({ matchedExperiences }: ExperienceCardsProps) {
   const [deletingExperience, setDeletingExperience] =
     useState<Experience | null>(null);
 
-  const canSelectMore = selectedIds.length < MAX_EXPERIENCE_SELECTION;
+  // matchedExperiences에 존재하는 유효한 선택만 계산
+  const matchedIds = new Set(matchedExperiences.map((me) => me.experience.id));
+  const validSelectedCount = selectedIds.filter((id) => matchedIds.has(id)).length;
+  const canSelectMore = validSelectedCount < MAX_EXPERIENCE_SELECTION;
 
   const handleShowDetail = (experience: Experience) => {
     setDetailExperience(experience);
