@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Input } from "@/components/ui/input";
 
 interface QuestionFieldItemProps {
@@ -13,7 +14,6 @@ interface QuestionFieldItemProps {
 }
 
 export function QuestionFieldItem({
-  index,
   questionValue,
   maxLengthValue,
   onQuestionChange,
@@ -22,39 +22,43 @@ export function QuestionFieldItem({
   showRemoveButton = true,
 }: QuestionFieldItemProps) {
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-2">
-        <span className="text-body-7-2 text-gray-200 shrink-0">
-          문항 {index + 1}
-        </span>
-        {showRemoveButton && onRemove && (
-          <button
-            type="button"
-            onClick={onRemove}
-            className="text-body-9-3 text-alert hover:underline cursor-pointer"
-          >
-            삭제
-          </button>
-        )}
-      </div>
-      <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2">
+      <Input
+        placeholder="문항을 입력해주세요"
+        className="flex-1 h-10 text-body-5-4"
+        value={questionValue}
+        onChange={(e) => onQuestionChange(e.target.value)}
+      />
+      <div className="relative flex items-center">
         <Input
-          placeholder={`${index + 1}번 문항`}
-          className="text-body-5-4"
-          value={questionValue}
-          onChange={(e) => onQuestionChange(e.target.value)}
-        />
-        <Input
-          type="number"
+          type="text"
+          inputMode="numeric"
           placeholder="글자수"
-          className="text-body-5-4 w-28"
+          className="h-10 w-25 text-body-5-4 text-center pr-7"
           value={maxLengthValue ?? ""}
           onChange={(e) => {
-            const value = e.target.value;
+            const value = e.target.value.replace(/[^0-9]/g, "");
             onMaxLengthChange(value ? Number(value) : null);
           }}
         />
+        <span className="absolute right-3 text-body-5-4 text-primary-400 pointer-events-none">
+          자
+        </span>
       </div>
+      {showRemoveButton && onRemove && (
+        <button
+          type="button"
+          onClick={onRemove}
+          className="shrink-0 size-10 flex items-center justify-center border border-gray-70 rounded-lg hover:bg-gray-20 transition-colors cursor-pointer"
+        >
+          <Image
+            src="/icons/icon-trash.svg"
+            alt="삭제"
+            width={24}
+            height={24}
+          />
+        </button>
+      )}
     </div>
   );
 }
