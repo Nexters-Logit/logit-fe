@@ -1,7 +1,15 @@
 'use server';
 
 import { apiFetch, API_ENDPOINTS } from '@/libs/api-client';
-import type { ExperienceCreate, ExperienceUpdate, Experience } from '@/types/api';
+import type { ExperienceCreate, ExperienceUpdate, Experience, ExperienceListResponse } from '@/types/api';
+
+/**
+ * 경험 목록 조회
+ */
+export async function getExperiences(): Promise<Experience[]> {
+  const response = await apiFetch<ExperienceListResponse>(API_ENDPOINTS.experiences);
+  return response.experiences;
+}
 
 /**
  * 경험 생성
