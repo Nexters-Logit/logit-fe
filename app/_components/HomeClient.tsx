@@ -12,6 +12,8 @@ import { ExperienceCard } from "./ExperienceCard";
 import { SectionHeader } from "./SectionHeader";
 import { NewProjectModal } from "./NewProjectModal";
 import { NewExperienceModal } from "./NewExperienceModal";
+import { LoginModal } from "./LoginModal";
+import { getAccessToken } from "@/libs/auth";
 import { useExperienceCounts } from "@/app/_hooks/useExperienceCounts";
 import { EXPERIENCE_CATEGORY } from "@/types/api";
 
@@ -73,6 +75,24 @@ interface HomeClientProps {
 export function HomeClient({ projectListSlot }: HomeClientProps) {
   const [isProjectModalOpen, setProjectModalOpen] = useState(false);
   const [isExperienceModalOpen, setExperienceModalOpen] = useState(false);
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+
+  const handleExperienceButtonClick = () => {
+    if (getAccessToken()) {
+      setExperienceModalOpen(true);
+    } else {
+      setLoginModalOpen(true);
+    }
+  };
+
+  const handleProjectButtonClick = () => {
+    if (getAccessToken()) {
+      setProjectModalOpen(true);
+    } else {
+      setLoginModalOpen(true);
+    }
+  };
+
   const { data: counts = {} } = useExperienceCounts();
 
   return (
@@ -87,7 +107,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
           <SectionHeader
             title="경험 유형"
             buttonText="경험 등록"
-            onClick={() => setExperienceModalOpen(true)}
+            onClick={handleExperienceButtonClick}
           />
           <Carousel opts={{ align: "start" }} className="mt-5 w-311 -ml-17.5">
             <div className="flex items-center gap-7.5 ">
@@ -114,7 +134,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
           <SectionHeader
             title="프로젝트 목록"
             buttonText="프로젝트 생성"
-            onClick={() => setProjectModalOpen(true)}
+            onClick={handleProjectButtonClick}
           />
           {projectListSlot}
         </section>
@@ -128,6 +148,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
         open={isExperienceModalOpen}
         onOpenChange={setExperienceModalOpen}
       />
+      <LoginModal open={isLoginModalOpen} onOpenChange={setLoginModalOpen} />
     </main>
   );
 }

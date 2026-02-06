@@ -8,7 +8,7 @@ export default function StatusEmpty({
   message = "생성된 프로젝트가 없어요",
 }: StatusEmptyProps) {
   return (
-    <div className="flex flex-col items-center gap-7 w-37.5">
+    <div className="flex flex-col items-center gap-7 w-52">
       <Image
         src="/illustrations/status-empty.svg"
         alt="빈 상태"

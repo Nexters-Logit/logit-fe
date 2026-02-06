@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { UserMenu } from './UserMenu';
 
 export function Header() {
   return (
@@ -33,9 +34,7 @@ export function Header() {
           <Image src="/icons/report.svg" alt="리포트" width={26} height={26} />
           <span className="text-body-3-3 text-primary-400">리포트</span>
         </Link>
-        <div className="w-10 h-10 rounded-full bg-primary-20 flex items-center justify-center">
-          <div className="w-8 h-8 rounded-full bg-primary-70" />
-        </div>
+        <UserMenu />
       </nav>
     </header>
   );

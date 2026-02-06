@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useChatStore } from '../../_store/useChatStore';
-
+import { useChatStore } from "../../_store/useChatStore";
+import { Button } from "@/components/ui/button";
 interface DraftPanelProps {
   maxLength?: number;
 }
@@ -33,6 +33,9 @@ export function DraftPanel({ maxLength }: DraftPanelProps) {
           </p>
         )}
       </div>
+      <Button variant="primary" className="w-full">
+        작성 완료
+      </Button>
     </div>
   );
 }
