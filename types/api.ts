@@ -167,7 +167,7 @@ export interface ProjectCreate {
   recruit_notice: string;
   company_talent?: string | null;
   due_date?: string | null;
-  questions?: QuestionCreate[];
+  questions: QuestionCreate[];
 }
 
 export interface ExperienceCreate {
