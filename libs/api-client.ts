@@ -73,10 +73,14 @@ export async function apiFetch<T>(
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
-    throw new ApiError(
-      response.status,
-      error.detail || `API Error: ${response.status}`
-    );
+    const detail = error.detail;
+    const message =
+      typeof detail === 'string'
+        ? detail
+        : detail
+          ? JSON.stringify(detail)
+          : `API Error: ${response.status}`;
+    throw new ApiError(response.status, message);
   }
 
   // 204 No Content 처리
