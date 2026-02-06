@@ -1,13 +1,20 @@
-'use server';
+"use server";
 
-import { apiFetch, API_ENDPOINTS } from '@/libs/api-client';
-import type { ExperienceCreate, ExperienceUpdate, Experience, ExperienceListResponse } from '@/types/api';
+import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
+import type {
+  ExperienceCreate,
+  ExperienceUpdate,
+  Experience,
+  ExperienceListResponse,
+} from "@/types/api";
 
 /**
  * 경험 목록 조회
  */
 export async function getExperiences(): Promise<Experience[]> {
-  const response = await apiFetch<ExperienceListResponse>(API_ENDPOINTS.experiences);
+  const response = await apiFetch<ExperienceListResponse>(
+    API_ENDPOINTS.experiences,
+  );
   return response.experiences;
 }
 
@@ -16,7 +23,7 @@ export async function getExperiences(): Promise<Experience[]> {
  */
 export async function createExperience(data: ExperienceCreate) {
   return apiFetch(API_ENDPOINTS.experiences, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(data),
   });
 }
@@ -24,9 +31,12 @@ export async function createExperience(data: ExperienceCreate) {
 /**
  * 경험 수정
  */
-export async function updateExperience(id: string, data: ExperienceUpdate): Promise<Experience> {
+export async function updateExperience(
+  id: string,
+  data: ExperienceUpdate,
+): Promise<Experience> {
   return apiFetch<Experience>(API_ENDPOINTS.experience(id), {
-    method: 'PATCH',
+    method: "PATCH",
     body: JSON.stringify(data),
   });
 }
@@ -36,7 +46,7 @@ export async function updateExperience(id: string, data: ExperienceUpdate): Prom
  */
 export async function deleteExperience(id: string): Promise<void> {
   return apiFetch<void>(API_ENDPOINTS.experience(id), {
-    method: 'DELETE',
+    method: "DELETE",
   });
 }
 

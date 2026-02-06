@@ -10,7 +10,10 @@ export default function AuthCallbackPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const accessToken = searchParams.get("access_token");
+    let accessToken = searchParams.get("access_token");
+    if (accessToken?.includes("&refresh_token=")) {
+      accessToken = accessToken.split("&refresh_token=")[0] ?? "";
+    }
     const refreshToken = searchParams.get("refresh_token");
 
     if (accessToken && refreshToken) {
