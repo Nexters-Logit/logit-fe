@@ -1,4 +1,9 @@
-import { getAccessToken, ACCESS_TOKEN_COOKIE } from "./auth";
+import {
+  getAccessToken,
+  getRefreshToken,
+  ACCESS_TOKEN_COOKIE,
+  refreshAuthTokens,
+} from "./auth";
 
 export const API_BASE_URL = "https://api-dev.logit.ai.kr";
 
@@ -54,10 +59,12 @@ interface FetchOptions extends Omit<RequestInit, "headers"> {
 
 /**
  * 인증이 포함된 API 요청을 수행합니다.
+ * 401 발생 시 클라이언트에서 리프레시 토큰으로 갱신 후 1회 재시도합니다.
  */
 export async function apiFetch<T>(
   endpoint: string,
   options: FetchOptions = {},
+  isRetry = false,
 ): Promise<T> {
   const token = await getAuthToken();
 
@@ -74,6 +81,16 @@ export async function apiFetch<T>(
     ...options,
     headers,
   });
+
+  if (response.status === 401 && !isRetry && typeof window !== "undefined") {
+    const refreshToken = getRefreshToken();
+    if (refreshToken) {
+      const refreshed = await refreshAuthTokens();
+      if (refreshed) {
+        return apiFetch<T>(endpoint, options, true);
+      }
+    }
+  }
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
@@ -119,6 +136,7 @@ export const API_ENDPOINTS = {
   authGoogleCallback: (code: string) =>
     `/api/v1/auth/google/callback?code=${encodeURIComponent(code)}`,
   authLogout: "/api/v1/auth/logout",
+  authRefresh: "/api/v1/auth/refresh",
 
   // Experiences
   experiences: "/api/v1/experiences",
