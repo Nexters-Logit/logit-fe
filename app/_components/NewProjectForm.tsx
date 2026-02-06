@@ -15,12 +15,16 @@ const projectFormSchema = z.object({
   recruit_notice: z.string().min(1, "채용 공고를 입력해주세요"),
   company_talent: z.string().optional(),
   due_date: z.string().optional(),
-  questions: z.array(
-    z.object({
-      question: z.string(),
-      max_length: z.union([z.number(), z.nan()]).optional().nullable(),
+  questions: z
+    .array(
+      z.object({
+        question: z.string(),
+        max_length: z.union([z.number(), z.nan()]).optional().nullable(),
+      }),
+    )
+    .refine((questions) => questions.some((q) => q.question.trim()), {
+      message: "최소 1개의 문항을 입력해주세요",
     }),
-  ),
 });
 
 type ProjectFormValues = z.infer<typeof projectFormSchema>;
@@ -47,6 +51,7 @@ export function NewProjectForm({
     register,
     handleSubmit,
     control,
+    trigger,
     formState: { errors },
   } = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
@@ -66,11 +71,6 @@ export function NewProjectForm({
   });
 
   const handleFormSubmit = (data: ProjectFormValues) => {
-    if (step === 1) {
-      goToStep(2);
-      return;
-    }
-
     const questions: QuestionCreate[] = data.questions
       .filter((q) => q.question.trim())
       .map((q) => ({
@@ -87,7 +87,7 @@ export function NewProjectForm({
         ? data.company_talent
         : undefined,
 
-      questions: questions.length > 0 ? questions : undefined,
+      questions,
     });
   };
 
@@ -221,6 +221,11 @@ export function NewProjectForm({
             >
               + 추가하기
             </Button>
+            {errors.questions?.root && (
+              <p className="text-body-9-3 text-alert">
+                {errors.questions.root.message}
+              </p>
+            )}
           </div>
         </div>
       )}
@@ -246,10 +251,9 @@ export function NewProjectForm({
           {step === 1 ? (
             <Button
               type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                goToStep(2);
+              onClick={async () => {
+                const valid = await trigger(["company", "job_position", "recruit_notice"]);
+                if (valid) goToStep(2);
               }}
               className="h-11 gap-2 px-5 text-body-5-2 text-white"
             >
