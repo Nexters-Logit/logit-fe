@@ -39,7 +39,6 @@ type ExperienceFormValues = z.infer<typeof experienceFormSchema>;
 
 interface NewExperienceFormProps {
   onSubmit: (data: ExperienceCreate) => void;
-  onCancel: () => void;
   isPending?: boolean;
   onStepChange?: (step: 1 | 2) => void;
   mode?: "create" | "edit";
@@ -60,7 +59,7 @@ export const NewExperienceForm = forwardRef<
   NewExperienceFormRef,
   NewExperienceFormProps
 >(function NewExperienceForm(
-  { onSubmit, onCancel, isPending = false, onStepChange, mode = "create", initialData },
+  { onSubmit, isPending = false, onStepChange, mode = "create", initialData },
   ref,
 ) {
   const [step, setStep] = useState<1 | 2>(1);
@@ -186,7 +185,8 @@ export const NewExperienceForm = forwardRef<
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit, onValidationError)} className="flex flex-col">
+    <form onSubmit={handleSubmit(handleFormSubmit, onValidationError)} className="flex flex-1 flex-col min-h-0">
+      <div className="flex-1 overflow-y-auto px-8 pb-6">
       {/* 1페이지: 기본정보 */}
       {step === 1 && (
         <div className="flex flex-col gap-5">
@@ -427,8 +427,10 @@ export const NewExperienceForm = forwardRef<
         </div>
       )}
 
+      </div>
+
       {/* 버튼 영역 */}
-      <div className="-mx-8 flex items-center justify-center px-8 py-5 gap-4 mt-3">
+      <div className="shrink-0 flex items-center justify-center px-8 py-5 gap-4">
         <div>
           {step === 2 && (
             <Button

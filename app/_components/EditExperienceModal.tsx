@@ -1,15 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
 import { NewExperienceForm } from "./NewExperienceForm";
 import { useUpdateExperience } from "@/app/_hooks/useUpdateExperience";
+import { StepFormModal } from "@/components/common/StepFormModal";
 import type { Experience, ExperienceCreate } from "@/types/api";
 
 const STEP_TITLES = {
@@ -75,41 +69,23 @@ export function EditExperienceModal({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent
-        className="flex max-h-[90vh] flex-col overflow-hidden rounded-2xl border-0 p-0 shadow-chat sm:max-w-2xl"
-        showCloseButton={false}
-        onPointerDownOutside={(e) => {
-          e.preventDefault();
-          handleClose();
-        }}
-        onEscapeKeyDown={handleClose}
-      >
-        <div className="shrink-0 px-8 pt-6 pb-7 gap-1.5">
-          <DialogHeader>
-            <p className="text-body-7-2 text-primary-400 font-semibold">
-              {step}/2
-            </p>
-            <DialogTitle className="text-title-2-2 text-gray-400">
-              {title}
-            </DialogTitle>
-            <DialogDescription className="text-body-7-2 text-primary-400">
-              {description}
-            </DialogDescription>
-          </DialogHeader>
-        </div>
-
-        <div className="flex-1 overflow-y-auto px-8 pb-6">
-          <NewExperienceForm
-            onSubmit={handleSubmit}
-            onCancel={handleClose}
-            isPending={updateExperience.isPending}
-            onStepChange={setStep}
-            mode="edit"
-            initialData={experience}
-          />
-        </div>
-      </DialogContent>
-    </Dialog>
+    <StepFormModal
+      open={open}
+      onOpenChange={onOpenChange}
+      onClose={handleClose}
+      step={step}
+      totalSteps={2}
+      title={title}
+      description={description}
+      showCloseButton={false}
+    >
+      <NewExperienceForm
+        onSubmit={handleSubmit}
+        isPending={updateExperience.isPending}
+        onStepChange={setStep}
+        mode="edit"
+        initialData={experience}
+      />
+    </StepFormModal>
   );
 }
