@@ -2,14 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { API_BASE_URL, API_ENDPOINTS } from "@/libs/api-client";
 import { setAuthTokens } from "@/libs/auth";
-
-interface CallbackResponse {
-  access_token: string;
-  refresh_token: string;
-  is_new_user?: boolean;
-}
 
 export default function AuthCallbackPage() {
   const router = useRouter();
@@ -17,34 +10,16 @@ export default function AuthCallbackPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const processCallback = async () => {
-      const code = searchParams.get("code");
-      if (code) {
-        try {
-          const res = await fetch(
-            `${API_BASE_URL}${API_ENDPOINTS.authGoogleCallback(code)}`,
-          );
-          if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            throw new Error(err.detail || `API Error: ${res.status}`);
-          }
-          const data: CallbackResponse = await res.json();
-          setAuthTokens(data.access_token, data.refresh_token);
-          router.replace("/");
-        } catch (e) {
-          setError(
-            e instanceof Error
-              ? e.message
-              : "로그인 처리 중 오류가 발생했습니다.",
-          );
-        }
-        return;
-      }
+    const accessToken = searchParams.get("access_token");
+    const refreshToken = searchParams.get("refresh_token");
 
-      setError("유효하지 않은 콜백 요청입니다.");
-    };
+    if (accessToken && refreshToken) {
+      setAuthTokens(accessToken, refreshToken);
+      router.replace("/");
+      return;
+    }
 
-    processCallback();
+    setError("유효하지 않은 콜백 요청입니다.");
   }, [router, searchParams]);
 
   if (error) {
