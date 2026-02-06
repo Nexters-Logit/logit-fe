@@ -11,10 +11,14 @@ function AuthCallbackContent() {
 
   useEffect(() => {
     let accessToken = searchParams.get("access_token");
-    if (accessToken?.includes("&refresh_token=")) {
+    let refreshToken = searchParams.get("refresh_token");
+    if (
+      accessToken?.includes("&refresh_token=") ||
+      accessToken?.includes("&access_token=")
+    ) {
       accessToken = accessToken.split("&refresh_token=")[0] ?? "";
+      refreshToken = accessToken.split("&refresh_token=")[1] ?? "";
     }
-    const refreshToken = searchParams.get("refresh_token");
 
     if (accessToken && refreshToken) {
       setAuthTokens(accessToken, refreshToken);
