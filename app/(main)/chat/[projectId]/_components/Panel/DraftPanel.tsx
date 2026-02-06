@@ -2,6 +2,7 @@
 
 import { useChatStore } from "../../_store/useChatStore";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 interface DraftPanelProps {
   maxLength?: number;
 }
@@ -13,10 +14,16 @@ export function DraftPanel({ maxLength }: DraftPanelProps) {
   return (
     <div className="flex-1 flex flex-col gap-8 px-7 pt-5 pb-8 overflow-hidden">
       {/* 글자수 카운터 */}
-      <div className="shrink-0">
-        <span className="text-body-5-5 text-gray-400 opacity-60">
-          {charCount} / {maxLength || 1000}
-        </span>
+      <div className="flex items-center justify-between">
+        <div className="shrink-0">
+          <span className="text-body-5-5 text-gray-400 opacity-60">
+            {charCount} / {maxLength || 1000}
+          </span>
+        </div>
+
+        <Button variant="ghost" className="size-6 p-0">
+          <Image src="/icons/edit.svg" alt="trash" width={24} height={24} />
+        </Button>
       </div>
 
       {/* 내용 */}
