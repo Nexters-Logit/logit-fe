@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { setAuthTokens } from "@/libs/auth";
 
-export default function AuthCallbackPage() {
+function AuthCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
@@ -45,5 +45,20 @@ export default function AuthCallbackPage() {
       <div className="size-10 animate-spin rounded-full border-2 border-primary-100 border-t-transparent" />
       <p className="text-body-5-4 text-gray-200">로그인 처리 중...</p>
     </div>
+  );
+}
+
+export default function AuthCallbackPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen flex-col items-center justify-center gap-4">
+          <div className="size-10 animate-spin rounded-full border-2 border-primary-100 border-t-transparent" />
+          <p className="text-body-5-4 text-gray-200">로그인 처리 중...</p>
+        </div>
+      }
+    >
+      <AuthCallbackContent />
+    </Suspense>
   );
 }
