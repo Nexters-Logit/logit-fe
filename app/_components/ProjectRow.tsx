@@ -25,7 +25,7 @@ interface ProjectRowProps {
 }
 
 export function ProjectRow({ project, onClick }: ProjectRowProps) {
-  const title = `${project.company} ${project.job_position} 자기소개서`;
+  const title = `${project.company}_${project.job_position}`;
   const date = formatDate(project.updated_at);
 
   const dDay = getStableDday(project.id);
