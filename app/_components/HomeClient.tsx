@@ -12,6 +12,7 @@ import { ExperienceCard } from "./ExperienceCard";
 import { SectionHeader } from "./SectionHeader";
 import { NewProjectModal } from "./NewProjectModal";
 import { NewExperienceModal } from "./NewExperienceModal";
+import { LoginModal } from "./LoginModal";
 
 const experienceTypes = [
   {
@@ -51,13 +52,23 @@ interface HomeClientProps {
 export function HomeClient({ projectListSlot }: HomeClientProps) {
   const [isProjectModalOpen, setProjectModalOpen] = useState(false);
   const [isExperienceModalOpen, setExperienceModalOpen] = useState(false);
+  const [isDesignTestModalOpen, setDesignTestModalOpen] = useState(false);
 
   return (
     <main className="w-full mx-auto pt-10 pb-25 flex-1 overflow-y-auto scrollbar-hide">
       <div className="max-w-267 mx-auto">
-        <h1 className="text-headline-1 text-gray-400 mb-16">
-          어떤 자기소개서를 작성하시겠어요?
-        </h1>
+        <div className="flex items-center justify-between mb-16">
+          <h1 className="text-headline-1 text-gray-400">
+            어떤 자기소개서를 작성하시겠어요?
+          </h1>
+          <button
+            type="button"
+            onClick={() => setDesignTestModalOpen(true)}
+            className="rounded-3.5 px-4 py-2 text-body-7-2 text-primary-200 bg-primary-50 hover:bg-primary-20 transition-colors"
+          >
+            모달 테스트
+          </button>
+        </div>
 
         {/* 경험 유형 섹션 */}
         <section className="mb-21.25">
@@ -107,6 +118,10 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
       <NewExperienceModal
         open={isExperienceModalOpen}
         onOpenChange={setExperienceModalOpen}
+      />
+      <LoginModal
+        open={isDesignTestModalOpen}
+        onOpenChange={setDesignTestModalOpen}
       />
     </main>
   );
