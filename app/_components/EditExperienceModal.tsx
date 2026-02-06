@@ -78,7 +78,6 @@ export function EditExperienceModal({
       totalSteps={2}
       title={title}
       description={description}
-      showCloseButton={false}
     >
       <NewExperienceForm
         onSubmit={handleSubmit}
