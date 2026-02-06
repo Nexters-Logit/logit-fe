@@ -67,7 +67,7 @@
   --shadow-chat: 0 4px 20px rgba(0, 0, 0, 0.05);
   --shadow-toast: 4px 10px 20px rgba(0, 0, 0, 0.08);
 
-  /* Font Sizes */
+  /* Font Sizes (Tailwind v4 @theme 방식) */
   --text-headline-1: 32px;
   --text-title-1: 28px;
   --text-title-2: 24px;
@@ -88,6 +88,151 @@
   --leading-140: 1.4;
   --leading-150: 1.5;
   --leading-180: 1.8;
+}
+
+/* Figma node-id=1007-22663, 1007-22664 기반 타이포그래피 */
+.bold_32 {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.bold_28 {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.bold_24 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.bold_20 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.bold_18 {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.bold_16 {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.bold_14 {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.bold_12 {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.semibold_24 {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.semibold_22 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.semibold_20 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.semibold_18 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.semibold_16 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.semibold_14 {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.medium_16 {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.medium_14 {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.medium_13 {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.regular_16 {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.regular_15 {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.8;
+}
+
+.regular_14 {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.regular_13 {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.regular_12 {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.medium_12 {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.regular_11 {
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
 }
 
 /* Typography Utility Classes */

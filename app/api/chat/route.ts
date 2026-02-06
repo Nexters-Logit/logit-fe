@@ -65,11 +65,12 @@ export async function POST(req: Request) {
 
   const { question_id, experience_ids } = body;
 
+  const token = await getAuthToken();
   const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.chats}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${getAuthToken()}`,
+      Authorization: `Bearer ${token}`,
       Accept: 'text/event-stream',
     },
     body: JSON.stringify({

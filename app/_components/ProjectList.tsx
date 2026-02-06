@@ -7,14 +7,23 @@ import { ProjectRow } from "./ProjectRow";
 
 interface ProjectListProps {
   projects: ProjectListItem[];
+  hasToken: boolean;
 }
 
-export function ProjectList({ projects }: ProjectListProps) {
+export function ProjectList({ projects, hasToken }: ProjectListProps) {
   const router = useRouter();
 
   const handleProjectClick = (projectId: string, questionId: string) => {
     router.push(`/chat/${projectId}/${questionId}`);
   };
+
+  if (!hasToken) {
+    return (
+      <div className="mt-5 flex justify-center py-10">
+        <StatusEmpty message="로그인하고 자소서를 작성해보세요." />
+      </div>
+    );
+  }
 
   if (projects.length === 0) {
     return (
