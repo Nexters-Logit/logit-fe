@@ -11,6 +11,7 @@ import {
   useUpdateAnswer,
   useDraftContent,
   useSyncChatStore,
+  useChatHistoryPagination,
 } from "../../_hooks";
 import {
   convertToUIMessages,
@@ -28,6 +29,8 @@ interface ChatHistory {
   questionText: string;
   chats: ChatHistoryItem[];
   experienceIds: string[];
+  hasMore?: boolean;
+  nextCursor: string | null;
 }
 
 interface ChatAreaClientProps {
@@ -65,6 +68,15 @@ export function ChatAreaClient({
         setActivePanelTab("DRAFT");
       }
     },
+  });
+
+  // 채팅 히스토리 페이지네이션
+  const pagination = useChatHistoryPagination({
+    questionId,
+    initialHasMore: chatHistory.hasMore,
+    initialCursor: chatHistory.nextCursor,
+    messages: chat.messages,
+    setMessages: chat.setMessages,
   });
 
   // Draft Content (스트리밍 우선, 서버 데이터 fallback)
@@ -123,6 +135,7 @@ export function ChatAreaClient({
           getMessageMetadata={chat.getMessageMetadata}
           onUpdateDraft={handleUpdateDraftFromMessage}
           onRetry={chat.retry}
+          pagination={pagination}
         />
       </div>
 

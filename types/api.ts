@@ -40,7 +40,8 @@ export interface Experience {
   id: string;
   user_id: string;
   title: string;
-  date: string;
+  start_date: string;
+  end_date: string;
   experience_type: ExperienceType;
   situation: string;
   task: string;
@@ -129,11 +130,15 @@ export interface ChatHistoryItem {
 
 export interface ChatHistoryResponse {
   project_name: string;
-  created_at: string;
+  project_created_at: string;
   question_id: string;
   question: string;
+  answer: string | null;
   chats: ChatHistoryItem[];
   experience_ids: string[];
+  next_cursor: string | null;
+  has_more: boolean;
+  remaining_chats: number;
 }
 
 export interface ChatRequest {
@@ -180,4 +185,16 @@ export interface ExperienceCreate {
 export interface QuestionUpdate {
   question: string;
   max_length?: number | null;
+}
+
+export interface ExperienceUpdate {
+  title: string;
+  start_date: string;
+  end_date: string;
+  experience_type: ExperienceType;
+  situation: string;
+  task: string;
+  action: string;
+  result: string;
+  category: ExperienceCategory;
 }

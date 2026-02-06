@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import type { ProjectCreate, QuestionCreate } from "@/types/api";
@@ -27,19 +27,16 @@ type ProjectFormValues = z.infer<typeof projectFormSchema>;
 
 interface NewProjectFormProps {
   onSubmit: (data: ProjectCreate) => void;
-  onCancel: () => void;
   isPending?: boolean;
   onStepChange?: (step: 1 | 2) => void;
 }
 
 export function NewProjectForm({
   onSubmit,
-  onCancel,
   isPending = false,
   onStepChange,
 }: NewProjectFormProps) {
   const [step, setStep] = useState<1 | 2>(1);
-  const [hasAttemptedStep2Submit, setHasAttemptedStep2Submit] = useState(false);
 
   const goToStep = (newStep: 1 | 2) => {
     setStep(newStep);
@@ -95,7 +92,8 @@ export function NewProjectForm({
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-col">
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-1 flex-col min-h-0">
+      <div className="flex-1 overflow-y-auto px-8 pb-6">
       {/* 1페이지: 기본정보 */}
       {step === 1 && (
         <div className="flex flex-col gap-5">
@@ -227,8 +225,10 @@ export function NewProjectForm({
         </div>
       )}
 
+      </div>
+
       {/* 버튼 영역 */}
-      <div className="-mx-8 flex items-center justify-center px-8 py-5 gap-4 mt-3">
+      <div className="shrink-0 flex items-center justify-center px-8 py-5 gap-4">
         <div>
           {step === 2 && (
             <Button
@@ -259,7 +259,6 @@ export function NewProjectForm({
             <Button
               type="submit"
               disabled={isPending}
-              onClick={() => setHasAttemptedStep2Submit(true)}
               className="h-11 px-6 text-body-5-2 text-white"
             >
               {isPending ? "생성 중..." : "프로젝트 생성"}

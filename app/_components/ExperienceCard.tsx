@@ -15,11 +15,11 @@ export function ExperienceCard({
 }: ExperienceCardProps) {
   return (
     <div
-      className={`${bgColor} w-65.25 h-47.5 rounded-5 overflow-hidden relative shrink-0`}
+      className={`${bgColor} w-65.25 h-47.5 rounded-5 overflow-hidden relative shrink-0 select-none`}
     >
       <div className="p-6.5">
-        <h3 className="text-body-1 text-primary-600">{title}</h3>
-        <p className="text-body-5-5 text-primary-600 opacity-50">
+        <h3 className="text-body-1 font-semibold text-primary-600">{title}</h3>
+        <p className="text-body-5-5 font-medium text-primary-600 opacity-50">
           관련경험 {count}개
         </p>
       </div>
