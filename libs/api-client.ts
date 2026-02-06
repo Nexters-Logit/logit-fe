@@ -61,7 +61,6 @@ export async function apiFetch<T>(
 ): Promise<T> {
   const token = await getAuthToken();
 
-  console.log("token!!!!!!!!!!!", token);
   const headers: Record<string, string> = {
     Authorization: `Bearer ${token}`,
     ...options.headers,
