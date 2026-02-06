@@ -12,35 +12,57 @@ import { ExperienceCard } from "./ExperienceCard";
 import { SectionHeader } from "./SectionHeader";
 import { NewProjectModal } from "./NewProjectModal";
 import { NewExperienceModal } from "./NewExperienceModal";
+import { useExperienceCounts } from "@/app/_hooks/useExperienceCounts";
+import { EXPERIENCE_CATEGORY } from "@/types/api";
 
-const experienceTypes = [
+const EXPERIENCE_CARDS = [
   {
     id: 1,
-    title: "주도적 실행력",
-    count: 1,
+    category: EXPERIENCE_CATEGORY.PROACTIVE_EXECUTION,
     bgColor: "bg-[#dcf9f9]",
     illustration: "/illustrations/card-type01.png",
   },
   {
     id: 2,
-    title: "기술적 전문성",
-    count: 1,
+    category: EXPERIENCE_CATEGORY.TECHNICAL_EXPERTISE,
     bgColor: "bg-[#e3f6fd]",
     illustration: "/illustrations/card-type02.png",
   },
   {
     id: 3,
-    title: "논리적 분석력",
-    count: 1,
+    category: EXPERIENCE_CATEGORY.LOGICAL_ANALYSIS,
     bgColor: "bg-[#e3f0fd]",
     illustration: "/illustrations/card-type03.png",
   },
   {
     id: 4,
-    title: "창의적 문제해결",
-    count: 1,
+    category: EXPERIENCE_CATEGORY.CREATIVE_PROBLEM_SOLVING,
     bgColor: "bg-[#e3e9fd]",
     illustration: "/illustrations/card-type04.png",
+  },
+  {
+    id: 5,
+    category: EXPERIENCE_CATEGORY.COLLABORATIVE_COMMUNICATION,
+    bgColor: "bg-gradient-to-b from-[#e4e3fd] to-[#e9e3fd]",
+    illustration: "/illustrations/card-type05.png",
+  },
+  {
+    id: 6,
+    category: EXPERIENCE_CATEGORY.PERSISTENT_RESPONSIBILITY,
+    bgColor: "bg-gradient-to-b from-[#eee3fd] to-[#f9e3fd]",
+    illustration: "/illustrations/card-type06.png",
+  },
+  {
+    id: 7,
+    category: EXPERIENCE_CATEGORY.FLEXIBLE_ADAPTABILITY,
+    bgColor: "bg-gradient-to-b from-[#f7e3fd] to-[#fde3f9]",
+    illustration: "/illustrations/card-type07.png",
+  },
+  {
+    id: 8,
+    category: EXPERIENCE_CATEGORY.CUSTOMER_VALUE,
+    bgColor: "bg-gradient-to-b from-[#fde3f8] to-[#fde3e3]",
+    illustration: "/illustrations/card-type08.png",
   },
 ];
 
@@ -51,10 +73,11 @@ interface HomeClientProps {
 export function HomeClient({ projectListSlot }: HomeClientProps) {
   const [isProjectModalOpen, setProjectModalOpen] = useState(false);
   const [isExperienceModalOpen, setExperienceModalOpen] = useState(false);
+  const { data: counts = {} } = useExperienceCounts();
 
   return (
     <main className="w-full mx-auto pt-10 pb-25 flex-1 overflow-y-auto scrollbar-hide">
-      <div className="max-w-267 mx-auto">
+      <div className="max-w-276 mx-auto">
         <h1 className="text-headline-1 text-gray-400 mb-16">
           어떤 자기소개서를 작성하시겠어요?
         </h1>
@@ -66,20 +89,17 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
             buttonText="경험 등록"
             onClick={() => setExperienceModalOpen(true)}
           />
-          <Carousel
-            opts={{ align: "start" }}
-            className="mt-5 w-[1244px] ml-[-70px]"
-          >
+          <Carousel opts={{ align: "start" }} className="mt-5 w-311 -ml-17.5">
             <div className="flex items-center gap-7.5 ">
               <CarouselPrevious className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200 cursor-pointer" />
               <CarouselContent className="-ml-5 ">
-                {experienceTypes.map((type) => (
-                  <CarouselItem key={type.id} className="pl-5 basis-auto">
+                {EXPERIENCE_CARDS.map((card) => (
+                  <CarouselItem key={card.id} className="pl-5 basis-auto">
                     <ExperienceCard
-                      title={type.title}
-                      count={type.count}
-                      bgColor={type.bgColor}
-                      illustration={type.illustration}
+                      title={card.category}
+                      count={counts[card.category] ?? 0}
+                      bgColor={card.bgColor}
+                      illustration={card.illustration}
                     />
                   </CarouselItem>
                 ))}

@@ -19,6 +19,10 @@ interface ChatPageProps {
 export default async function ChatPage({ params }: ChatPageProps) {
   const { questionId } = await params;
 
+  if (!questionId || questionId === "null") {
+    throw new Error("유효하지 않은 문항입니다.");
+  }
+
   return (
     <ChatPageShell
       header={<ChatHeader />}

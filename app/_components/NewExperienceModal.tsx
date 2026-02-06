@@ -2,17 +2,12 @@
 
 import { useState, useRef } from "react";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import {
   NewExperienceForm,
   type NewExperienceFormRef,
 } from "./NewExperienceForm";
 import { useCreateExperience } from "@/app/_hooks/useCreateExperience";
+import { StepFormModal } from "@/components/common/StepFormModal";
+import { showToast } from "@/libs/toast";
 import type { ExperienceCreate } from "@/types/api";
 
 const EXAMPLE_EXPERIENCE: ExperienceCreate = {
@@ -65,63 +60,43 @@ export function NewExperienceModal({
   const handleSubmit = (data: ExperienceCreate) => {
     createExperience.mutate(data, {
       onSuccess: () => {
-        alert("경험이 등록되었습니다.");
+        showToast.success("경험이 등록되었습니다.");
         handleClose();
         onSuccess?.();
       },
       onError: () => {
-        alert("등록 중 오류가 발생했습니다.");
+        showToast.error("등록 중 오류가 발생했습니다.");
       },
     });
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent
-        className="flex max-h-[90vh] flex-col overflow-hidden rounded-2xl border-0 p-0 shadow-chat sm:max-w-2xl"
-        onPointerDownOutside={(e) => {
-          e.preventDefault();
-          handleClose();
-        }}
-        onEscapeKeyDown={handleClose}
-      >
-        {/* 헤더 */}
-        <div className="shrink-0 px-8 pt-6 pb-7 gap-1.5">
-          <DialogHeader>
-            <p className="text-body-7-2 text-primary-400 font-semibold">
-              {step}/2
-            </p>
-            <DialogTitle className="text-title-2-2 text-gray-400">
-              {title}
-            </DialogTitle>
-            <div className="flex justify-between items-center">
-              <DialogDescription className="text-body-7-2 text-primary-400">
-                {description}
-              </DialogDescription>
-              <button
-                type="button"
-                onClick={() =>
-                  formRef.current?.fillWithExample(EXAMPLE_EXPERIENCE)
-                }
-                className="rounded-lg px-3.5 py-0.5 text-body-7-3 text-primary-400 border border-gray-70 bg-gray-20 cursor-pointer"
-              >
-                예시 불러오기
-              </button>
-            </div>
-          </DialogHeader>
-        </div>
-
-        {/* 컨텐츠 */}
-        <div className="flex-1 overflow-y-auto px-8 pb-6">
-          <NewExperienceForm
-            ref={formRef}
-            onSubmit={handleSubmit}
-            onCancel={handleClose}
-            isPending={createExperience.isPending}
-            onStepChange={setStep}
-          />
-        </div>
-      </DialogContent>
-    </Dialog>
+    <StepFormModal
+      open={open}
+      onOpenChange={onOpenChange}
+      onClose={handleClose}
+      step={step}
+      totalSteps={2}
+      title={title}
+      description={description}
+      headerExtra={
+        <button
+          type="button"
+          onClick={() =>
+            formRef.current?.fillWithExample(EXAMPLE_EXPERIENCE)
+          }
+          className="rounded-lg px-3.5 py-0.5 text-body-7-3 text-primary-400 border border-gray-70 bg-gray-20 cursor-pointer hover:bg-gray-70 transition-colors"
+        >
+          예시 불러오기
+        </button>
+      }
+    >
+      <NewExperienceForm
+        ref={formRef}
+        onSubmit={handleSubmit}
+        isPending={createExperience.isPending}
+        onStepChange={setStep}
+      />
+    </StepFormModal>
   );
 }

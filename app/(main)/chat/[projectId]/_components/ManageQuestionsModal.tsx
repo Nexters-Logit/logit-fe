@@ -2,6 +2,7 @@
 
 import { useState, useTransition, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +17,7 @@ import {
   updateQuestion,
   deleteQuestion,
 } from "@/app/_actions/projects";
+import { showToast } from "@/libs/toast";
 import type { QuestionListItem } from "@/types/api";
 
 interface QuestionField {
@@ -102,9 +104,10 @@ export function ManageQuestionsModal({
     }
 
     handleClose();
+    showToast.success("문항이 삭제되었습니다.");
 
     deleteQuestion(projectId, field.id).catch(() => {
-      alert("문항 삭제 중 오류가 발생했습니다. 페이지를 새로고침합니다.");
+      showToast.error("문항 삭제 중 오류가 발생했습니다. 페이지를 새로고침합니다.");
       router.refresh();
     });
   };
@@ -142,8 +145,9 @@ export function ManageQuestionsModal({
           });
           onQuestionChange(result.id);
           handleClose();
+          showToast.success("문항이 추가되었습니다.");
         } catch {
-          alert("문항 생성 중 오류가 발생했습니다.");
+          showToast.error("문항 생성 중 오류가 발생했습니다.");
         }
       });
       return;
@@ -159,10 +163,14 @@ export function ManageQuestionsModal({
             max_length: field.max_length ?? null,
           }),
         ),
-      ).catch(() => {
-        alert("문항 수정 중 오류가 발생했습니다. 페이지를 새로고침합니다.");
-        router.refresh();
-      });
+      )
+        .then(() => {
+          showToast.success("문항이 수정되었습니다.");
+        })
+        .catch(() => {
+          showToast.error("문항 수정 중 오류가 발생했습니다. 페이지를 새로고침합니다.");
+          router.refresh();
+        });
     }
   };
 
@@ -182,26 +190,44 @@ export function ManageQuestionsModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="flex max-h-[90vh] flex-col overflow-hidden rounded-2xl border-0 p-0 shadow-chat sm:max-w-2xl"
+        className="flex max-h-[90vh] min-h-136.75 flex-col overflow-hidden rounded-5 border-0 p-0 shadow-chat sm:max-w-207"
+        showCloseButton={false}
         onPointerDownOutside={(e) => {
           e.preventDefault();
           handleClose();
         }}
         onEscapeKeyDown={handleClose}
       >
-        <div className="shrink-0 px-8 pt-6 pb-5">
-          <DialogHeader>
-            <DialogTitle className="text-title-2-2 text-gray-400">
-              문항 관리
-            </DialogTitle>
-            <DialogDescription className="text-body-7-2 text-primary-400">
-              문항을 수정하거나 새 문항을 추가하세요.
-            </DialogDescription>
+        <div className="shrink-0 px-7.5 pt-7.5 pb-6">
+          <DialogHeader className="flex-row items-start justify-between">
+            <div className="flex flex-col gap-1.5">
+              <p className="text-body-7-2 text-primary-400 font-semibold">
+                문항 관리
+              </p>
+              <DialogTitle className="text-title-2-2 text-gray-500">
+                자기소개서 문항 입력
+              </DialogTitle>
+              <DialogDescription className="text-body-7-2 text-primary-400">
+                작성하는 자기소개서 문항을 입력해주세요
+              </DialogDescription>
+            </div>
+            <button
+              type="button"
+              onClick={handleClose}
+              className="shrink-0 p-1 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+            >
+              <Image
+                src="/icons/icon-close.svg"
+                alt="닫기"
+                width={28}
+                height={28}
+              />
+            </button>
           </DialogHeader>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-8 pb-6">
-          <div className="flex flex-col gap-5">
+        <div className="flex-1 overflow-y-auto px-7.5 pb-6">
+          <div className="flex flex-col gap-3">
             {fields.map((field, index) => (
               <QuestionFieldItem
                 key={field.id ?? `new-${index}`}
@@ -213,33 +239,28 @@ export function ManageQuestionsModal({
                   handleMaxLengthChange(index, value)
                 }
                 onRemove={() => handleRemoveField(index)}
-                showRemoveButton={
-                  field.isNew
-                    ? fields.length > 1
-                    : fields.filter((f) => !f.isNew).length > 1
-                }
+                showRemoveButton={fields.length > 1}
               />
             ))}
 
             <button
               type="button"
               onClick={handleAddField}
-              className="group w-full h-11 flex items-center justify-center bg-primary-50 rounded-3.5 hover:bg-primary-70 transition-colors cursor-pointer"
+              className="group w-full h-11 flex items-center justify-center bg-primary-50 rounded-3.5 hover:bg-primary-60 transition-colors cursor-pointer"
             >
-              <span className="text-body-5-2 text-gray-300 group-hover:text-gray-400 transition-colors">
+              <span className="text-body-3-2 text-gray-300 group-hover:text-gray-400 transition-colors">
                 + 추가하기
               </span>
             </button>
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 px-8 py-5 border-t border-gray-70">
+        <div className="flex items-center justify-center gap-4.5 px-7.5 py-7">
           <Button
             type="button"
             variant="secondary"
             onClick={handleClose}
             disabled={isPending}
-            className="h-11 px-5 text-body-5-2"
           >
             취소
           </Button>
@@ -247,7 +268,6 @@ export function ManageQuestionsModal({
             type="button"
             onClick={handleSave}
             disabled={isPending || !hasChanges}
-            className="h-11 px-5 text-body-5-2 text-white"
           >
             {isPending ? "저장 중..." : "업데이트"}
           </Button>
