@@ -22,7 +22,7 @@ export function ExperienceOptionsMenu({
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="p-1 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+          className="p-1 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
           onClick={(e) => e.stopPropagation()}
         >
           <Image
@@ -44,12 +44,7 @@ export function ExperienceOptionsMenu({
           }}
           className="px-5 py-3.75 gap-3 cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
         >
-          <Image
-            src="/icons/icon-edit.svg"
-            alt=""
-            width={18}
-            height={18}
-          />
+          <Image src="/icons/icon-edit.svg" alt="" width={18} height={18} />
           <span className="text-body-5-3 text-primary-600">수정</span>
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -59,12 +54,7 @@ export function ExperienceOptionsMenu({
           }}
           className="px-5 py-3.75 gap-3 cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
         >
-          <Image
-            src="/icons/icon-trash.svg"
-            alt=""
-            width={18}
-            height={18}
-          />
+          <Image src="/icons/icon-trash.svg" alt="" width={18} height={18} />
           <span className="text-body-5-3 text-primary-600">삭제</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
