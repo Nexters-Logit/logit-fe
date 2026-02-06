@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { NewProjectForm } from "./NewProjectForm";
 import { useCreateProject } from "@/app/_hooks/useCreateProject";
+import { getQuestions } from "@/app/_actions/projects";
 import { StepFormModal } from "@/components/common/StepFormModal";
 import { showToast } from "@/libs/toast";
 import type { ProjectCreate } from "@/types/api";
@@ -24,6 +26,7 @@ interface NewProjectModalProps {
 }
 
 export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
+  const router = useRouter();
   const createProject = useCreateProject();
   const [step, setStep] = useState<1 | 2>(1);
   const { title, description } = STEP_TITLES[step];
@@ -35,9 +38,16 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
 
   const handleSubmit = (data: ProjectCreate) => {
     createProject.mutate(data, {
-      onSuccess: () => {
+      onSuccess: async (result) => {
         showToast.success("프로젝트가 생성되었습니다.");
         handleClose();
+
+        const questions = await getQuestions(result.id);
+        if (questions.length > 0) {
+          router.push(`/chat/${result.id}/${questions[0].id}`);
+        } else {
+          throw new Error("생성된 문항을 찾을 수 없습니다.");
+        }
       },
       onError: () => {
         showToast.error("생성 중 오류가 발생했습니다.");

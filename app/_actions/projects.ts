@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import type {
+  Project,
   ProjectCreate,
   ProjectListItem,
   Question,
@@ -30,8 +31,8 @@ export async function getProjects(params?: {
  * 프로젝트 생성
  * 생성 성공 시 홈 페이지 캐시를 무효화하여 프로젝트 목록이 갱신됩니다.
  */
-export async function createProject(data: ProjectCreate) {
-  const result = await apiFetch(API_ENDPOINTS.projects, {
+export async function createProject(data: ProjectCreate): Promise<Project> {
+  const result = await apiFetch<Project>(API_ENDPOINTS.projects, {
     method: "POST",
     body: JSON.stringify(data),
   });
