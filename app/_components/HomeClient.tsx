@@ -147,6 +147,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
       <NewExperienceModal
         open={isExperienceModalOpen}
         onOpenChange={setExperienceModalOpen}
+        onSuccess={() => setProjectModalOpen(true)}
       />
       <LoginModal open={isLoginModalOpen} onOpenChange={setLoginModalOpen} />
     </main>

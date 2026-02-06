@@ -82,9 +82,7 @@ export function NewExperienceModal({
       headerExtra={
         <button
           type="button"
-          onClick={() =>
-            formRef.current?.fillWithExample(EXAMPLE_EXPERIENCE)
-          }
+          onClick={() => formRef.current?.fillWithExample(EXAMPLE_EXPERIENCE)}
           className="rounded-lg px-3.5 py-0.5 text-body-7-3 text-primary-400 border border-gray-70 bg-gray-20 cursor-pointer hover:bg-gray-70 transition-colors"
         >
           예시 불러오기

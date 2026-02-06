@@ -44,7 +44,49 @@ export function clearAuthTokens(): void {
   deleteCookie(REFRESH_TOKEN_KEY);
 }
 
-const LOGOUT_API_URL = "https://api-dev.logit.ai.kr/api/v1/auth/logout";
+const API_BASE_URL = "https://api-dev.logit.ai.kr";
+const LOGOUT_API_URL = `${API_BASE_URL}/api/v1/auth/logout`;
+const REFRESH_API_URL = `${API_BASE_URL}/api/v1/auth/refresh`;
+
+let refreshPromise: Promise<boolean> | null = null;
+
+interface RefreshResponse {
+  access_token: string;
+  refresh_token: string;
+}
+
+/**
+ * 리프레시 토큰으로 새 액세스/리프레시 토큰을 발급받아 쿠키에 저장합니다.
+ * 클라이언트에서만 사용 가능합니다. 동시 호출 시 하나의 refresh만 수행합니다.
+ * @returns 성공 시 true, 실패 시 false
+ */
+export async function refreshAuthTokens(): Promise<boolean> {
+  if (typeof window === "undefined") return false;
+  const refreshToken = getRefreshToken();
+  if (!refreshToken) return false;
+
+  if (refreshPromise) return refreshPromise;
+
+  refreshPromise = (async () => {
+    try {
+      const res = await fetch(REFRESH_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refresh_token: refreshToken }),
+      });
+      if (!res.ok) return false;
+      const data: RefreshResponse = await res.json();
+      setAuthTokens(data.access_token, data.refresh_token);
+      return true;
+    } catch {
+      return false;
+    } finally {
+      refreshPromise = null;
+    }
+  })();
+
+  return refreshPromise;
+}
 
 /**
  * 로그아웃: 서버에 토큰 무효화 요청 후 로컬 토큰 삭제 및 홈으로 이동
