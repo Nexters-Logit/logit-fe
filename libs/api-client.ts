@@ -1,3 +1,5 @@
+import { getAccessToken, ACCESS_TOKEN_COOKIE } from './auth';
+
 export const API_BASE_URL = 'https://api-dev.logit.ai.kr';
 
 // ============================================================================
@@ -6,19 +8,21 @@ export const API_BASE_URL = 'https://api-dev.logit.ai.kr';
 
 /**
  * 인증 토큰을 반환합니다.
- * - 개발 환경: 환경변수에서 가져옴
- * - 프로덕션: 추후 쿠키/세션에서 가져오도록 확장
+ * - 클라이언트: cookie의 access_token
+ * - 서버: cookie 또는 환경변수 API_DEV_TOKEN
  */
-export function getAuthToken(): string {
-  // 서버 사이드에서만 환경변수 접근 가능
-  if (typeof window === 'undefined') {
+export async function getAuthToken(): Promise<string> {
+  if (typeof window !== 'undefined') {
+    const token = getAccessToken();
+    if (token) return token;
+  } else {
     const token = process.env.API_DEV_TOKEN;
-    if (token) {
-      return token;
-    }
+    if (token) return token;
+    const { cookies } = await import('next/headers');
+    const store = await cookies();
+    const cookieToken = store.get(ACCESS_TOKEN_COOKIE)?.value;
+    if (cookieToken) return cookieToken;
   }
-
-  // TODO: 프로덕션에서는 쿠키/세션에서 토큰 가져오기
   throw new Error('No auth token available');
 }
 
@@ -37,7 +41,7 @@ export async function apiFetch<T>(
   endpoint: string,
   options: FetchOptions = {}
 ): Promise<T> {
-  const token = getAuthToken();
+  const token = await getAuthToken();
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
@@ -83,6 +87,12 @@ export class ApiError extends Error {
 // ============================================================================
 
 export const API_ENDPOINTS = {
+  // Auth
+  authGoogle: '/api/v1/auth/google',
+  authGoogleCallback: (code: string) =>
+    `/api/v1/auth/google/callback?code=${encodeURIComponent(code)}`,
+  authLogout: '/api/v1/auth/logout',
+
   // Experiences
   experiences: '/api/v1/experiences',
   experienceSearch: (q: string) =>

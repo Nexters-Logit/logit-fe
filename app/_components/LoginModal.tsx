@@ -2,7 +2,7 @@
 
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-
+import { API_BASE_URL } from "@/libs/api-client";
 import Image from "next/image";
 
 interface LoginModalProps {
@@ -13,6 +13,14 @@ interface LoginModalProps {
 export function LoginModal({ open, onOpenChange }: LoginModalProps) {
   const handleClose = () => {
     onOpenChange(false);
+  };
+
+  const handleGoogleLogin = () => {
+    const redirectUri =
+      typeof window !== "undefined"
+        ? encodeURIComponent(window.location.origin + "/auth/callback")
+        : "";
+    window.location.href = `${API_BASE_URL}/api/v1/auth/google${redirectUri ? `?redirect_uri=${redirectUri}` : ""}`;
   };
 
   return (
@@ -52,6 +60,7 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
           <Button
             type="button"
             variant={"outline"}
+            onClick={handleGoogleLogin}
             className="h-11 py-2.5 px-6 text-body-5-2 border border-gray-100 w-full"
           >
             <Image
