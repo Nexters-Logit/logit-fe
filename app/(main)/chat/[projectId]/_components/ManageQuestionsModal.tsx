@@ -17,6 +17,7 @@ import {
   updateQuestion,
   deleteQuestion,
 } from "@/app/_actions/projects";
+import { showToast } from "@/libs/toast";
 import type { QuestionListItem } from "@/types/api";
 
 interface QuestionField {
@@ -103,9 +104,10 @@ export function ManageQuestionsModal({
     }
 
     handleClose();
+    showToast.success("문항이 삭제되었습니다.");
 
     deleteQuestion(projectId, field.id).catch(() => {
-      alert("문항 삭제 중 오류가 발생했습니다. 페이지를 새로고침합니다.");
+      showToast.error("문항 삭제 중 오류가 발생했습니다. 페이지를 새로고침합니다.");
       router.refresh();
     });
   };
@@ -143,8 +145,9 @@ export function ManageQuestionsModal({
           });
           onQuestionChange(result.id);
           handleClose();
+          showToast.success("문항이 추가되었습니다.");
         } catch {
-          alert("문항 생성 중 오류가 발생했습니다.");
+          showToast.error("문항 생성 중 오류가 발생했습니다.");
         }
       });
       return;
@@ -160,10 +163,14 @@ export function ManageQuestionsModal({
             max_length: field.max_length ?? null,
           }),
         ),
-      ).catch(() => {
-        alert("문항 수정 중 오류가 발생했습니다. 페이지를 새로고침합니다.");
-        router.refresh();
-      });
+      )
+        .then(() => {
+          showToast.success("문항이 수정되었습니다.");
+        })
+        .catch(() => {
+          showToast.error("문항 수정 중 오류가 발생했습니다. 페이지를 새로고침합니다.");
+          router.refresh();
+        });
     }
   };
 

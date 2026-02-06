@@ -7,6 +7,7 @@ import {
 } from "./NewExperienceForm";
 import { useCreateExperience } from "@/app/_hooks/useCreateExperience";
 import { StepFormModal } from "@/components/common/StepFormModal";
+import { showToast } from "@/libs/toast";
 import type { ExperienceCreate } from "@/types/api";
 
 const EXAMPLE_EXPERIENCE: ExperienceCreate = {
@@ -59,12 +60,12 @@ export function NewExperienceModal({
   const handleSubmit = (data: ExperienceCreate) => {
     createExperience.mutate(data, {
       onSuccess: () => {
-        alert("경험이 등록되었습니다.");
+        showToast.success("경험이 등록되었습니다.");
         handleClose();
         onSuccess?.();
       },
       onError: () => {
-        alert("등록 중 오류가 발생했습니다.");
+        showToast.error("등록 중 오류가 발생했습니다.");
       },
     });
   };

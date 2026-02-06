@@ -8,6 +8,7 @@ import { DeleteExperienceDialog } from "./DeleteExperienceDialog";
 import { EditExperienceModal } from "@/app/_components/EditExperienceModal";
 import { useChatStore } from "../../_store/useChatStore";
 import { useDeleteExperience } from "@/app/_hooks/useDeleteExperience";
+import { showToast } from "@/libs/toast";
 import { MAX_EXPERIENCE_SELECTION } from "../../_constants";
 import type { Experience, MatchedExperience } from "@/types/api";
 
@@ -62,9 +63,10 @@ export function ExperienceCards({ matchedExperiences }: ExperienceCardsProps) {
           removeExperience(deletingExperience.id);
           setDeletingExperience(null);
           router.refresh();
+          showToast.success("경험이 삭제되었습니다.");
         },
         onError: () => {
-          alert("삭제 중 오류가 발생했습니다.");
+          showToast.error("삭제 중 오류가 발생했습니다.");
         },
       });
     }

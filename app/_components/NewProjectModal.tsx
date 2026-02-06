@@ -4,6 +4,7 @@ import { useState } from "react";
 import { NewProjectForm } from "./NewProjectForm";
 import { useCreateProject } from "@/app/_hooks/useCreateProject";
 import { StepFormModal } from "@/components/common/StepFormModal";
+import { showToast } from "@/libs/toast";
 import type { ProjectCreate } from "@/types/api";
 
 const STEP_TITLES = {
@@ -35,11 +36,11 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const handleSubmit = (data: ProjectCreate) => {
     createProject.mutate(data, {
       onSuccess: () => {
-        alert("프로젝트가 생성되었습니다.");
+        showToast.success("프로젝트가 생성되었습니다.");
         handleClose();
       },
       onError: () => {
-        alert("생성 중 오류가 발생했습니다.");
+        showToast.error("생성 중 오류가 발생했습니다.");
       },
     });
   };

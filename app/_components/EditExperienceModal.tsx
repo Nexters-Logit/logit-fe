@@ -4,6 +4,7 @@ import { useState } from "react";
 import { NewExperienceForm } from "./NewExperienceForm";
 import { useUpdateExperience } from "@/app/_hooks/useUpdateExperience";
 import { StepFormModal } from "@/components/common/StepFormModal";
+import { showToast } from "@/libs/toast";
 import type { Experience, ExperienceCreate } from "@/types/api";
 
 const STEP_TITLES = {
@@ -57,12 +58,12 @@ export function EditExperienceModal({
       },
       {
         onSuccess: () => {
-          alert("경험이 수정되었습니다.");
+          showToast.success("경험이 수정되었습니다.");
           handleClose();
           onSuccess?.();
         },
         onError: () => {
-          alert("수정 중 오류가 발생했습니다.");
+          showToast.error("수정 중 오류가 발생했습니다.");
         },
       }
     );
