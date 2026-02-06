@@ -3,6 +3,24 @@ import { getAccessToken, ACCESS_TOKEN_COOKIE } from './auth';
 export const API_BASE_URL = 'https://api-dev.logit.ai.kr';
 
 // ============================================================================
+// Query String Utility
+// ============================================================================
+
+type QueryParams = Record<string, string | number | boolean | undefined | null>;
+
+function buildQueryString(params?: QueryParams): string {
+  if (!params) return '';
+  const entries = Object.entries(params).filter(
+    ([, v]) => v !== undefined && v !== null
+  );
+  if (entries.length === 0) return '';
+  const searchParams = new URLSearchParams(
+    entries.map(([k, v]) => [k, String(v)])
+  );
+  return `?${searchParams.toString()}`;
+}
+
+// ============================================================================
 // Token Management
 // ============================================================================
 
@@ -43,21 +61,30 @@ export async function apiFetch<T>(
 ): Promise<T> {
   const token = await getAuthToken();
 
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${token}`,
+    ...options.headers,
+  };
+
+  if (options.body) {
+    headers['Content-Type'] = 'application/json';
+  }
+
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-      ...options.headers,
-    },
+    headers,
   });
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
-    throw new ApiError(
-      response.status,
-      error.detail || `API Error: ${response.status}`
-    );
+    const detail = error.detail;
+    const message =
+      typeof detail === 'string'
+        ? detail
+        : detail
+          ? JSON.stringify(detail)
+          : `API Error: ${response.status}`;
+    throw new ApiError(response.status, message);
   }
 
   // 204 No Content 처리
@@ -95,19 +122,15 @@ export const API_ENDPOINTS = {
 
   // Experiences
   experiences: '/api/v1/experiences',
+  experience: (id: string) => `/api/v1/experiences/${id}`,
   experienceSearch: (q: string) =>
     `/api/v1/experiences/search?q=${encodeURIComponent(q)}`,
   matchQuestion: (questionId: string) =>
     `/api/v1/experiences/match-question/${questionId}`,
   // Projects & Questions
   projects: '/api/v1/projects/',
-  projectsList: (params: { skip?: number; limit?: number }) => {
-    const searchParams = new URLSearchParams();
-    if (params.skip !== undefined) searchParams.set('skip', String(params.skip));
-    if (params.limit !== undefined) searchParams.set('limit', String(params.limit));
-    const query = searchParams.toString();
-    return `/api/v1/projects/${query ? `?${query}` : ''}`;
-  },
+  projectsList: (params?: { skip?: number; limit?: number }) =>
+    `/api/v1/projects/${buildQueryString(params)}`,
   project: (id: string) => `/api/v1/projects/${id}`,
   questions: (projectId: string) =>
     `/api/v1/projects/${projectId}/questions/`,
@@ -116,8 +139,8 @@ export const API_ENDPOINTS = {
 
   // Chats
   chats: '/api/v1/projects/chats',
-  chatHistory: (questionId: string) =>
-    `/api/v1/projects/chats/${questionId}`,
+  chatHistory: (questionId: string, params?: { cursor?: string; size?: number }) =>
+    `/api/v1/projects/chats/${questionId}${buildQueryString(params)}`,
   updateAnswer: (chatId: string) =>
     `/api/v1/projects/chats/${chatId}/answer`,
 } as const;

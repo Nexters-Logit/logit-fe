@@ -20,7 +20,7 @@ export function useChatStream({
 }: UseChatStreamOptions) {
   const lastMessageRef = useRef<string | null>(null);
 
-  const { messages, sendMessage, status, error, stop } = useChat({
+  const { messages, setMessages, sendMessage, status, error, stop } = useChat({
     id: `chat-${questionId}`,
     messages: initialMessages,
     transport: new DefaultChatTransport({
@@ -66,6 +66,7 @@ export function useChatStream({
 
   return {
     messages,
+    setMessages,
     sendMessage: send,
     status,
     error,

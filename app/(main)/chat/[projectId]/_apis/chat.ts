@@ -5,13 +5,23 @@ import type {
   MatchedExperienceResponse,
 } from "@/types/api";
 
+export const CHAT_HISTORY_PAGE_SIZE = 10;
+
+export interface GetChatHistoryParams {
+  cursor?: string;
+  size?: number;
+}
+
 /**
  * 채팅 히스토리 조회
  */
 export async function getChatHistory(
   questionId: string,
+  params?: GetChatHistoryParams,
 ): Promise<ChatHistoryResponse> {
-  return apiFetch<ChatHistoryResponse>(API_ENDPOINTS.chatHistory(questionId));
+  return apiFetch<ChatHistoryResponse>(
+    API_ENDPOINTS.chatHistory(questionId, params),
+  );
 }
 
 /**

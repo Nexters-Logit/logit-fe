@@ -14,6 +14,7 @@
   --color-primary-10: #eff6ff;
   --color-primary-20: #f5faff;
   --color-primary-50: #e5f0ff;
+  --color-primary-60: #c3dcff;
   --color-primary-70: #8dc9ff;
   --color-primary-100: #40a5ff;
   --color-primary-200: #2571eb;
@@ -64,6 +65,7 @@
 
   /* Box Shadow */
   --shadow-chat: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --shadow-toast: 4px 10px 20px rgba(0, 0, 0, 0.08);
 
   /* Font Sizes (Tailwind v4 @theme 방식) */
   --text-headline-1: 32px;
@@ -420,4 +422,47 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-pretendard), system-ui, sans-serif;
+}
+
+/* Streaming Text Effect */
+@keyframes shimmer {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+.streaming-text {
+  background: linear-gradient(-45deg, #6e7cd0 0%, #43b3c7 50%, #6e7cd0 100%);
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 2.5s ease-in-out infinite;
+}
+
+/* Toast Typography */
+.text-toast {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.4px;
+}
+
+/* react-toastify overrides */
+.Toastify__toast {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  min-height: auto;
+}
+
+.Toastify__toast-body {
+  padding: 0;
+  margin: 0;
 }

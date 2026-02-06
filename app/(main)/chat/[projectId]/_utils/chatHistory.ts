@@ -9,5 +9,7 @@ export function validateChatHistory(data: ChatHistoryResponse | null) {
     questionText: data?.question || '문항을 불러오는 중...',
     chats: data?.chats || [],
     experienceIds: data?.experience_ids || [],
+    hasMore: data?.has_more,
+    nextCursor: data?.next_cursor ?? null,
   };
 }

@@ -6,6 +6,7 @@ interface AIMessageProps {
   content: string;
   isDraft?: boolean;
   chatId?: string;
+  isStreaming?: boolean;
   onUpdateDraft?: (chatId: string) => void;
 }
 
@@ -13,13 +14,16 @@ export function AIMessage({
   content,
   isDraft,
   chatId,
+  isStreaming,
   onUpdateDraft,
 }: AIMessageProps) {
   return (
     <div className="flex gap-5 items-start py-2">
       <AIAvatar />
       <div className="flex-1 flex flex-col gap-4.5">
-        <div className="py-4 text-body-6-1 text-gray-400 [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+        <div
+          className={`py-4 text-body-6-1 text-gray-400 [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 ${isStreaming ? "streaming-text" : ""}`}
+        >
           <MessageResponse>{content}</MessageResponse>
         </div>
         {isDraft && chatId && onUpdateDraft && (

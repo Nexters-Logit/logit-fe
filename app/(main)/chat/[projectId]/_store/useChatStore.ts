@@ -15,6 +15,7 @@ interface ChatStore {
   deselectExperience: (id: string) => void;
   toggleExperience: (id: string) => void;
   clearSelection: () => void;
+  removeExperience: (id: string) => void;
 
   // 패널 탭 상태
   activePanelTab: PanelTab;
@@ -74,6 +75,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   },
 
   clearSelection: () => set({ selectedExperienceIds: [] }),
+
+  removeExperience: (id) =>
+    set((state) => ({
+      selectedExperienceIds: state.selectedExperienceIds.filter(
+        (existingId) => existingId !== id
+      ),
+    })),
 
   // 패널 탭 상태
   activePanelTab: 'EXPERIENCES',
