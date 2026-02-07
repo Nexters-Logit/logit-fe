@@ -41,10 +41,6 @@ export async function getMatchedExperiences(
  */
 export async function updateAnswer(
   chatId: string,
-  content: string,
 ): Promise<void> {
-  return apiFetch<void>(API_ENDPOINTS.updateAnswer(chatId), {
-    method: "PATCH",
-    body: JSON.stringify({ content }),
-  });
+  return apiFetch<void>(API_ENDPOINTS.updateAnswer(chatId), { method: "PATCH" });
 }
