@@ -9,7 +9,6 @@ import { useProjectContext } from "../../_context";
 import {
   useChatStream,
   useUpdateAnswer,
-  useDraftContent,
   useSyncChatStore,
   useChatHistoryPagination,
 } from "../../_hooks";
@@ -27,6 +26,7 @@ import type { ChatHistoryItem } from "@/types/api";
 interface ChatHistory {
   projectName: string;
   questionText: string;
+  answer: string | null;
   chats: ChatHistoryItem[];
   experienceIds: string[];
   hasMore?: boolean;
@@ -52,6 +52,7 @@ export function ChatAreaClient({
   // Store
   const selectedExperienceIds = useChatStore((s) => s.selectedExperienceIds);
   const setActivePanelTab = useChatStore((s) => s.setActivePanelTab);
+  const setDraftContent = useChatStore((s) => s.setDraftContent);
   const setMaxLength = useChatStore((s) => s.setMaxLength);
 
   // Mutations
@@ -66,6 +67,7 @@ export function ChatAreaClient({
       const metadata = extractDraftMetadata(message);
       if (metadata?.is_draft) {
         setActivePanelTab("DRAFT");
+        setDraftContent(getMessageContent(message));
       }
     },
   });
@@ -79,15 +81,15 @@ export function ChatAreaClient({
     setMessages: chat.setMessages,
   });
 
-  // Draft Content (스트리밍 우선, 서버 데이터 fallback)
-  const serverDraftContent = chatHistory.chats.findLast(
-    (c) => c.is_draft,
-  )?.content;
-  const draftContent = useDraftContent({
-    messages: chat.messages,
-    getMessageMetadata: chat.getMessageMetadata,
-    serverDraftContent,
-  });
+  // 초기 draft content: 저장된 answer → 히스토리의 draft fallback
+  const initialDraft =
+    chatHistory.answer ??
+    chatHistory.chats.findLast((c) => c.is_draft)?.content ??
+    null;
+
+  useEffect(() => {
+    setDraftContent(initialDraft);
+  }, [initialDraft, setDraftContent]);
 
   // Generate Draft Handler
   const handleGenerateDraft = () => {
@@ -98,7 +100,6 @@ export function ChatAreaClient({
 
   // Store 동기화
   useSyncChatStore({
-    draftContent,
     generateDraft: handleGenerateDraft,
     initialExperienceIds: chatHistory.experienceIds,
   });
@@ -116,12 +117,11 @@ export function ChatAreaClient({
       const metadata = chat.getMessageMetadata(m);
       return metadata?.chat_id === chatId;
     });
-    if (!message) return;
-
-    const content = getMessageContent(message);
-    if (content) {
-      updateAnswerMutation.mutate({ chatId, content });
+    if (message) {
+      setDraftContent(getMessageContent(message));
     }
+    updateAnswerMutation.mutate(chatId);
+    setActivePanelTab("DRAFT");
   };
 
   return (

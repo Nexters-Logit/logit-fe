@@ -36,7 +36,7 @@ function ToastContent({
   message: string;
 }) {
   return (
-    <div className="flex items-center gap-4 rounded-3.5 bg-primary-400 pl-4 pr-4.5 py-3 shadow-toast backdrop-blur-sm">
+    <div className="inline-flex items-center gap-4 rounded-3.5 bg-primary-400 pl-4 pr-4.5 py-3 shadow-toast backdrop-blur-sm max-w-120 text-center break-words">
       <div className="shrink-0">{icon}</div>
       <p className="text-toast text-primary-20">{message}</p>
     </div>
