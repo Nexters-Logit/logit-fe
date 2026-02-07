@@ -5,7 +5,7 @@ import {
   refreshAuthTokens,
 } from "./auth";
 
-export const API_BASE_URL = "https://api-dev.logit.ai.kr";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api-dev.logit.ai.kr';
 
 // ============================================================================
 // Query String Utility
