@@ -36,6 +36,7 @@ export default async function ChatProjectLayout({
         projectId,
         company: project?.company ?? "회사",
         jobPosition: project?.job_position ?? "직무",
+        dueDate: project?.due_date ?? null,
         questions,
       }}
     >

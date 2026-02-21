@@ -98,8 +98,11 @@ export interface ProjectListItem {
   id: string;
   company: string;
   job_position: string;
+  due_date: string | null;
   updated_at: string;
-  question_id: string;
+  question_id: string | null;
+  total_questions: number;
+  completed_questions: number;
 }
 
 // ============================================================================

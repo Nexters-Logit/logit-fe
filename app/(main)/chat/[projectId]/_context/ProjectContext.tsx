@@ -7,6 +7,7 @@ interface ProjectContextValue {
   projectId: string;
   company: string;
   jobPosition: string;
+  dueDate: string | null;
   questions: QuestionListItem[];
 }
 
