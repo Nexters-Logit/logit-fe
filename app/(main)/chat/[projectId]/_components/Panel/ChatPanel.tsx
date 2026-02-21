@@ -17,12 +17,16 @@ export function ChatPanel({ maxLength, experienceCards }: ChatPanelProps) {
   const router = useRouter();
   const activeTab = useChatStore((s) => s.activePanelTab);
   const storeMaxLength = useChatStore((s) => s.maxLength);
+  const setScrollTargetExperienceId = useChatStore((s) => s.setScrollTargetExperienceId);
   const [isExperienceModalOpen, setIsExperienceModalOpen] = useState(false);
 
   const effectiveMaxLength = maxLength ?? storeMaxLength;
 
-  const handleExperienceCreated = () => {
+  const handleExperienceCreated = (createdId?: string) => {
     router.refresh();
+    if (createdId) {
+      setScrollTargetExperienceId(createdId);
+    }
   };
 
   return (
