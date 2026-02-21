@@ -12,11 +12,7 @@ import {
   useSyncChatStore,
   useChatHistoryPagination,
 } from "../../_hooks";
-import {
-  convertToUIMessages,
-  extractDraftMetadata,
-  getMessageContent,
-} from "../../_utils";
+import { convertToUIMessages, getMessageContent } from "../../_utils";
 import type { ChatHistoryItem } from "@/types/api";
 
 // ============================================================================
@@ -63,13 +59,6 @@ export function ChatAreaClient({
     questionId,
     experienceIds: selectedExperienceIds,
     initialMessages: convertToUIMessages(chatHistory.chats),
-    onFinish: (message) => {
-      const metadata = extractDraftMetadata(message);
-      if (metadata?.is_draft) {
-        setActivePanelTab("DRAFT");
-        setDraftContent(getMessageContent(message));
-      }
-    },
   });
 
   // 채팅 히스토리 페이지네이션
@@ -81,11 +70,8 @@ export function ChatAreaClient({
     setMessages: chat.setMessages,
   });
 
-  // 초기 draft content: 저장된 answer → 히스토리의 draft fallback
-  const initialDraft =
-    chatHistory.answer ??
-    chatHistory.chats.findLast((c) => c.is_draft)?.content ??
-    null;
+  // 초기 draft content: 명시적으로 저장된 answer만 사용
+  const initialDraft = chatHistory.answer ?? null;
 
   useEffect(() => {
     setDraftContent(initialDraft);
