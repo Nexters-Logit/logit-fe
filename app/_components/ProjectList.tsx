@@ -13,7 +13,11 @@ interface ProjectListProps {
 export function ProjectList({ projects, hasToken }: ProjectListProps) {
   const router = useRouter();
 
-  const handleProjectClick = (projectId: string, questionId: string) => {
+  const handleProjectClick = (
+    projectId: string,
+    questionId: string | null,
+  ) => {
+    if (!questionId) return;
     router.push(`/chat/${projectId}/${questionId}`);
   };
 

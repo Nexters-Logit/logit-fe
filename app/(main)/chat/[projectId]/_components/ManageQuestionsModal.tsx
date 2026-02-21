@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { QuestionFieldItem } from "@/app/_components/QuestionFieldItem";
@@ -200,17 +199,9 @@ export function ManageQuestionsModal({
       >
         <div className="shrink-0 px-7.5 pt-7.5 pb-6">
           <DialogHeader className="flex-row items-start justify-between">
-            <div className="flex flex-col gap-1.5">
-              <p className="text-body-7-2 text-primary-400 font-semibold">
-                문항 관리
-              </p>
-              <DialogTitle className="text-title-2-2 text-gray-500">
-                자기소개서 문항 입력
-              </DialogTitle>
-              <DialogDescription className="text-body-7-2 text-primary-400">
-                작성하는 자기소개서 문항을 입력해주세요
-              </DialogDescription>
-            </div>
+            <DialogTitle className="text-title-2-2 text-gray-500">
+              자기소개서 문항 수정
+            </DialogTitle>
             <button
               type="button"
               onClick={handleClose}
@@ -246,30 +237,28 @@ export function ManageQuestionsModal({
             <button
               type="button"
               onClick={handleAddField}
-              className="group w-full h-11 flex items-center justify-center bg-primary-50 rounded-3.5 hover:bg-primary-60 transition-colors cursor-pointer"
+              className="group w-full h-11 flex items-center justify-center gap-1.5 bg-primary-20 rounded-3.5 hover:bg-primary-50 transition-colors cursor-pointer"
             >
+              <Image
+                src="/icons/icon-plus-circle.svg"
+                alt=""
+                width={18}
+                height={18}
+              />
               <span className="text-body-3-2 text-gray-300 group-hover:text-gray-400 transition-colors">
-                + 추가하기
+                추가하기
               </span>
             </button>
           </div>
         </div>
 
-        <div className="flex items-center justify-center gap-4.5 px-7.5 py-7">
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={handleClose}
-            disabled={isPending}
-          >
-            취소
-          </Button>
+        <div className="flex items-center justify-center px-7.5 py-7">
           <Button
             type="button"
             onClick={handleSave}
             disabled={isPending || !hasChanges}
           >
-            {isPending ? "저장 중..." : "업데이트"}
+            {isPending ? "저장 중..." : "문항 수정"}
           </Button>
         </div>
       </DialogContent>

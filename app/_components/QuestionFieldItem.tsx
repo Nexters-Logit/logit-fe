@@ -52,10 +52,10 @@ export function QuestionFieldItem({
           className="shrink-0 size-10 flex items-center justify-center border border-gray-70 rounded-lg hover:bg-gray-20 transition-colors cursor-pointer"
         >
           <Image
-            src="/icons/icon-trash.svg"
+            src="/icons/icon-trash-gray.svg"
             alt="삭제"
-            width={24}
-            height={24}
+            width={20}
+            height={20}
           />
         </button>
       )}
