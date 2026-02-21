@@ -15,3 +15,7 @@ export * from './Panel';
 
 // Layout
 export * from './Layout';
+
+// Modals
+export { AddQuestionModal } from './AddQuestionModal';
+export { DeleteQuestionDialog } from './DeleteQuestionDialog';
