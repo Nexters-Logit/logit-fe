@@ -1,5 +1,5 @@
 export const ACCESS_TOKEN_COOKIE = "logit_access_token";
-const REFRESH_TOKEN_KEY = "logit_refresh_token";
+
 const COOKIE_MAX_AGE = 7 * 24 * 60 * 60; // 7일 (초)
 
 function setCookie(name: string, value: string): void {
@@ -22,10 +22,9 @@ function deleteCookie(name: string): void {
   document.cookie = `${name}=; path=/; max-age=0`;
 }
 
-export function setAuthTokens(accessToken: string, refreshToken: string): void {
+export function setAuthTokens(accessToken: string): void {
   if (typeof window === "undefined") return;
   setCookie(ACCESS_TOKEN_COOKIE, accessToken);
-  setCookie(REFRESH_TOKEN_KEY, refreshToken);
 }
 
 export function getAccessToken(): string | null {
@@ -33,15 +32,9 @@ export function getAccessToken(): string | null {
   return getCookie(ACCESS_TOKEN_COOKIE);
 }
 
-export function getRefreshToken(): string | null {
-  if (typeof window === "undefined") return null;
-  return getCookie(REFRESH_TOKEN_KEY);
-}
-
 export function clearAuthTokens(): void {
   if (typeof window === "undefined") return;
   deleteCookie(ACCESS_TOKEN_COOKIE);
-  deleteCookie(REFRESH_TOKEN_KEY);
 }
 
 const API_BASE_URL = "https://api-dev.logit.ai.kr";
@@ -52,18 +45,15 @@ let refreshPromise: Promise<boolean> | null = null;
 
 interface RefreshResponse {
   access_token: string;
-  refresh_token: string;
 }
 
 /**
- * 리프레시 토큰으로 새 액세스/리프레시 토큰을 발급받아 쿠키에 저장합니다.
- * 클라이언트에서만 사용 가능합니다. 동시 호출 시 하나의 refresh만 수행합니다.
+ * HttpOnly 쿠키의 refresh_token으로 새 액세스 토큰을 발급받아 저장합니다.
+ * POST 시 credentials: 'include'로 서버에 refresh_token 쿠키가 전달됩니다.
  * @returns 성공 시 true, 실패 시 false
  */
 export async function refreshAuthTokens(): Promise<boolean> {
   if (typeof window === "undefined") return false;
-  const refreshToken = getRefreshToken();
-  if (!refreshToken) return false;
 
   if (refreshPromise) return refreshPromise;
 
@@ -71,13 +61,16 @@ export async function refreshAuthTokens(): Promise<boolean> {
     try {
       const res = await fetch(REFRESH_API_URL, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refresh_token: refreshToken }),
+        body: JSON.stringify({}),
       });
       if (!res.ok) return false;
       const data: RefreshResponse = await res.json();
-      setAuthTokens(data.access_token, data.refresh_token);
-      return true;
+      if (data.access_token) {
+        setAuthTokens(data.access_token);
+      }
+      return !!data.access_token;
     } catch {
       return false;
     } finally {
@@ -93,10 +86,11 @@ export async function refreshAuthTokens(): Promise<boolean> {
  */
 export async function logout(): Promise<void> {
   if (typeof window === "undefined") return;
-  const refreshToken = getRefreshToken();
+
   const accessToken = getAccessToken();
   clearAuthTokens();
-  if (refreshToken && accessToken) {
+
+  if (accessToken) {
     try {
       await fetch(LOGOUT_API_URL, {
         method: "POST",
@@ -104,7 +98,7 @@ export async function logout(): Promise<void> {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ refresh_token: refreshToken }),
+        body: JSON.stringify({}),
       });
     } catch {
       // 네트워크 오류 등 - 이미 로컬 토큰은 삭제됨
