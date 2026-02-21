@@ -12,8 +12,8 @@ import { ExperienceCard } from "./ExperienceCard";
 import { SectionHeader } from "./SectionHeader";
 import { NewProjectModal } from "./NewProjectModal";
 import { NewExperienceModal } from "./NewExperienceModal";
-import { LoginModal } from "./LoginModal";
 import { getAccessToken } from "@/libs/auth";
+import { useLoginModal } from "./LoginModalContext";
 import { useExperienceCounts } from "@/app/_hooks/useExperienceCounts";
 import { EXPERIENCE_CATEGORY } from "@/types/api";
 
@@ -75,7 +75,7 @@ interface HomeClientProps {
 export function HomeClient({ projectListSlot }: HomeClientProps) {
   const [isProjectModalOpen, setProjectModalOpen] = useState(false);
   const [isExperienceModalOpen, setExperienceModalOpen] = useState(false);
-  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+  const { setLoginModalOpen } = useLoginModal();
 
   const handleExperienceButtonClick = () => {
     if (getAccessToken()) {
@@ -149,7 +149,6 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
         onOpenChange={setExperienceModalOpen}
         onSuccess={() => setProjectModalOpen(true)}
       />
-      <LoginModal open={isLoginModalOpen} onOpenChange={setLoginModalOpen} />
     </main>
   );
 }

@@ -6,10 +6,27 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { logout } from "@/libs/auth";
+import { getAccessToken, logout } from "@/libs/auth";
+import { useLoginModal } from "@/app/_components/LoginModalContext";
 import { LogOut } from "lucide-react";
 
 export function UserMenu() {
+  const { setLoginModalOpen } = useLoginModal();
+  const isLoggedIn = !!getAccessToken();
+
+  if (!isLoggedIn) {
+    return (
+      <button
+        type="button"
+        onClick={() => setLoginModalOpen(true)}
+        className="w-10 h-10 rounded-full bg-primary-20 flex items-center justify-center hover:bg-primary-30 transition-colors cursor-pointer"
+        aria-label="로그인"
+      >
+        <div className="w-8 h-8 rounded-full bg-primary-70" />
+      </button>
+    );
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

@@ -1,4 +1,5 @@
-import { Header } from '@/components/common/Header';
+import { Header } from "@/components/common/Header";
+import { LoginModalProvider } from "../_components/LoginModalContext";
 
 export default function MainLayout({
   children,
@@ -6,9 +7,11 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="h-screen bg-white flex flex-col overflow-hidden">
-      <Header />
-      {children}
-    </div>
+    <LoginModalProvider>
+      <div className="h-screen bg-white flex flex-col overflow-hidden">
+        <Header />
+        {children}
+      </div>
+    </LoginModalProvider>
   );
 }
