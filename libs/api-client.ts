@@ -155,5 +155,4 @@ export const API_ENDPOINTS = {
     questionId: string,
     params?: { cursor?: string; size?: number },
   ) => `/api/v1/projects/chats/${questionId}${buildQueryString(params)}`,
-  updateAnswer: (chatId: string) => `/api/v1/projects/chats/${chatId}/answer`,
 } as const;

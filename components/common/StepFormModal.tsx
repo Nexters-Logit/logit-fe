@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -18,7 +19,6 @@ interface StepFormModalProps {
   title: string;
   description: string;
   headerExtra?: ReactNode;
-  showCloseButton?: boolean;
   children: ReactNode;
 }
 
@@ -31,14 +31,13 @@ export function StepFormModal({
   title,
   description,
   headerExtra,
-  showCloseButton = true,
   children,
 }: StepFormModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className="flex max-h-[90vh] flex-col overflow-hidden rounded-2xl border-0 p-0 shadow-chat sm:max-w-2xl"
-        showCloseButton={showCloseButton}
+        showCloseButton={false}
         onPointerDownOutside={(e) => {
           e.preventDefault();
           onClose();
@@ -46,7 +45,19 @@ export function StepFormModal({
         onEscapeKeyDown={onClose}
       >
         <div className="shrink-0 px-8 pt-6 pb-7 gap-1.5">
-          <DialogHeader>
+          <DialogHeader className="relative">
+            <button
+              type="button"
+              onClick={onClose}
+              className="absolute top-0 right-0 shrink-0 p-1 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+            >
+              <Image
+                src="/icons/icon-close.svg"
+                alt="닫기"
+                width={28}
+                height={28}
+              />
+            </button>
             <p className="text-body-7-2 text-primary-400 font-semibold">
               {step}/{totalSteps}
             </p>

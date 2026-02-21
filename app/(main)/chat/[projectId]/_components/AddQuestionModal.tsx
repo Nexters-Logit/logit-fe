@@ -8,6 +8,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { createQuestion } from "@/app/_actions/projects";
 import { showToast } from "@/libs/toast";
@@ -89,11 +91,11 @@ export function AddQuestionModal({
             <label className="text-body-7-2 text-primary-500 font-semibold">
               문항내용
             </label>
-            <textarea
+            <Textarea
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               placeholder="예) 지원동기를 입력해주세요"
-              className="h-16 rounded-lg border border-gray-70 px-3.5 py-2.5 text-body-5-1 text-gray-500 placeholder:text-gray-200 resize-none focus:outline-none focus:border-primary-100 transition-colors"
+              className="h-16 text-body-5-1 text-gray-500 resize-none"
             />
           </div>
 
@@ -101,12 +103,12 @@ export function AddQuestionModal({
             <label className="text-body-7-2 text-primary-500 font-semibold">
               글자 수 제한
             </label>
-            <input
+            <Input
               type="number"
               value={maxLength}
               onChange={(e) => setMaxLength(e.target.value)}
               placeholder="글자수를 입력해주세요"
-              className="h-10 rounded-lg border border-gray-70 px-3.5 text-body-5-1 text-gray-500 placeholder:text-gray-200 focus:outline-none focus:border-primary-100 transition-colors"
+              className="h-10 text-body-5-1 text-gray-500"
             />
           </div>
         </div>

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ExperienceCard } from "./ExperienceCard";
 import { ExperienceDetailModal } from "./ExperienceDetailModal";
 import { DeleteExperienceDialog } from "./DeleteExperienceDialog";
-import { EditExperienceModal } from "@/app/_components/EditExperienceModal";
+import { ExperienceModal } from "@/app/_components/ExperienceModal";
 import { useChatStore } from "../../_store/useChatStore";
 import { useDeleteExperience } from "@/app/_hooks/useDeleteExperience";
 import { showToast } from "@/libs/toast";
@@ -120,7 +120,8 @@ export function ExperienceCards({ matchedExperiences }: ExperienceCardsProps) {
       )}
 
       {editingExperience && (
-        <EditExperienceModal
+        <ExperienceModal
+          mode="edit"
           open={!!editingExperience}
           onOpenChange={(open) => !open && setEditingExperience(null)}
           experience={editingExperience}

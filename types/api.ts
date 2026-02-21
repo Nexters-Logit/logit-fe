@@ -49,16 +49,24 @@ export interface Experience {
   user_id: string;
   title: string;
   start_date: string;
-  end_date: string;
+  end_date: string | null;
   experience_type: ExperienceType;
-  situation: string;
-  task: string;
-  action: string;
-  result: string;
+  format_type: FormatType;
   category: ExperienceCategory;
   tags: string;
   created_at: string;
   updated_at: string;
+  /** STAR */
+  situation: string | null;
+  task: string | null;
+  action: string | null;
+  result: string | null;
+  /** PSI */
+  problem: string | null;
+  solution: string | null;
+  insight: string | null;
+  /** FREE */
+  content: string | null;
 }
 
 export interface ExperienceListResponse {
