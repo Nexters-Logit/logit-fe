@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { setAuthTokens } from "@/libs/auth";
+import { API_BASE_URL } from "@/libs/api-client";
 
 function AuthCallbackContent() {
   const router = useRouter();
@@ -10,23 +11,46 @@ function AuthCallbackContent() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let accessToken = searchParams.get("access_token");
-    let refreshToken = searchParams.get("refresh_token");
-    if (
-      accessToken?.includes("&refresh_token=") ||
-      accessToken?.includes("&access_token=")
-    ) {
-      accessToken = accessToken.split("&refresh_token=")[0] ?? "";
-      refreshToken = accessToken.split("&refresh_token=")[1] ?? "";
-    }
+    const code = searchParams.get("code");
 
-    if (accessToken && refreshToken) {
-      setAuthTokens(accessToken, refreshToken);
-      router.replace("/");
+    if (!code) {
+      setError("유효하지 않은 콜백 요청입니다.");
       return;
     }
 
-    setError("유효하지 않은 콜백 요청입니다.");
+    const exchangeToken = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/auth/token`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            code,
+            platform: "web",
+          }),
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.detail || `API Error: ${res.status}`);
+        }
+
+        const data: { access_token: string; refresh_token: string } =
+          await res.json();
+
+        setAuthTokens(data.access_token, data.refresh_token);
+        router.replace("/");
+      } catch (e) {
+        setError(
+          e instanceof Error
+            ? e.message
+            : "로그인 처리 중 오류가 발생했습니다.",
+        );
+      }
+    };
+
+    exchangeToken();
   }, [router, searchParams]);
 
   if (error) {
