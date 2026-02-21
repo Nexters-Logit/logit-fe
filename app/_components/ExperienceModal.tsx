@@ -6,9 +6,10 @@ import {
   type NewExperienceFormRef,
 } from "./NewExperienceForm";
 import { useCreateExperience } from "@/app/_hooks/useCreateExperience";
+import { useUpdateExperience } from "@/app/_hooks/useUpdateExperience";
 import { StepFormModal } from "@/components/common/StepFormModal";
 import { showToast } from "@/libs/toast";
-import type { ExperienceCreate } from "@/types/api";
+import type { Experience, ExperienceCreate } from "@/types/api";
 
 const EXAMPLE_EXPERIENCE: ExperienceCreate = {
   title: "주식회사 로짓 컴퍼니",
@@ -27,31 +28,36 @@ const EXAMPLE_EXPERIENCE: ExperienceCreate = {
 };
 
 const STEP_TITLES = {
-  1: {
-    title: "경험 등록",
-    description: "등록하는 경험의 정보를 알려주세요.",
+  create: {
+    1: { title: "경험 등록", description: "등록하는 경험의 정보를 알려주세요." },
+    2: { title: "경험 정리", description: "답변의 완성도를 위해 최소 50자 이상 입력해 주세요." },
   },
-  2: {
-    title: "경험 정리",
-    description: "답변의 완성도를 위해 최소 50자 이상 입력해 주세요.",
+  edit: {
+    1: { title: "경험 수정", description: "수정할 경험의 정보를 입력해주세요." },
+    2: { title: "경험 정리", description: "답변의 완성도를 위해 최소 50자 이상 입력해 주세요." },
   },
 } as const;
 
-interface NewExperienceModalProps {
+type ExperienceModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSuccess?: (createdId?: string) => void;
-}
+} & (
+  | { mode?: "create"; onSuccess?: (createdId?: string) => void; experience?: never }
+  | { mode: "edit"; onSuccess?: () => void; experience: Experience }
+);
 
-export function NewExperienceModal({
+export function ExperienceModal({
   open,
   onOpenChange,
+  mode = "create",
   onSuccess,
-}: NewExperienceModalProps) {
+  experience,
+}: ExperienceModalProps) {
   const createExperience = useCreateExperience();
+  const updateExperience = useUpdateExperience();
   const formRef = useRef<NewExperienceFormRef>(null);
   const [step, setStep] = useState<1 | 2>(1);
-  const { title, description } = STEP_TITLES[step];
+  const { title, description } = STEP_TITLES[mode][step];
 
   const handleClose = () => {
     onOpenChange(false);
@@ -59,17 +65,35 @@ export function NewExperienceModal({
   };
 
   const handleSubmit = (data: ExperienceCreate) => {
-    createExperience.mutate(data, {
-      onSuccess: (response) => {
-        showToast.success("경험이 등록되었습니다.");
-        handleClose();
-        onSuccess?.(response?.id);
-      },
-      onError: () => {
-        showToast.error("등록 중 오류가 발생했습니다.");
-      },
-    });
+    if (mode === "edit" && experience) {
+      updateExperience.mutate(
+        { id: experience.id, data },
+        {
+          onSuccess: () => {
+            showToast.success("경험이 수정되었습니다.");
+            handleClose();
+            (onSuccess as (() => void) | undefined)?.();
+          },
+          onError: () => {
+            showToast.error("수정 중 오류가 발생했습니다.");
+          },
+        },
+      );
+    } else {
+      createExperience.mutate(data, {
+        onSuccess: (response) => {
+          showToast.success("경험이 등록되었습니다.");
+          handleClose();
+          (onSuccess as ((createdId?: string) => void) | undefined)?.(response?.id);
+        },
+        onError: () => {
+          showToast.error("등록 중 오류가 발생했습니다.");
+        },
+      });
+    }
   };
+
+  const isPending = mode === "edit" ? updateExperience.isPending : createExperience.isPending;
 
   return (
     <StepFormModal
@@ -81,20 +105,24 @@ export function NewExperienceModal({
       title={title}
       description={description}
       headerExtra={
-        <button
-          type="button"
-          onClick={() => formRef.current?.fillWithExample(EXAMPLE_EXPERIENCE)}
-          className="rounded-lg px-3.5 py-0.5 text-body-7-3 text-primary-400 border border-gray-70 bg-gray-20 cursor-pointer hover:bg-gray-70 transition-colors"
-        >
-          예시 불러오기
-        </button>
+        mode === "create" ? (
+          <button
+            type="button"
+            onClick={() => formRef.current?.fillWithExample(EXAMPLE_EXPERIENCE)}
+            className="rounded-lg px-3.5 py-0.5 text-body-7-3 text-primary-400 border border-gray-70 bg-gray-20 cursor-pointer hover:bg-gray-70 transition-colors"
+          >
+            예시 불러오기
+          </button>
+        ) : undefined
       }
     >
       <NewExperienceForm
-        ref={formRef}
+        ref={mode === "create" ? formRef : undefined}
         onSubmit={handleSubmit}
-        isPending={createExperience.isPending}
+        isPending={isPending}
         onStepChange={setStep}
+        mode={mode}
+        initialData={mode === "edit" ? experience : undefined}
       />
     </StepFormModal>
   );

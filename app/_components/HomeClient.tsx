@@ -11,7 +11,7 @@ import {
 import { ExperienceCard } from "./ExperienceCard";
 import { SectionHeader } from "./SectionHeader";
 import { NewProjectModal } from "./NewProjectModal";
-import { NewExperienceModal } from "./NewExperienceModal";
+import { ExperienceModal } from "./ExperienceModal";
 import { getAccessToken } from "@/libs/auth";
 import { useLoginModal } from "./LoginModalContext";
 import { useExperienceCounts } from "@/app/_hooks/useExperienceCounts";
@@ -144,7 +144,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
         open={isProjectModalOpen}
         onOpenChange={setProjectModalOpen}
       />
-      <NewExperienceModal
+      <ExperienceModal
         open={isExperienceModalOpen}
         onOpenChange={setExperienceModalOpen}
         onSuccess={() => setProjectModalOpen(true)}
