@@ -37,7 +37,7 @@ const experienceFormSchema = z
     start_date: z.string().min(1, "시작일을 선택해주세요"),
     end_date: z.string(),
     experience_type: z.string().min(1, "경험 유형을 선택해주세요"),
-    category: z.string().min(1, "카테고리를 선택해주세요"),
+    category: z.string(), // UI 삭제로 선택 불가 → 제출 시 기본값 적용
     experience_format: z.string().min(1, "경험정리방법을 선택해주세요"),
     situation: z.string(),
     task: z.string(),
@@ -234,7 +234,11 @@ export const NewExperienceForm = forwardRef<
   const normalizeDate = (date: string) =>
     date ? date.replace(/\./g, "-") : date;
 
+  const defaultCategory = Object.values(EXPERIENCE_CATEGORY)[0] as ExperienceCreate["category"];
+
   const buildCreatePayload = (data: ExperienceFormValues): ExperienceCreate => {
+    const category: ExperienceCreate["category"] =
+      (data.category?.trim() as ExperienceCreate["category"]) || defaultCategory;
     const base = {
       title: data.title,
       start_date: normalizeDate(data.start_date),
@@ -242,7 +246,7 @@ export const NewExperienceForm = forwardRef<
       experience_type:
         data.experience_type as ExperienceCreate["experience_type"],
       format_type: data.experience_format as ExperienceCreate["format_type"],
-      category: data.category as ExperienceCreate["category"],
+      category,
     };
     if (data.experience_format === EXPERIENCE_FORMAT.STAR) {
       return {
