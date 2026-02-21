@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/libs/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap font-semibold transition-all disabled:pointer-events-none disabled:bg-gray-100 disabled:text-white [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-2 aria-invalid:ring-destructive/20 aria-invalid:border-alert cursor-pointer w-[165px] h-[44px] rounded-3.5",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap font-semibold transition-all disabled:pointer-events-none disabled:bg-gray-100 disabled:text-white [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-primary-200 focus-visible:ring-offset-2 aria-invalid:ring-alert/20 aria-invalid:border-alert cursor-pointer rounded-3.5",
   {
     variants: {
       variant: {
@@ -20,7 +20,7 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-11 w -[165px] px-6 py-3.5 has-[>svg]:px-5",
+        default: "h-11 px-6 py-3.5 has-[>svg]:px-5",
         icon: "size-11 rounded-3.5",
         "icon-xs": "size-6 rounded-3.5 [&_svg:not([class*='size-'])]:size-3",
         "icon-sm": "size-9 rounded-3.5",
