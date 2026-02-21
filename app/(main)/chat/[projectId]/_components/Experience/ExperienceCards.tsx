@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ExperienceCard } from "./ExperienceCard";
 import { ExperienceDetailModal } from "./ExperienceDetailModal";
@@ -21,6 +21,8 @@ export function ExperienceCards({ matchedExperiences }: ExperienceCardsProps) {
   const selectedIds = useChatStore((s) => s.selectedExperienceIds);
   const toggleExperience = useChatStore((s) => s.toggleExperience);
   const removeExperience = useChatStore((s) => s.removeExperience);
+  const scrollTargetExperienceId = useChatStore((s) => s.scrollTargetExperienceId);
+  const setScrollTargetExperienceId = useChatStore((s) => s.setScrollTargetExperienceId);
 
   const deleteExperience = useDeleteExperience();
 
@@ -37,6 +39,19 @@ export function ExperienceCards({ matchedExperiences }: ExperienceCardsProps) {
   const matchedIds = new Set(matchedExperiences.map((me) => me.experience.id));
   const validSelectedCount = selectedIds.filter((id) => matchedIds.has(id)).length;
   const canSelectMore = validSelectedCount < MAX_EXPERIENCE_SELECTION;
+
+  // 새 경험 생성 후 스크롤
+  useEffect(() => {
+    if (!scrollTargetExperienceId) return;
+
+    const el = document.querySelector(
+      `[data-experience-id="${scrollTargetExperienceId}"]`
+    );
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      setScrollTargetExperienceId(null);
+    }
+  }, [scrollTargetExperienceId, matchedExperiences, setScrollTargetExperienceId]);
 
   const handleShowDetail = (experience: Experience) => {
     setDetailExperience(experience);
@@ -80,17 +95,18 @@ export function ExperienceCards({ matchedExperiences }: ExperienceCardsProps) {
     <>
       <div className="flex flex-col gap-3 py-2">
         {matchedExperiences.map(({ experience, similarity_score }) => (
-          <ExperienceCard
-            key={experience.id}
-            experience={experience}
-            similarityScore={similarity_score}
-            isSelected={selectedIds.includes(experience.id)}
-            onToggle={() => toggleExperience(experience.id)}
-            onShowDetail={handleShowDetail}
-            onEdit={handleEdit}
-            onDelete={handleDeleteRequest}
-            disabled={!canSelectMore}
-          />
+          <div key={experience.id} data-experience-id={experience.id}>
+            <ExperienceCard
+              experience={experience}
+              similarityScore={similarity_score}
+              isSelected={selectedIds.includes(experience.id)}
+              onToggle={() => toggleExperience(experience.id)}
+              onShowDetail={handleShowDetail}
+              onEdit={handleEdit}
+              onDelete={handleDeleteRequest}
+              disabled={!canSelectMore}
+            />
+          </div>
         ))}
       </div>
 
