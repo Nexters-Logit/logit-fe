@@ -16,6 +16,7 @@ const EXAMPLE_EXPERIENCE: ExperienceCreate = {
   end_date: "2026-01-01",
   experience_type: "인턴",
   category: "기술적 전문성",
+  format_type: "STAR",
   situation:
     "반려동물 용품 커머스 스타트업에서 인턴으로 근무하며 신제품(자동 급식기) SNS 광고 캠페인을 집행함. 초기 광고비 200만 원을 투입했으나 클릭률(CTR)은 0.8%에 불과했고, 실제 구매로 이어지는 전환율(CVR)이 매우 낮아 예산 낭비가 우려되는 상황이었음. |",
   task: "2주 안에 광고 클릭률을 1.5% 이상으로 끌어올리고, 가입 및 구매 전환율을 전주 대비 20% 개선하는 것을 목표로 잡음.",
@@ -27,11 +28,11 @@ const EXAMPLE_EXPERIENCE: ExperienceCreate = {
 
 const STEP_TITLES = {
   1: {
-    title: "새 경험 등록",
+    title: "경험 등록",
     description: "등록하는 경험의 정보를 알려주세요.",
   },
   2: {
-    title: "STAR 기반 경험 정리",
+    title: "경험 정리",
     description: "답변의 완성도를 위해 최소 50자 이상 입력해 주세요.",
   },
 } as const;

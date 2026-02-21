@@ -36,6 +36,14 @@ export type ExperienceType =
 // Experience
 // ============================================================================
 
+export const FORMAT_TYPE = {
+  STAR: "STAR",
+  PSI: "PSI",
+  FREE: "FREE",
+} as const;
+
+export type FormatType = (typeof FORMAT_TYPE)[keyof typeof FORMAT_TYPE];
+
 export interface Experience {
   id: string;
   user_id: string;
@@ -172,16 +180,25 @@ export interface ProjectCreate {
   questions: QuestionCreate[];
 }
 
+/** POST /api/v1/experiences 요청. format_type에 따라 해당 필드만 전송 */
 export interface ExperienceCreate {
   title: string;
   start_date: string;
   end_date: string;
   experience_type: ExperienceType;
-  situation: string;
-  task: string;
-  action: string;
-  result: string;
+  format_type: FormatType;
   category: ExperienceCategory;
+  /** STAR */
+  situation?: string;
+  task?: string;
+  action?: string;
+  result?: string;
+  /** PSI */
+  problem?: string;
+  solution?: string;
+  insight?: string;
+  /** FREE */
+  content?: string;
 }
 
 export interface QuestionUpdate {
@@ -195,9 +212,14 @@ export interface ExperienceUpdate {
   start_date: string;
   end_date: string;
   experience_type: ExperienceType;
-  situation: string;
-  task: string;
-  action: string;
-  result: string;
+  format_type: FormatType;
   category: ExperienceCategory;
+  situation?: string;
+  task?: string;
+  action?: string;
+  result?: string;
+  problem?: string;
+  solution?: string;
+  insight?: string;
+  content?: string;
 }
