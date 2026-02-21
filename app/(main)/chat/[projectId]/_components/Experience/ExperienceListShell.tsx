@@ -12,7 +12,7 @@ export function ExperienceListShell({ children, onAddClick }: ExperienceListShel
   return (
     <div className="flex-1 flex flex-col gap-5 pt-5 pb-8 overflow-hidden">
       <p className="text-body-5-5 text-gray-400 opacity-60 px-7">
-        반영할 경험카드를 선택하세요 (최대 3개)
+        사용할 경험을 선택하세요 (최대 3개)
       </p>
 
       <div className="flex-1 flex flex-col gap-7 overflow-y-auto px-7">

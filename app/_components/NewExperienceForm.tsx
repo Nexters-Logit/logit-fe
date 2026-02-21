@@ -67,7 +67,7 @@ const experienceFormSchema = z
         );
       }
       if (data.experience_format === EXPERIENCE_FORMAT.FREE) {
-        return data.content.trim().length >= minLen;
+        return data.content.trim().length >= 1;
       }
       return true;
     },

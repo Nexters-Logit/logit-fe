@@ -32,6 +32,10 @@ interface ChatStore {
   // 문항 최대 글자수
   maxLength: number;
   setMaxLength: (length: number) => void;
+
+  // 스크롤 타겟 경험 ID
+  scrollTargetExperienceId: string | null;
+  setScrollTargetExperienceId: (id: string | null) => void;
 }
 
 export const useChatStore = create<ChatStore>((set, get) => ({
@@ -98,4 +102,8 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   // 문항 최대 글자수
   maxLength: 1000,
   setMaxLength: (length) => set({ maxLength: length }),
+
+  // 스크롤 타겟 경험 ID
+  scrollTargetExperienceId: null,
+  setScrollTargetExperienceId: (id) => set({ scrollTargetExperienceId: id }),
 }));

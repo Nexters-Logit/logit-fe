@@ -21,8 +21,8 @@ export async function getExperiences(): Promise<Experience[]> {
 /**
  * 경험 생성
  */
-export async function createExperience(data: ExperienceCreate) {
-  return apiFetch(API_ENDPOINTS.experiences, {
+export async function createExperience(data: ExperienceCreate): Promise<Experience> {
+  return apiFetch<Experience>(API_ENDPOINTS.experiences, {
     method: "POST",
     body: JSON.stringify(data),
   });

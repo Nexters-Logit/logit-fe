@@ -9,11 +9,13 @@ import {
 import Image from "next/image";
 
 interface ExperienceOptionsMenuProps {
+  onShowDetail: () => void;
   onEdit: () => void;
   onDelete: () => void;
 }
 
 export function ExperienceOptionsMenu({
+  onShowDetail,
   onEdit,
   onDelete,
 }: ExperienceOptionsMenuProps) {
@@ -40,22 +42,32 @@ export function ExperienceOptionsMenu({
         <DropdownMenuItem
           onClick={(e) => {
             e.stopPropagation();
+            onShowDetail();
+          }}
+          className="px-4 py-3.5 gap-3 cursor-pointer hover:bg-gray-50 focus:bg-gray-50 border-b border-gray-70"
+        >
+          <Image src="/icons/icon-expand.svg" alt="" width={18} height={18} />
+          <span className="text-body-5-3 text-[#17181E]">전체보기</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation();
             onEdit();
           }}
-          className="px-5 py-3.75 gap-3 cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
+          className="px-4 py-3.5 gap-3 cursor-pointer hover:bg-gray-50 focus:bg-gray-50 border-b border-gray-70"
         >
           <Image src="/icons/icon-edit.svg" alt="" width={18} height={18} />
-          <span className="text-body-5-3 text-primary-600">수정</span>
+          <span className="text-body-5-3 text-[#17181E]">수정하기</span>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={(e) => {
             e.stopPropagation();
             onDelete();
           }}
-          className="px-5 py-3.75 gap-3 cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
+          className="px-4 py-3.5 gap-3 cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
         >
           <Image src="/icons/icon-trash.svg" alt="" width={18} height={18} />
-          <span className="text-body-5-3 text-primary-600">삭제</span>
+          <span className="text-body-5-3 text-[#17181E]">삭제하기</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
