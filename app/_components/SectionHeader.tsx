@@ -20,7 +20,7 @@ export function SectionHeader({
       <Button
         onClick={onClick}
         disabled={isPending}
-        // className="bg-primary-100 text-white w-[165px] text-body-3-2 px-6 py-3.5 rounded-3.5 h-11 flex items-center justify-center disabled:opacity-50"
+        className="w-41.25"
       >
         {isPending ? pendingText : buttonText}
       </Button>

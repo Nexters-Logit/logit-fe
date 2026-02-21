@@ -6,7 +6,7 @@ import { ChatPanelTabs } from './ChatPanelTabs';
 import { ExperienceListShell } from '../Experience/ExperienceListShell';
 import { DraftPanel } from './DraftPanel';
 import { useChatStore } from '../../_store/useChatStore';
-import { NewExperienceModal } from '@/app/_components/NewExperienceModal';
+import { ExperienceModal } from '@/app/_components/ExperienceModal';
 
 interface ChatPanelProps {
   maxLength?: number;
@@ -41,7 +41,7 @@ export function ChatPanel({ maxLength, experienceCards }: ChatPanelProps) {
         <DraftPanel maxLength={effectiveMaxLength} />
       )}
 
-      <NewExperienceModal
+      <ExperienceModal
         open={isExperienceModalOpen}
         onOpenChange={setIsExperienceModalOpen}
         onSuccess={handleExperienceCreated}

@@ -32,7 +32,7 @@ export function ExperienceCard({
   const isDisabled = disabled && !isSelected;
 
   const cardStyles = [
-    "relative w-full px-4.5 py-3.5 rounded-3.5 text-left transition-all",
+    "relative w-full px-4.5 py-3.5 rounded-3.5 text-left transition-all select-none",
     isSelected
       ? "bg-primary-10 border-2 border-primary-100"
       : "bg-white border-2 border-gray-70",

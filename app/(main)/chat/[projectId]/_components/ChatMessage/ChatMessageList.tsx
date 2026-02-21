@@ -78,7 +78,7 @@ function ChatMessageListContent({
   );
 
   return (
-    <ConversationContent className="flex flex-col gap-10 p-0">
+    <ConversationContent className="flex flex-col gap-10 py-5">
       <div ref={sentinelRef} className="h-1" />
       {pagination.isFetching && (
         <div className="flex justify-center py-4">

@@ -36,11 +36,3 @@ export async function getMatchedExperiences(
   return data.experiences;
 }
 
-/**
- * 답변 업데이트 (초안 → 답변 저장)
- */
-export async function updateAnswer(
-  chatId: string,
-): Promise<void> {
-  return apiFetch<void>(API_ENDPOINTS.updateAnswer(chatId), { method: "PATCH" });
-}

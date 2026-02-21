@@ -8,15 +8,11 @@ import { useChatStore } from "../../_store/useChatStore";
 import { useProjectContext } from "../../_context";
 import {
   useChatStream,
-  useUpdateAnswer,
+  useSaveAnswer,
   useSyncChatStore,
   useChatHistoryPagination,
 } from "../../_hooks";
-import {
-  convertToUIMessages,
-  extractDraftMetadata,
-  getMessageContent,
-} from "../../_utils";
+import { convertToUIMessages, getMessageContent } from "../../_utils";
 import type { ChatHistoryItem } from "@/types/api";
 
 // ============================================================================
@@ -56,20 +52,13 @@ export function ChatAreaClient({
   const setMaxLength = useChatStore((s) => s.setMaxLength);
 
   // Mutations
-  const updateAnswerMutation = useUpdateAnswer();
+  const saveAnswerMutation = useSaveAnswer();
 
   // Chat Stream
   const chat = useChatStream({
     questionId,
     experienceIds: selectedExperienceIds,
     initialMessages: convertToUIMessages(chatHistory.chats),
-    onFinish: (message) => {
-      const metadata = extractDraftMetadata(message);
-      if (metadata?.is_draft) {
-        setActivePanelTab("DRAFT");
-        setDraftContent(getMessageContent(message));
-      }
-    },
   });
 
   // 채팅 히스토리 페이지네이션
@@ -81,11 +70,8 @@ export function ChatAreaClient({
     setMessages: chat.setMessages,
   });
 
-  // 초기 draft content: 저장된 answer → 히스토리의 draft fallback
-  const initialDraft =
-    chatHistory.answer ??
-    chatHistory.chats.findLast((c) => c.is_draft)?.content ??
-    null;
+  // 초기 draft content: 명시적으로 저장된 answer만 사용
+  const initialDraft = chatHistory.answer ?? null;
 
   useEffect(() => {
     setDraftContent(initialDraft);
@@ -118,16 +104,17 @@ export function ChatAreaClient({
       return metadata?.chat_id === chatId;
     });
     if (message) {
-      setDraftContent(getMessageContent(message));
+      const content = getMessageContent(message);
+      setDraftContent(content);
+      saveAnswerMutation.mutate(content);
     }
-    updateAnswerMutation.mutate(chatId);
     setActivePanelTab("DRAFT");
   };
 
   return (
     <>
       {/* 채팅 메시지 영역 */}
-      <div className="flex-1 min-h-0 overflow-hidden">
+      <div className="relative flex-1 min-h-0 overflow-hidden">
         <ChatMessageList
           messages={chat.messages}
           status={chat.status}
@@ -137,6 +124,7 @@ export function ChatAreaClient({
           onRetry={chat.retry}
           pagination={pagination}
         />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-linear-to-t from-white to-transparent" />
       </div>
 
       {/* 입력 영역 */}

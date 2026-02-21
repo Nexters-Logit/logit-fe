@@ -9,6 +9,7 @@ import type { ProjectCreate, QuestionCreate } from "@/types/api";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { formatDateInput } from "@/libs/utils";
 import { QuestionFieldItem } from "./QuestionFieldItem";
 
 const projectFormSchema = z.object({
@@ -30,13 +31,6 @@ const projectFormSchema = z.object({
 });
 
 type ProjectFormValues = z.infer<typeof projectFormSchema>;
-
-const formatDateInput = (value: string) => {
-  const digits = value.replace(/\D/g, "").slice(0, 8);
-  if (digits.length <= 4) return digits;
-  if (digits.length <= 6) return `${digits.slice(0, 4)}.${digits.slice(4)}`;
-  return `${digits.slice(0, 4)}.${digits.slice(4, 6)}.${digits.slice(6)}`;
-};
 
 export interface NewProjectFormRef {
   fillWithExamples: (step: 1 | 2) => void;

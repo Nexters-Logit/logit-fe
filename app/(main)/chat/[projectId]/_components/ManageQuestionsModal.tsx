@@ -257,6 +257,7 @@ export function ManageQuestionsModal({
             type="button"
             onClick={handleSave}
             disabled={isPending || !hasChanges}
+            className="w-41.25"
           >
             {isPending ? "저장 중..." : "문항 수정"}
           </Button>

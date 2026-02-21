@@ -40,10 +40,10 @@ export default function ChatError({ error, reset }: ErrorProps) {
           )}
 
           <div className="flex gap-3 justify-center">
-            <Button variant="outline" onClick={() => window.history.back()}>
+            <Button variant="outline" className="w-41.25" onClick={() => window.history.back()}>
               이전으로
             </Button>
-            <Button onClick={reset}>
+            <Button className="w-41.25" onClick={reset}>
               <RefreshCw className="w-4 h-4 mr-2" />
               다시 시도
             </Button>

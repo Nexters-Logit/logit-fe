@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { formatDateInput } from "@/libs/utils";
 import {
   Select,
   SelectContent,
@@ -48,34 +49,28 @@ const experienceFormSchema = z
     insight: z.string(),
     content: z.string(),
   })
-  .refine(
-    (data) => {
-      const minLen = 50;
-      if (data.experience_format === EXPERIENCE_FORMAT.STAR) {
-        return (
-          data.situation.trim().length >= minLen &&
-          data.task.trim().length >= minLen &&
-          data.action.trim().length >= minLen &&
-          data.result.trim().length >= minLen
-        );
+  .superRefine((data, ctx) => {
+    const minLen = 50;
+    const msg = "50자 이상 입력해주세요";
+
+    if (data.experience_format === EXPERIENCE_FORMAT.STAR) {
+      for (const field of ["situation", "task", "action", "result"] as const) {
+        if (data[field].trim().length < minLen) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: msg, path: [field] });
+        }
       }
-      if (data.experience_format === EXPERIENCE_FORMAT.PSI) {
-        return (
-          data.problem.trim().length >= minLen &&
-          data.solution.trim().length >= minLen &&
-          data.insight.trim().length >= minLen
-        );
+    } else if (data.experience_format === EXPERIENCE_FORMAT.PSI) {
+      for (const field of ["problem", "solution", "insight"] as const) {
+        if (data[field].trim().length < minLen) {
+          ctx.addIssue({ code: z.ZodIssueCode.custom, message: msg, path: [field] });
+        }
       }
-      if (data.experience_format === EXPERIENCE_FORMAT.FREE) {
-        return data.content.trim().length >= 1;
+    } else if (data.experience_format === EXPERIENCE_FORMAT.FREE) {
+      if (data.content.trim().length < 1) {
+        ctx.addIssue({ code: z.ZodIssueCode.custom, message: "내용을 입력해주세요", path: ["content"] });
       }
-      return true;
-    },
-    {
-      message: "모든 텍스트 필드는 50자 이상 입력해주세요",
-      path: ["situation"],
-    },
-  );
+    }
+  });
 
 type ExperienceFormValues = z.infer<typeof experienceFormSchema>;
 
@@ -114,21 +109,22 @@ export const NewExperienceForm = forwardRef<
 
   const getDefaultValues = (): ExperienceFormValues => {
     if (initialData) {
+      const format = initialData.format_type ?? EXPERIENCE_FORMAT.STAR;
       return {
         title: initialData.title,
         start_date: toFormDate(initialData.start_date || ""),
         end_date: toFormDate(initialData.end_date || ""),
         experience_type: initialData.experience_type,
         category: initialData.category,
-        experience_format: EXPERIENCE_FORMAT.STAR,
-        situation: initialData.situation,
-        task: initialData.task,
-        action: initialData.action,
-        result: initialData.result,
-        problem: "",
-        solution: "",
-        insight: "",
-        content: "",
+        experience_format: format,
+        situation: initialData.situation ?? "",
+        task: initialData.task ?? "",
+        action: initialData.action ?? "",
+        result: initialData.result ?? "",
+        problem: initialData.problem ?? "",
+        solution: initialData.solution ?? "",
+        insight: initialData.insight ?? "",
+        content: initialData.content ?? "",
       };
     }
     return {
@@ -167,21 +163,22 @@ export const NewExperienceForm = forwardRef<
   // edit 모드에서 initialData가 변경되면 폼을 reset
   useEffect(() => {
     if (mode === "edit" && initialData) {
+      const format = initialData.format_type ?? EXPERIENCE_FORMAT.STAR;
       reset({
         title: initialData.title,
         start_date: toFormDate(initialData.start_date || ""),
         end_date: toFormDate(initialData.end_date || ""),
         experience_type: initialData.experience_type,
         category: initialData.category,
-        experience_format: EXPERIENCE_FORMAT.STAR,
-        situation: initialData.situation,
-        task: initialData.task,
-        action: initialData.action,
-        result: initialData.result,
-        problem: "",
-        solution: "",
-        insight: "",
-        content: "",
+        experience_format: format,
+        situation: initialData.situation ?? "",
+        task: initialData.task ?? "",
+        action: initialData.action ?? "",
+        result: initialData.result ?? "",
+        problem: initialData.problem ?? "",
+        solution: initialData.solution ?? "",
+        insight: initialData.insight ?? "",
+        content: initialData.content ?? "",
       });
     }
   }, [mode, initialData, reset]);
@@ -222,13 +219,6 @@ export const NewExperienceForm = forwardRef<
 
   const handlePrev = () => {
     goToStep(1);
-  };
-
-  const formatDateInput = (value: string) => {
-    const digits = value.replace(/\D/g, "").slice(0, 8);
-    if (digits.length <= 4) return digits;
-    if (digits.length <= 6) return `${digits.slice(0, 4)}.${digits.slice(4)}`;
-    return `${digits.slice(0, 4)}.${digits.slice(4, 6)}.${digits.slice(6)}`;
   };
 
   const normalizeDate = (date: string) =>
@@ -416,52 +406,6 @@ export const NewExperienceForm = forwardRef<
                 </p>
               )}
             </div>
-            {/* 카테고리 정책 변경으로 인한 삭제 */}
-            {/* <div className="flex flex-col gap-2">
-              <label htmlFor="category" className="text-body-7-2 text-gray-400">
-                작성하신 내용과 적합한 경험 유형을 선택해주세요
-                <span className="text-alert">*</span>
-              </label>
-              <Controller
-                name="category"
-                control={control}
-                render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger
-                      id="category"
-                      className="h-11 w-full text-body-5-4"
-                      aria-invalid={!!errors.category}
-                    >
-                      <SelectValue placeholder="선택해주세요" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.entries(EXPERIENCE_CATEGORY).map(
-                        ([key, value]) => {
-                          const config = getCategoryConfig(value);
-                          return (
-                            <SelectItem key={key} value={value}>
-                              <Image
-                                src={config.icon}
-                                alt=""
-                                width={18}
-                                height={18}
-                                className="shrink-0"
-                              />
-                              {value}
-                            </SelectItem>
-                          );
-                        },
-                      )}
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-              {hasAttemptedStep1Next && errors.category && (
-                <p className="text-body-7-3 text-alert">
-                  필수 입력 항목입니다.
-                </p>
-              )}
-            </div> */}
           </div>
         )}
 
@@ -606,9 +550,9 @@ export const NewExperienceForm = forwardRef<
                     aria-invalid={!!errors.problem}
                     {...register("problem")}
                   />
-                  {hasAttemptedStep2Submit && errors.situation && (
+                  {hasAttemptedStep2Submit && errors.problem && (
                     <p className="text-body-9-3 text-alert">
-                      필수 입력 항목을 채워주세요
+                      {errors.problem.message}
                     </p>
                   )}
                 </div>
@@ -627,6 +571,11 @@ export const NewExperienceForm = forwardRef<
                     aria-invalid={!!errors.solution}
                     {...register("solution")}
                   />
+                  {hasAttemptedStep2Submit && errors.solution && (
+                    <p className="text-body-9-3 text-alert">
+                      {errors.solution.message}
+                    </p>
+                  )}
                 </div>
                 <div className="flex flex-col gap-2">
                   <label
@@ -643,6 +592,11 @@ export const NewExperienceForm = forwardRef<
                     aria-invalid={!!errors.insight}
                     {...register("insight")}
                   />
+                  {hasAttemptedStep2Submit && errors.insight && (
+                    <p className="text-body-9-3 text-alert">
+                      {errors.insight.message}
+                    </p>
+                  )}
                 </div>
               </>
             )}
@@ -661,13 +615,13 @@ export const NewExperienceForm = forwardRef<
                   id="content"
                   placeholder="경험한 내용을 자유롭게 작성해주세요. 상황, 본인의 역할, 결과와 배운 점 등을 포함하면 좋습니다."
                   rows={8}
-                  className="min-h-44 resize-y"
+                  className="min-h-44"
                   aria-invalid={!!errors.content}
                   {...register("content")}
                 />
-                {hasAttemptedStep2Submit && errors.situation && (
+                {hasAttemptedStep2Submit && errors.content && (
                   <p className="text-body-9-3 text-alert">
-                    필수 입력 항목을 채워주세요
+                    {errors.content.message}
                   </p>
                 )}
               </div>
