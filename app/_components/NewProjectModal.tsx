@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { NewProjectForm } from "./NewProjectForm";
+import { NewProjectForm, type NewProjectFormRef } from "./NewProjectForm";
 import { useCreateProject } from "@/app/_hooks/useCreateProject";
 import { getQuestions } from "@/app/_actions/projects";
 import { StepFormModal } from "@/components/common/StepFormModal";
@@ -29,6 +29,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
   const router = useRouter();
   const createProject = useCreateProject();
   const [step, setStep] = useState<1 | 2>(1);
+  const formRef = useRef<NewProjectFormRef>(null);
   const { title, description } = STEP_TITLES[step];
 
   const handleClose = () => {
@@ -64,8 +65,18 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
       totalSteps={2}
       title={title}
       description={description}
+      headerExtra={
+        <button
+          type="button"
+          onClick={() => formRef.current?.fillWithExamples(step)}
+          className="rounded-lg px-3.5 py-0.5 text-body-7-3 text-primary-400 border border-gray-70 bg-gray-20 cursor-pointer hover:bg-gray-70 transition-colors"
+        >
+          예시 불러오기
+        </button>
+      }
     >
       <NewProjectForm
+        ref={formRef}
         onSubmit={handleSubmit}
         isPending={createProject.isPending}
         onStepChange={setStep}
