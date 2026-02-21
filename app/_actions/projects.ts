@@ -98,6 +98,16 @@ export async function toggleQuestionComplete(
 }
 
 /**
+ * 프로젝트 삭제
+ */
+export async function deleteProject(projectId: string): Promise<void> {
+  await apiFetch<void>(API_ENDPOINTS.project(projectId), {
+    method: "DELETE",
+  });
+  revalidatePath("/");
+}
+
+/**
  * 문항 삭제
  */
 export async function deleteQuestion(
