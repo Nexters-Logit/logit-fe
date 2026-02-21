@@ -40,7 +40,7 @@ const STEP_TITLES = {
 interface NewExperienceModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSuccess?: () => void;
+  onSuccess?: (createdId?: string) => void;
 }
 
 export function NewExperienceModal({
@@ -60,10 +60,10 @@ export function NewExperienceModal({
 
   const handleSubmit = (data: ExperienceCreate) => {
     createExperience.mutate(data, {
-      onSuccess: () => {
+      onSuccess: (response) => {
         showToast.success("경험이 등록되었습니다.");
         handleClose();
-        onSuccess?.();
+        onSuccess?.(response?.id);
       },
       onError: () => {
         showToast.error("등록 중 오류가 발생했습니다.");

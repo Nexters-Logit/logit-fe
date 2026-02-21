@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { useChat, UIMessage } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
+import { refreshAuthTokens } from '@/libs/auth';
 import type { ChatMessageMetadata } from '@/types/chat';
 
 interface UseChatStreamOptions {
@@ -25,6 +26,16 @@ export function useChatStream({
     messages: initialMessages,
     transport: new DefaultChatTransport({
       api: '/api/chat',
+      fetch: async (input, init) => {
+        const response = await fetch(input, init);
+        if (response.status === 401) {
+          const refreshed = await refreshAuthTokens();
+          if (refreshed) {
+            return fetch(input, init);
+          }
+        }
+        return response;
+      },
     }),
     onFinish: ({ message }) => onFinish?.(message),
   });

@@ -62,7 +62,7 @@ export async function refreshAuthTokens(): Promise<boolean> {
       const res = await fetch(REFRESH_API_URL, {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json", credentials: "include" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({}),
       });
       if (!res.ok) return false;
