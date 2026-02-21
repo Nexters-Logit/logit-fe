@@ -146,6 +146,8 @@ export const API_ENDPOINTS = {
   questions: (projectId: string) => `/api/v1/projects/${projectId}/questions/`,
   question: (projectId: string, questionId: string) =>
     `/api/v1/projects/${projectId}/questions/${questionId}`,
+  questionComplete: (projectId: string, questionId: string) =>
+    `/api/v1/projects/${projectId}/questions/${questionId}/complete`,
 
   // Chats
   chats: "/api/v1/projects/chats",

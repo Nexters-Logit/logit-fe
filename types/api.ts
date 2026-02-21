@@ -105,6 +105,7 @@ export interface Question {
   question: string;
   max_length: number | null;
   answer: string | null;
+  is_completed: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -114,6 +115,7 @@ export interface QuestionListItem {
   question: string;
   max_length: number | null;
   answer: string | null;
+  is_completed: boolean;
 }
 
 // ============================================================================
@@ -183,8 +185,9 @@ export interface ExperienceCreate {
 }
 
 export interface QuestionUpdate {
-  question: string;
+  question?: string;
   max_length?: number | null;
+  answer?: string;
 }
 
 export interface ExperienceUpdate {
