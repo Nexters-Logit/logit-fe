@@ -27,11 +27,11 @@ const EXAMPLE_EXPERIENCE: ExperienceCreate = {
 
 const STEP_TITLES = {
   1: {
-    title: "새 경험 등록",
+    title: "경험 등록",
     description: "등록하는 경험의 정보를 알려주세요.",
   },
   2: {
-    title: "STAR 기반 경험 정리",
+    title: "경험 정리",
     description: "답변의 완성도를 위해 최소 50자 이상 입력해 주세요.",
   },
 } as const;

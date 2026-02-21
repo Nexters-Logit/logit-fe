@@ -13,7 +13,7 @@ const STEP_TITLES = {
     description: "수정할 경험의 정보를 입력해주세요.",
   },
   2: {
-    title: "STAR 기반 경험 정리",
+    title: "경험 정리",
     description: "답변의 완성도를 위해 최소 50자 이상 입력해 주세요.",
   },
 } as const;
@@ -65,7 +65,7 @@ export function EditExperienceModal({
         onError: () => {
           showToast.error("수정 중 오류가 발생했습니다.");
         },
-      }
+      },
     );
   };
 
