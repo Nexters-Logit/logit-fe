@@ -8,7 +8,7 @@ import { useChatStore } from "../../_store/useChatStore";
 import { useProjectContext } from "../../_context";
 import {
   useChatStream,
-  useUpdateAnswer,
+  useSaveAnswer,
   useSyncChatStore,
   useChatHistoryPagination,
 } from "../../_hooks";
@@ -56,7 +56,7 @@ export function ChatAreaClient({
   const setMaxLength = useChatStore((s) => s.setMaxLength);
 
   // Mutations
-  const updateAnswerMutation = useUpdateAnswer();
+  const saveAnswerMutation = useSaveAnswer();
 
   // Chat Stream
   const chat = useChatStream({
@@ -118,16 +118,17 @@ export function ChatAreaClient({
       return metadata?.chat_id === chatId;
     });
     if (message) {
-      setDraftContent(getMessageContent(message));
+      const content = getMessageContent(message);
+      setDraftContent(content);
+      saveAnswerMutation.mutate(content);
     }
-    updateAnswerMutation.mutate(chatId);
     setActivePanelTab("DRAFT");
   };
 
   return (
     <>
       {/* 채팅 메시지 영역 */}
-      <div className="flex-1 min-h-0 overflow-hidden">
+      <div className="relative flex-1 min-h-0 overflow-hidden">
         <ChatMessageList
           messages={chat.messages}
           status={chat.status}
@@ -137,6 +138,7 @@ export function ChatAreaClient({
           onRetry={chat.retry}
           pagination={pagination}
         />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-linear-to-t from-white to-transparent" />
       </div>
 
       {/* 입력 영역 */}

@@ -26,13 +26,27 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="flex max-h-[90vh w-[500px] flex-col overflow-hidden rounded-2xl border-0 pt-10 px-12 pb-8 shadow-chat sm:max-w-2xl gap-9"
+        className="flex max-h-[90vh] w-125 flex-col overflow-hidden rounded-2xl border-0 pt-10 px-12 pb-8 shadow-chat sm:max-w-2xl gap-9"
+        showCloseButton={false}
         onPointerDownOutside={(e) => {
           e.preventDefault();
           handleClose();
         }}
         onEscapeKeyDown={handleClose}
       >
+        <button
+          type="button"
+          onClick={handleClose}
+          className="absolute top-4 right-4 shrink-0 p-1 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+        >
+          <Image
+            src="/icons/icon-close.svg"
+            alt="닫기"
+            width={28}
+            height={28}
+          />
+        </button>
+
         {/* 헤더 */}
         <DialogTitle className="sr-only">로그인</DialogTitle>
         <div className="gap-2 flex flex-col items-center justify-center">
@@ -41,14 +55,14 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
             alt="Logit logo"
             width={60}
             height={60}
-          ></Image>
+          />
 
           <Image
             src="/icons/logo_wordmark.svg"
             alt="logo_wordmark"
             width={64}
             height={32}
-          ></Image>
+          />
 
           <p className="regular_18 text-black">
             로그인하고 모든 기능을 사용해보세요
@@ -68,7 +82,7 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
               alt="google_login"
               width={20}
               height={20}
-            ></Image>
+            />
             Google로 시작하기
           </Button>
           <Button
@@ -81,7 +95,7 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
               alt="apple_login"
               width={20}
               height={20}
-            ></Image>
+            />
             Apple로 시작하기
           </Button>
         </div>
