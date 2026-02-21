@@ -1,11 +1,7 @@
-import {
-  getAccessToken,
-  getRefreshToken,
-  ACCESS_TOKEN_COOKIE,
-  refreshAuthTokens,
-} from "./auth";
+import { getAccessToken, ACCESS_TOKEN_COOKIE, refreshAuthTokens } from "./auth";
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api-dev.logit.ai.kr';
+export const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://api-dev.logit.ai.kr";
 
 // ============================================================================
 // Query String Utility
@@ -83,12 +79,9 @@ export async function apiFetch<T>(
   });
 
   if (response.status === 401 && !isRetry && typeof window !== "undefined") {
-    const refreshToken = getRefreshToken();
-    if (refreshToken) {
-      const refreshed = await refreshAuthTokens();
-      if (refreshed) {
-        return apiFetch<T>(endpoint, options, true);
-      }
+    const refreshed = await refreshAuthTokens();
+    if (refreshed) {
+      return apiFetch<T>(endpoint, options, true);
     }
   }
 

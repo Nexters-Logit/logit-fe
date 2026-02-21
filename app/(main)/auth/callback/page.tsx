@@ -36,10 +36,9 @@ function AuthCallbackContent() {
           throw new Error(err.detail || `API Error: ${res.status}`);
         }
 
-        const data: { access_token: string; refresh_token: string } =
-          await res.json();
+        const data: { access_token: string } = await res.json();
 
-        setAuthTokens(data.access_token, data.refresh_token);
+        setAuthTokens(data.access_token);
         router.replace("/");
       } catch (e) {
         setError(
