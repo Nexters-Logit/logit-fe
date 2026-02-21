@@ -94,6 +94,7 @@ export async function logout(): Promise<void> {
     try {
       await fetch(LOGOUT_API_URL, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,

@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getCategoryConfig } from "@/app/(main)/chat/[projectId]/_constants";
+import { EXPERIENCE_TYPE_ICON } from "@/app/_constants/experienceTypes";
 
 /** 폼 내부용 (드롭다운 value). API의 format_type과 매핑: 자유형식 → FREE */
 const EXPERIENCE_FORMAT = {
@@ -234,11 +234,14 @@ export const NewExperienceForm = forwardRef<
   const normalizeDate = (date: string) =>
     date ? date.replace(/\./g, "-") : date;
 
-  const defaultCategory = Object.values(EXPERIENCE_CATEGORY)[0] as ExperienceCreate["category"];
+  const defaultCategory = Object.values(
+    EXPERIENCE_CATEGORY,
+  )[0] as ExperienceCreate["category"];
 
   const buildCreatePayload = (data: ExperienceFormValues): ExperienceCreate => {
     const category: ExperienceCreate["category"] =
-      (data.category?.trim() as ExperienceCreate["category"]) || defaultCategory;
+      (data.category?.trim() as ExperienceCreate["category"]) ||
+      defaultCategory;
     const base = {
       title: data.title,
       start_date: normalizeDate(data.start_date),
@@ -393,6 +396,13 @@ export const NewExperienceForm = forwardRef<
                     <SelectContent>
                       {Object.entries(EXPERIENCE_TYPE).map(([key, value]) => (
                         <SelectItem key={key} value={value}>
+                          <Image
+                            src={EXPERIENCE_TYPE_ICON[value]}
+                            alt=""
+                            width={24}
+                            height={24}
+                            className="shrink-0"
+                          />
                           {value}
                         </SelectItem>
                       ))}
