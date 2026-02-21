@@ -99,7 +99,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
     <main className="w-full mx-auto p-10 pb-25 flex-1 overflow-y-auto scrollbar-hide">
       <div className="w-276 mx-auto">
         <h1 className="text-headline-1 text-gray-400 mb-16">
-          어떤 자기소개서를 작성하시겠어요?
+          오늘 지원할 공고에 딱 맞는 경험, 로짓과 함께 골라 볼까요?
         </h1>
 
         {/* 경험 유형 섹션 */}
@@ -109,7 +109,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
             buttonText="경험 등록"
             onClick={handleExperienceButtonClick}
           />
-          <Carousel opts={{ align: "start" }} className="mt-5 w-311 -ml-17.5">
+          <Carousel opts={{ align: "start", slidesToScroll: 4 }} className="mt-5 w-311 -ml-17.5">
             <div className="flex items-center gap-7.5 ">
               <CarouselPrevious className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200 cursor-pointer disabled:bg-gray-20 disabled:text-gray-100 disabled:cursor-default disabled:opacity-40" />
               <CarouselContent className="-ml-5 ">
