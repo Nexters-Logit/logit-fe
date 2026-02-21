@@ -109,21 +109,22 @@ export const NewExperienceForm = forwardRef<
 
   const getDefaultValues = (): ExperienceFormValues => {
     if (initialData) {
+      const format = initialData.format_type ?? EXPERIENCE_FORMAT.STAR;
       return {
         title: initialData.title,
         start_date: toFormDate(initialData.start_date || ""),
         end_date: toFormDate(initialData.end_date || ""),
         experience_type: initialData.experience_type,
         category: initialData.category,
-        experience_format: EXPERIENCE_FORMAT.STAR,
-        situation: initialData.situation,
-        task: initialData.task,
-        action: initialData.action,
-        result: initialData.result,
-        problem: "",
-        solution: "",
-        insight: "",
-        content: "",
+        experience_format: format,
+        situation: initialData.situation ?? "",
+        task: initialData.task ?? "",
+        action: initialData.action ?? "",
+        result: initialData.result ?? "",
+        problem: initialData.problem ?? "",
+        solution: initialData.solution ?? "",
+        insight: initialData.insight ?? "",
+        content: initialData.content ?? "",
       };
     }
     return {
@@ -162,21 +163,22 @@ export const NewExperienceForm = forwardRef<
   // edit 모드에서 initialData가 변경되면 폼을 reset
   useEffect(() => {
     if (mode === "edit" && initialData) {
+      const format = initialData.format_type ?? EXPERIENCE_FORMAT.STAR;
       reset({
         title: initialData.title,
         start_date: toFormDate(initialData.start_date || ""),
         end_date: toFormDate(initialData.end_date || ""),
         experience_type: initialData.experience_type,
         category: initialData.category,
-        experience_format: EXPERIENCE_FORMAT.STAR,
-        situation: initialData.situation,
-        task: initialData.task,
-        action: initialData.action,
-        result: initialData.result,
-        problem: "",
-        solution: "",
-        insight: "",
-        content: "",
+        experience_format: format,
+        situation: initialData.situation ?? "",
+        task: initialData.task ?? "",
+        action: initialData.action ?? "",
+        result: initialData.result ?? "",
+        problem: initialData.problem ?? "",
+        solution: initialData.solution ?? "",
+        insight: initialData.insight ?? "",
+        content: initialData.content ?? "",
       });
     }
   }, [mode, initialData, reset]);
@@ -613,7 +615,7 @@ export const NewExperienceForm = forwardRef<
                   id="content"
                   placeholder="경험한 내용을 자유롭게 작성해주세요. 상황, 본인의 역할, 결과와 배운 점 등을 포함하면 좋습니다."
                   rows={8}
-                  className="min-h-44 resize-y"
+                  className="min-h-44"
                   aria-invalid={!!errors.content}
                   {...register("content")}
                 />

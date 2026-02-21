@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { getCategoryConfig } from "../../_constants";
-import type { Experience } from "@/types/api";
+import { EXPERIENCE_TYPE_MONO_ICON } from "@/app/_constants/experienceTypes";
+import { FORMAT_TYPE, type Experience, type ExperienceType } from "@/types/api";
 
 interface ExperienceDetailModalProps {
   open: boolean;
@@ -21,10 +22,10 @@ interface ExperienceDetailModalProps {
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-start gap-10">
-      <span className="w-25 shrink-0 text-body-7 font-semibold text-gray-200 leading-140">
+      <span className="w-25 shrink-0 text-body-7 font-semibold text-gray-200 leading-140 break-keep">
         {label}
       </span>
-      <span className="flex-1 text-body-5-4 text-gray-500 whitespace-pre-wrap">
+      <span className="flex-1 text-body-5-4 text-gray-500 whitespace-pre-wrap break-keep">
         {value || "-"}
       </span>
     </div>
@@ -40,8 +41,10 @@ function CategoryRow({ category }: { category: string }) {
         경험 유형
       </span>
       <div className="flex items-center gap-3.75">
+        <div className="size-6 shrink-0 flex items-center justify-center">
+          <Image src={config.icon} alt="" width={15} height={15} />
+        </div>
         <span className="text-body-5-4 text-gray-500">{category}</span>
-        <Image src={config.icon} alt="" width={18} height={18} />
       </div>
     </div>
   );
@@ -52,9 +55,9 @@ function DateRow({
   endDate,
 }: {
   startDate?: string;
-  endDate?: string;
+  endDate?: string | null;
 }) {
-  const formatDate = (date?: string) => date?.replace(/-/g, ". ") || "-";
+  const formatDate = (date?: string | null) => date?.replace(/-/g, ". ") || "-";
 
   return (
     <div className="flex items-start gap-10">
@@ -108,7 +111,28 @@ export function ExperienceDetailModal({
           <div className="flex flex-col gap-7.5">
             {/* 기본 정보 */}
             <div className="flex flex-col gap-3">
-              <DetailRow label="경험 종류" value={experience.experience_type} />
+              <div className="flex items-start gap-10">
+                <span className="w-25 shrink-0 text-body-7 font-semibold text-gray-200 leading-140 break-keep">
+                  경험 종류
+                </span>
+                <div className="flex items-center gap-3.75">
+                  <div className="size-6 shrink-0 flex items-center justify-center">
+                    <Image
+                      src={
+                        EXPERIENCE_TYPE_MONO_ICON[
+                          experience.experience_type as ExperienceType
+                        ]
+                      }
+                      alt=""
+                      width={24}
+                      height={24}
+                    />
+                  </div>
+                  <span className="text-body-5-4 text-gray-500">
+                    {experience.experience_type}
+                  </span>
+                </div>
+              </div>
               <CategoryRow category={experience.category} />
               <DateRow
                 startDate={experience.start_date}
@@ -116,16 +140,48 @@ export function ExperienceDetailModal({
               />
             </div>
 
-            {/* STAR 항목 */}
-            <div className="flex flex-col gap-7.5">
-              <DetailRow
-                label="Situation (상황)"
-                value={experience.situation}
-              />
-              <DetailRow label="Task (과제/목표)" value={experience.task} />
-              <DetailRow label="Action (행동)" value={experience.action} />
-              <DetailRow label="Result (결과)" value={experience.result} />
-            </div>
+            {/* format_type별 컨텐츠 */}
+            {experience.format_type === FORMAT_TYPE.STAR && (
+              <div className="flex flex-col gap-7.5">
+                <DetailRow
+                  label="Situation (상황)"
+                  value={experience.situation ?? ""}
+                />
+                <DetailRow
+                  label="Task (과제/목표)"
+                  value={experience.task ?? ""}
+                />
+                <DetailRow
+                  label="Action (행동)"
+                  value={experience.action ?? ""}
+                />
+                <DetailRow
+                  label="Result (결과)"
+                  value={experience.result ?? ""}
+                />
+              </div>
+            )}
+            {experience.format_type === FORMAT_TYPE.PSI && (
+              <div className="flex flex-col gap-7.5">
+                <DetailRow
+                  label="Problem (문제)"
+                  value={experience.problem ?? ""}
+                />
+                <DetailRow
+                  label="Solution (접근)"
+                  value={experience.solution ?? ""}
+                />
+                <DetailRow
+                  label="Insight (배움)"
+                  value={experience.insight ?? ""}
+                />
+              </div>
+            )}
+            {experience.format_type === FORMAT_TYPE.FREE && (
+              <div className="flex flex-col gap-7.5">
+                <DetailRow label="경험 기입" value={experience.content ?? ""} />
+              </div>
+            )}
           </div>
         </div>
 
