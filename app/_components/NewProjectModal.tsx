@@ -4,7 +4,6 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { NewProjectForm, type NewProjectFormRef } from "./NewProjectForm";
 import { useCreateProject } from "@/app/_hooks/useCreateProject";
-import { getQuestions } from "@/app/_actions/projects";
 import { StepFormModal } from "@/components/common/StepFormModal";
 import { showToast } from "@/libs/toast";
 import type { ProjectCreate } from "@/types/api";
@@ -39,15 +38,13 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
 
   const handleSubmit = (data: ProjectCreate) => {
     createProject.mutate(data, {
-      onSuccess: async (result) => {
+      onSuccess: (result) => {
         showToast.success("프로젝트가 생성되었습니다.");
         handleClose();
 
-        const questions = await getQuestions(result.id);
+        const { project, questions } = result;
         if (questions.length > 0) {
-          router.push(`/chat/${result.id}/${questions[0].id}`);
-        } else {
-          throw new Error("생성된 문항을 찾을 수 없습니다.");
+          router.push(`/chat/${project.id}/${questions[0].id}`);
         }
       },
       onError: () => {
