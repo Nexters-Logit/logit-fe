@@ -8,6 +8,7 @@ import Image from "next/image";
 import {
   EXPERIENCE_CATEGORY,
   EXPERIENCE_TYPE,
+  FORMAT_TYPE,
   type ExperienceCreate,
   type Experience,
 } from "@/types/api";
@@ -23,10 +24,11 @@ import {
 } from "@/components/ui/select";
 import { getCategoryConfig } from "@/app/(main)/chat/[projectId]/_constants";
 
+/** 폼 내부용 (드롭다운 value). API의 format_type과 매핑: 자유형식 → FREE */
 const EXPERIENCE_FORMAT = {
-  STAR: "STAR",
-  PSI: "PSI",
-  FREE: "자유형식",
+  STAR: FORMAT_TYPE.STAR,
+  PSI: FORMAT_TYPE.PSI,
+  FREE: FORMAT_TYPE.FREE, // "FREE"
 } as const;
 
 const experienceFormSchema = z
@@ -43,8 +45,8 @@ const experienceFormSchema = z
     result: z.string(),
     problem: z.string(),
     solution: z.string(),
-    impact: z.string(),
-    free_content: z.string(),
+    insight: z.string(),
+    content: z.string(),
   })
   .refine(
     (data) => {
@@ -61,11 +63,11 @@ const experienceFormSchema = z
         return (
           data.problem.trim().length >= minLen &&
           data.solution.trim().length >= minLen &&
-          data.impact.trim().length >= minLen
+          data.insight.trim().length >= minLen
         );
       }
       if (data.experience_format === EXPERIENCE_FORMAT.FREE) {
-        return data.free_content.trim().length >= minLen;
+        return data.content.trim().length >= minLen;
       }
       return true;
     },
@@ -125,8 +127,8 @@ export const NewExperienceForm = forwardRef<
         result: initialData.result,
         problem: "",
         solution: "",
-        impact: "",
-        free_content: "",
+        insight: "",
+        content: "",
       };
     }
     return {
@@ -142,8 +144,8 @@ export const NewExperienceForm = forwardRef<
       result: "",
       problem: "",
       solution: "",
-      impact: "",
-      free_content: "",
+      insight: "",
+      content: "",
     };
   };
 
@@ -178,29 +180,30 @@ export const NewExperienceForm = forwardRef<
         result: initialData.result,
         problem: "",
         solution: "",
-        impact: "",
-        free_content: "",
+        insight: "",
+        content: "",
       });
     }
   }, [mode, initialData, reset]);
 
   useImperativeHandle(ref, () => ({
     fillWithExample(data: ExperienceCreate) {
+      const format = data.format_type ?? EXPERIENCE_FORMAT.STAR;
       reset({
         title: data.title,
         start_date: toFormDate(data.start_date),
         end_date: toFormDate(data.end_date),
         experience_type: data.experience_type,
         category: data.category,
-        experience_format: EXPERIENCE_FORMAT.STAR,
-        situation: data.situation,
-        task: data.task,
-        action: data.action,
-        result: data.result,
-        problem: "",
-        solution: "",
-        impact: "",
-        free_content: "",
+        experience_format: format,
+        situation: data.situation ?? "",
+        task: data.task ?? "",
+        action: data.action ?? "",
+        result: data.result ?? "",
+        problem: data.problem ?? "",
+        solution: data.solution ?? "",
+        insight: data.insight ?? "",
+        content: data.content ?? "",
       });
     },
   }));
@@ -231,46 +234,41 @@ export const NewExperienceForm = forwardRef<
   const normalizeDate = (date: string) =>
     date ? date.replace(/\./g, "-") : date;
 
-  const buildStarPayload = (data: ExperienceFormValues): ExperienceCreate => ({
-    title: data.title,
-    start_date: normalizeDate(data.start_date),
-    end_date: normalizeDate(data.end_date),
-    experience_type:
-      data.experience_type as ExperienceCreate["experience_type"],
-    category: data.category as ExperienceCreate["category"],
-    situation: data.situation,
-    task: data.task,
-    action: data.action,
-    result: data.result,
-  });
+  const buildCreatePayload = (data: ExperienceFormValues): ExperienceCreate => {
+    const base = {
+      title: data.title,
+      start_date: normalizeDate(data.start_date),
+      end_date: normalizeDate(data.end_date),
+      experience_type:
+        data.experience_type as ExperienceCreate["experience_type"],
+      format_type: data.experience_format as ExperienceCreate["format_type"],
+      category: data.category as ExperienceCreate["category"],
+    };
+    if (data.experience_format === EXPERIENCE_FORMAT.STAR) {
+      return {
+        ...base,
+        situation: data.situation,
+        task: data.task,
+        action: data.action,
+        result: data.result,
+      };
+    }
+    if (data.experience_format === EXPERIENCE_FORMAT.PSI) {
+      return {
+        ...base,
+        problem: data.problem,
+        solution: data.solution,
+        insight: data.insight,
+      };
+    }
+    return {
+      ...base,
+      content: data.content,
+    };
+  };
 
   const handleFormSubmit = (data: ExperienceFormValues) => {
-    const { experience_format: format } = data;
-    if (format === EXPERIENCE_FORMAT.STAR) {
-      onSubmit(buildStarPayload(data));
-      return;
-    }
-    if (format === EXPERIENCE_FORMAT.PSI) {
-      onSubmit({
-        ...buildStarPayload(data),
-        situation: data.problem,
-        task: data.solution,
-        action: data.solution,
-        result: data.impact,
-      });
-      return;
-    }
-    if (format === EXPERIENCE_FORMAT.FREE) {
-      onSubmit({
-        ...buildStarPayload(data),
-        situation: data.free_content,
-        task: "-",
-        action: "-",
-        result: "-",
-      });
-      return;
-    }
-    onSubmit(buildStarPayload(data));
+    onSubmit(buildCreatePayload(data));
   };
 
   const onValidationError = (errors: unknown) => {
@@ -618,18 +616,18 @@ export const NewExperienceForm = forwardRef<
                 </div>
                 <div className="flex flex-col gap-2">
                   <label
-                    htmlFor="impact"
+                    htmlFor="insight"
                     className="text-body-7-2 text-gray-400"
                   >
-                    Impact (성과)를 입력해주세요
+                    Insight (인사이트)를 입력해주세요
                     <span className="text-alert">*</span>
                   </label>
                   <Textarea
-                    id="impact"
+                    id="insight"
                     placeholder="해결 과정을 통해 얻은 결과와 성과, 배운 점을 작성해주세요"
                     rows={2}
-                    aria-invalid={!!errors.impact}
-                    {...register("impact")}
+                    aria-invalid={!!errors.insight}
+                    {...register("insight")}
                   />
                 </div>
               </>
@@ -639,19 +637,19 @@ export const NewExperienceForm = forwardRef<
             {experienceFormat === EXPERIENCE_FORMAT.FREE && (
               <div className="flex flex-col gap-2">
                 <label
-                  htmlFor="free_content"
+                  htmlFor="content"
                   className="text-body-7-2 text-gray-400"
                 >
                   경험을 자유 형식으로 작성해주세요
                   <span className="text-alert">*</span>
                 </label>
                 <Textarea
-                  id="free_content"
+                  id="content"
                   placeholder="경험한 내용을 자유롭게 작성해주세요. 상황, 본인의 역할, 결과와 배운 점 등을 포함하면 좋습니다."
                   rows={8}
                   className="min-h-44 resize-y"
-                  aria-invalid={!!errors.free_content}
-                  {...register("free_content")}
+                  aria-invalid={!!errors.content}
+                  {...register("content")}
                 />
                 {hasAttemptedStep2Submit && errors.situation && (
                   <p className="text-body-9-3 text-alert">

@@ -44,17 +44,7 @@ export function EditExperienceModal({
     updateExperience.mutate(
       {
         id: experience.id,
-        data: {
-          title: data.title,
-          start_date: data.start_date,
-          end_date: data.end_date,
-          experience_type: data.experience_type,
-          situation: data.situation,
-          task: data.task,
-          action: data.action,
-          result: data.result,
-          category: data.category,
-        },
+        data,
       },
       {
         onSuccess: () => {
