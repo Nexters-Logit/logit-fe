@@ -83,6 +83,21 @@ export async function updateQuestion(
 }
 
 /**
+ * 문항 작성완료 토글
+ */
+export async function toggleQuestionComplete(
+  projectId: string,
+  questionId: string,
+): Promise<Question> {
+  const result = await apiFetch<Question>(
+    API_ENDPOINTS.questionComplete(projectId, questionId),
+    { method: "PATCH" },
+  );
+  revalidatePath(`/chat/${projectId}`);
+  return result;
+}
+
+/**
  * 문항 삭제
  */
 export async function deleteQuestion(
