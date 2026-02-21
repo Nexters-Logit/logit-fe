@@ -96,8 +96,8 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
   const { data: counts = {} } = useExperienceCounts();
 
   return (
-    <main className="w-full mx-auto pt-10 pb-25 flex-1 overflow-y-auto scrollbar-hide">
-      <div className="max-w-276 mx-auto">
+    <main className="w-full mx-auto p-10 pb-25 flex-1 overflow-y-auto scrollbar-hide">
+      <div className="w-276 mx-auto">
         <h1 className="text-headline-1 text-gray-400 mb-16">
           어떤 자기소개서를 작성하시겠어요?
         </h1>
