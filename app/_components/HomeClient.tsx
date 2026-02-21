@@ -111,7 +111,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
           />
           <Carousel opts={{ align: "start" }} className="mt-5 w-311 -ml-17.5">
             <div className="flex items-center gap-7.5 ">
-              <CarouselPrevious className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200 cursor-pointer" />
+              <CarouselPrevious className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200 cursor-pointer disabled:bg-gray-20 disabled:text-gray-100 disabled:cursor-default disabled:opacity-40" />
               <CarouselContent className="-ml-5 ">
                 {EXPERIENCE_CARDS.map((card) => (
                   <CarouselItem key={card.id} className="pl-5 basis-auto">
@@ -124,7 +124,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselNext className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200 cursor-pointer" />
+              <CarouselNext className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200 cursor-pointer disabled:bg-gray-20 disabled:text-gray-100 disabled:cursor-default disabled:opacity-40" />
             </div>
           </Carousel>
         </section>
