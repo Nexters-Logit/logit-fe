@@ -27,7 +27,7 @@ export function useToggleComplete({
   });
 
   const toggle = () => {
-    setIsCompleted(!isCompleted);
+    setIsCompleted((prev) => !prev);
     mutation.mutate(undefined, {
       onSuccess: () => {
         showToast.success(
