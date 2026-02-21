@@ -183,6 +183,11 @@ export interface ProjectCreate {
   questions: QuestionCreate[];
 }
 
+export interface ProjectCreateResponse {
+  project: Project;
+  questions: QuestionListItem[];
+}
+
 /** POST /api/v1/experiences 요청. format_type에 따라 해당 필드만 전송 */
 export interface ExperienceCreate {
   title: string;

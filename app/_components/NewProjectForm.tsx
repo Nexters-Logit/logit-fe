@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useState, forwardRef, useImperativeHandle } from "react";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import Image from "next/image";
 import type { ProjectCreate, QuestionCreate } from "@/types/api";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { QuestionFieldItem } from "./QuestionFieldItem";
 
 const projectFormSchema = z.object({
   company: z.string().min(1, "회사명을 입력해주세요"),
@@ -29,18 +31,27 @@ const projectFormSchema = z.object({
 
 type ProjectFormValues = z.infer<typeof projectFormSchema>;
 
+const formatDateInput = (value: string) => {
+  const digits = value.replace(/\D/g, "").slice(0, 8);
+  if (digits.length <= 4) return digits;
+  if (digits.length <= 6) return `${digits.slice(0, 4)}.${digits.slice(4)}`;
+  return `${digits.slice(0, 4)}.${digits.slice(4, 6)}.${digits.slice(6)}`;
+};
+
+export interface NewProjectFormRef {
+  fillWithExamples: (step: 1 | 2) => void;
+}
+
 interface NewProjectFormProps {
   onSubmit: (data: ProjectCreate) => void;
   isPending?: boolean;
   onStepChange?: (step: 1 | 2) => void;
 }
 
-export function NewProjectForm({
-  onSubmit,
-  isPending = false,
-  onStepChange,
-}: NewProjectFormProps) {
+export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>(
+  function NewProjectForm({ onSubmit, isPending = false, onStepChange }, ref) {
   const [step, setStep] = useState<1 | 2>(1);
+  const [isOngoing, setIsOngoing] = useState(false);
 
   const goToStep = (newStep: 1 | 2) => {
     setStep(newStep);
@@ -52,6 +63,8 @@ export function NewProjectForm({
     handleSubmit,
     control,
     trigger,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
@@ -65,10 +78,29 @@ export function NewProjectForm({
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control,
     name: "questions",
   });
+
+  useImperativeHandle(ref, () => ({
+    fillWithExamples(currentStep: 1 | 2) {
+      if (currentStep === 1) {
+        setValue("company", "주식회사 로짓 컴퍼니");
+        setValue("job_position", "프론트엔드 개발자");
+        setValue("recruit_notice", "[주요업무]\n- 웹 프론트엔드 개발 및 유지보수\n- UI/UX 개선 및 성능 최적화\n- RESTful API 연동 및 상태 관리\n\n[자격요건]\n- React, TypeScript 경험 2년 이상\n- HTML/CSS에 대한 깊은 이해\n\n[우대사항]\n- Next.js 경험\n- 디자인 시스템 구축 경험");
+        setValue("company_talent", "도전정신, 협업 능력, 사용자 중심 사고");
+        setValue("due_date", "2026.03.31");
+        setIsOngoing(false);
+      } else {
+        replace([
+          { question: "지원 동기와 입사 후 회사에서 이루고 싶은 꿈을 기술하십시오.", max_length: 500 },
+          { question: "본인의 성장과정을 간략히 기술하되 현재의 자신에게 가장 큰 영향을 끼친 사건, 인물 등을 포함하여 기술하시오.", max_length: 700 },
+          { question: "직무와 관련하여 본인이 갖고 있는 전문성을 구체적 경험을 바탕으로 작성하시오.", max_length: 500 },
+        ]);
+      }
+    },
+  }));
 
   const handleFormSubmit = (data: ProjectFormValues) => {
     const questions: QuestionCreate[] = data.questions
@@ -86,7 +118,11 @@ export function NewProjectForm({
       company_talent: data.company_talent?.trim()
         ? data.company_talent
         : undefined,
-
+      due_date: isOngoing
+        ? null
+        : data.due_date
+          ? data.due_date.replace(/\./g, "-")
+          : null,
       questions,
     });
   };
@@ -159,6 +195,54 @@ export function NewProjectForm({
           </div>
 
           <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <label className="text-body-7-2 text-gray-400">
+                마감 날짜<span className="text-alert">*</span>
+              </label>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsOngoing((prev) => {
+                      if (!prev) setValue("due_date", "");
+                      return !prev;
+                    });
+                  }}
+                  className={`flex items-center justify-center size-7 rounded-[7px] border transition-colors ${
+                    isOngoing
+                      ? "bg-primary-100 border-primary-100"
+                      : "bg-white border-gray-100"
+                  }`}
+                >
+                  {isOngoing && (
+                    <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M1.5 5L5.5 9L12.5 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
+                </button>
+                <span className="text-body-7-3 text-gray-500">상시</span>
+              </div>
+            </div>
+            <Controller
+              name="due_date"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  type="text"
+                  placeholder="YYYY. MM. DD"
+                  className="h-10 text-body-5-4"
+                  disabled={isOngoing}
+                  {...field}
+                  value={field.value}
+                  onChange={(e) =>
+                    field.onChange(formatDateInput(e.target.value))
+                  }
+                />
+              )}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
             <label
               htmlFor="company_talent"
               className="text-body-7-2 text-gray-400"
@@ -177,56 +261,35 @@ export function NewProjectForm({
 
       {/* 2페이지: 문항 */}
       {step === 2 && (
-        <div className="flex flex-col gap-5">
-          <div className="flex flex-col gap-2">
-            {fields.map((field, index) => (
-              <div key={field.id} className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-body-7-2 text-gray-200 shrink-0">
-                    문항 {index + 1}
-                  </span>
-                  {fields.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => remove(index)}
-                      className="text-body-9-3 text-alert hover:underline"
-                    >
-                      삭제
-                    </button>
-                  )}
-                </div>
-                <div className="flex items-center gap-2">
-                  <Input
-                    placeholder={`${index + 1}번 문항`}
-                    className="text-body-5-4"
-                    {...register(`questions.${index}.question`)}
-                  />
-                  <Input
-                    type="number"
-                    placeholder="글자수"
-                    className="text-body-5-4 w-28"
-                    {...register(`questions.${index}.max_length`, {
-                      valueAsNumber: true,
-                    })}
-                  />
-                </div>
-              </div>
-            ))}
+        <div className="flex flex-col gap-3">
+          {fields.map((field, index) => (
+            <QuestionFieldItem
+              key={field.id}
+              index={index}
+              questionValue={watch(`questions.${index}.question`) ?? ""}
+              maxLengthValue={watch(`questions.${index}.max_length`) ?? null}
+              onQuestionChange={(value) => setValue(`questions.${index}.question`, value)}
+              onMaxLengthChange={(value) => setValue(`questions.${index}.max_length`, value)}
+              onRemove={() => remove(index)}
+              showRemoveButton={fields.length > 1}
+            />
+          ))}
 
-            <Button
-              type="button"
-              variant="tertiary"
-              className="w-full text-gray-200"
-              onClick={() => append({ question: "", max_length: null })}
-            >
-              + 추가하기
-            </Button>
-            {errors.questions?.root && (
-              <p className="text-body-9-3 text-alert">
-                {errors.questions.root.message}
-              </p>
-            )}
-          </div>
+          <button
+            type="button"
+            onClick={() => append({ question: "", max_length: null })}
+            className="group w-full h-11 flex items-center justify-center gap-1.5 bg-primary-20 rounded-3.5 hover:bg-primary-50 transition-colors cursor-pointer"
+          >
+            <Image src="/icons/icon-plus-circle.svg" alt="" width={18} height={18} />
+            <span className="text-body-3-2 text-gray-300 group-hover:text-gray-400 transition-colors">
+              추가하기
+            </span>
+          </button>
+          {errors.questions?.root && (
+            <p className="text-body-9-3 text-alert">
+              {errors.questions.root.message}
+            </p>
+          )}
         </div>
       )}
 
@@ -272,4 +335,4 @@ export function NewProjectForm({
       </div>
     </form>
   );
-}
+});

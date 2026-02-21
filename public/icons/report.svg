@@ -1,7 +1,5 @@
-<svg preserveAspectRatio="xMidYMid meet" width="26" height="26" viewBox="0 0 17.8716 22.6362" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Frame 2087331100">
-<rect id="Rectangle 240652795" x="1" y="3.40723" width="15.8716" height="18.229" rx="2" fill="var(--fill-0, white)" stroke="var(--stroke-0, #6B7684)" stroke-width="2"/>
-<path id="Vector 27847" d="M4.99042 13.0879L7.81166 15.909L12.8815 10.8391" stroke="var(--stroke-0, #6B7684)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<rect id="Rectangle 240652794" x="4.42578" y="1" width="9.02051" height="5.27136" rx="1.5" fill="var(--fill-0, white)" stroke="var(--stroke-0, #6B7684)" stroke-width="2"/>
-</g>
+<svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="4.06" y="5.41" width="17.87" height="18.23" rx="2" fill="white" stroke="#6B7684" stroke-width="2"/>
+<path d="M8.99 15.09L11.81 17.91L16.88 12.84" stroke="#6B7684" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="8.43" y="3" width="9.02" height="5.27" rx="1.5" fill="white" stroke="#6B7684" stroke-width="2"/>
 </svg>
