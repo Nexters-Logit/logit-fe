@@ -1,10 +1,8 @@
 export const ACCESS_TOKEN_COOKIE = "logit_access_token";
 
-const COOKIE_MAX_AGE = 7 * 24 * 60 * 60; // 7일 (초)
-
 function setCookie(name: string, value: string): void {
   if (typeof document === "undefined") return;
-  document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${COOKIE_MAX_AGE}; SameSite=Lax`;
+  document.cookie = `${name}=${encodeURIComponent(value)}; path=/; SameSite=Lax`;
 }
 
 function getCookie(name: string): string | null {
@@ -66,8 +64,10 @@ export async function refreshAuthTokens(): Promise<boolean> {
         body: JSON.stringify({}),
       });
       if (!res.ok) return false;
+      console.log("refreshAuthTokens", res);
       const data: RefreshResponse = await res.json();
       if (data.access_token) {
+        console.log("setAuthTokens", data.access_token);
         setAuthTokens(data.access_token);
       }
       return !!data.access_token;
