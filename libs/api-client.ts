@@ -1,7 +1,11 @@
 import { getAccessToken, ACCESS_TOKEN_COOKIE, refreshAuthTokens } from "./auth";
 
+const DEFAULT_API_BASE_URL = "https://api-dev.logit.ai.kr";
+
 export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "https://api-dev.logit.ai.kr";
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  process.env.API_BASE_URL ||
+  DEFAULT_API_BASE_URL;
 
 // ============================================================================
 // Query String Utility
@@ -73,16 +77,19 @@ export async function apiFetch<T>(
     headers["Content-Type"] = "application/json";
   }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+  const baseUrl = API_BASE_URL?.trim() || DEFAULT_API_BASE_URL;
+  const response = await fetch(`${baseUrl}${endpoint}`, {
     ...options,
     headers,
   });
 
-  if (response.status === 401 && !isRetry && typeof window !== "undefined") {
-    const refreshed = await refreshAuthTokens();
-    if (refreshed) {
-      return apiFetch<T>(endpoint, options, true);
+  if (response.status === 401 && !isRetry) {
+    console.log("401! ");
+    if (typeof window !== "undefined") {
+      const refreshed = await refreshAuthTokens();
+      if (refreshed) return apiFetch<T>(endpoint, options, true);
     }
+    throw new ApiError(401, "토큰 갱신에 실패했습니다. 다시 로그인해 주세요.");
   }
 
   if (!response.ok) {
