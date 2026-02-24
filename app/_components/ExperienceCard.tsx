@@ -2,30 +2,19 @@ import Image from "next/image";
 
 interface ExperienceCardProps {
   title: string;
-  count: number;
-  bgColor: string;
   illustration: string;
 }
 
-export function ExperienceCard({
-  title,
-  count,
-  bgColor,
-  illustration,
-}: ExperienceCardProps) {
+export function ExperienceCard({ title, illustration }: ExperienceCardProps) {
   return (
-    <div
-      className={`${bgColor} w-65.25 h-47.5 rounded-5 overflow-hidden relative shrink-0 select-none`}
-    >
-      <div className="p-6.5">
-        <h3 className="text-body-1 font-semibold text-primary-600">{title}</h3>
-        <p className="text-body-5-5 font-medium text-primary-600 opacity-50">
-          관련경험 {count}개
-        </p>
-      </div>
-      <div className="absolute right-0 bottom-0 w-32.5 h-30">
-        <Image src={illustration} alt={title} fill className="object-contain" />
-      </div>
+    <div className="w-65.25 h-47.5 rounded-5 overflow-hidden shrink-0 select-none">
+      <Image
+        src={illustration}
+        alt={title}
+        width={261}
+        height={190}
+        className="w-full h-full object-cover"
+      />
     </div>
   );
 }

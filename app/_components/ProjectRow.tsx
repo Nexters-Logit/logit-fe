@@ -44,18 +44,13 @@ export function ProjectRow({ project, onClick }: ProjectRowProps) {
         onClick={onClick}
         className="flex items-center justify-between py-3.5 border-b border-gray-70 w-full cursor-pointer hover:bg-gray-20 transition-colors"
       >
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-5">
           <DueBadge dueDate={project.due_date} />
           <span className="text-body-5-5 text-primary-600">{title}</span>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5">
-            <span
-              className={`text-base font-normal leading-140 ${isAllComplete ? "text-[#00D173]" : "text-primary-600"}`}
-            >
-              {project.completed_questions} / {project.total_questions}
-            </span>
+        <div className="flex items-center gap-8">
+          <div className="flex items-center gap-4">
             <Image
               src={
                 isAllComplete ? "/icons/editComlete.svg" : "/icons/editing.svg"
@@ -64,6 +59,11 @@ export function ProjectRow({ project, onClick }: ProjectRowProps) {
               width={34}
               height={34}
             />
+            <span
+              className={`text-base font-normal leading-140 tabular-nums text-right min-w-8 ${isAllComplete ? "text-[#00D173]" : "text-primary-600"}`}
+            >
+              {project.completed_questions} / {project.total_questions}
+            </span>
           </div>
           <ProjectOptionsMenu onDelete={() => setDeleteOpen(true)} />
         </div>

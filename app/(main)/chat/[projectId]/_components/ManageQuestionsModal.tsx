@@ -189,7 +189,7 @@ export function ManageQuestionsModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="flex max-h-[90vh] min-h-136.75 flex-col overflow-hidden rounded-5 border-0 p-0 shadow-chat sm:max-w-207"
+        className="flex max-h-[90vh] h-168 flex-col overflow-hidden rounded-5 border-0 p-0 shadow-chat sm:max-w-207"
         showCloseButton={false}
         onPointerDownOutside={(e) => {
           e.preventDefault();
@@ -252,7 +252,7 @@ export function ManageQuestionsModal({
           </div>
         </div>
 
-        <div className="flex items-center justify-center px-7.5 py-7">
+        <div className="shrink-0 flex items-center justify-center h-25 px-7.5 gap-4.5">
           <Button
             type="button"
             onClick={handleSave}
