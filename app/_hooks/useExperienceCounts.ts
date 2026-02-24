@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getExperiences } from "@/app/_actions/experiences";
+import { getAccessToken } from "@/libs/auth";
 
 export function useExperienceCounts() {
   return useQuery({
@@ -11,5 +12,6 @@ export function useExperienceCounts() {
         return acc;
       }, {} as Record<string, number>);
     },
+    enabled: !!getAccessToken(),
   });
 }
