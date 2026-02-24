@@ -28,7 +28,7 @@ export function Header() {
           <span className="text-body-3-3 text-primary-400">홈</span>
         </Link>
         <Link
-          href="#"
+          href="/report"
           className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-20"
         >
           <Image src="/icons/report.svg" alt="리포트" width={26} height={26} />
