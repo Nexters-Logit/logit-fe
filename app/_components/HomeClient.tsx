@@ -14,57 +14,48 @@ import { NewProjectModal } from "./NewProjectModal";
 import { ExperienceModal } from "./ExperienceModal";
 import { getAccessToken } from "@/libs/auth";
 import { useLoginModal } from "./LoginModalContext";
-import { useExperienceCounts } from "@/app/_hooks/useExperienceCounts";
 import { EXPERIENCE_CATEGORY } from "@/types/api";
 
 const EXPERIENCE_CARDS = [
   {
     id: 1,
     category: EXPERIENCE_CATEGORY.PROACTIVE_EXECUTION,
-    bgColor: "bg-[#dcf9f9]",
-    illustration: "/illustrations/card-type01.png",
+    illustration: "/illustrations/card-type04.png",
   },
   {
     id: 2,
     category: EXPERIENCE_CATEGORY.TECHNICAL_EXPERTISE,
-    bgColor: "bg-[#e3f6fd]",
     illustration: "/illustrations/card-type02.png",
   },
   {
     id: 3,
     category: EXPERIENCE_CATEGORY.LOGICAL_ANALYSIS,
-    bgColor: "bg-[#e3f0fd]",
-    illustration: "/illustrations/card-type03.png",
+    illustration: "/illustrations/card-type05.png",
   },
   {
     id: 4,
     category: EXPERIENCE_CATEGORY.CREATIVE_PROBLEM_SOLVING,
-    bgColor: "bg-[#e3e9fd]",
-    illustration: "/illustrations/card-type04.png",
+    illustration: "/illustrations/card-type06.png",
   },
   {
     id: 5,
     category: EXPERIENCE_CATEGORY.COLLABORATIVE_COMMUNICATION,
-    bgColor: "bg-gradient-to-b from-[#e4e3fd] to-[#e9e3fd]",
-    illustration: "/illustrations/card-type05.png",
+    illustration: "/illustrations/card-type03.png",
   },
   {
     id: 6,
     category: EXPERIENCE_CATEGORY.PERSISTENT_RESPONSIBILITY,
-    bgColor: "bg-gradient-to-b from-[#eee3fd] to-[#f9e3fd]",
-    illustration: "/illustrations/card-type06.png",
+    illustration: "/illustrations/card-type08.png",
   },
   {
     id: 7,
     category: EXPERIENCE_CATEGORY.FLEXIBLE_ADAPTABILITY,
-    bgColor: "bg-gradient-to-b from-[#f7e3fd] to-[#fde3f9]",
     illustration: "/illustrations/card-type07.png",
   },
   {
     id: 8,
     category: EXPERIENCE_CATEGORY.CUSTOMER_VALUE,
-    bgColor: "bg-gradient-to-b from-[#fde3f8] to-[#fde3e3]",
-    illustration: "/illustrations/card-type08.png",
+    illustration: "/illustrations/card-type01.png",
   },
 ];
 
@@ -93,8 +84,6 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
     }
   };
 
-  const { data: counts = {} } = useExperienceCounts();
-
   return (
     <main className="w-full mx-auto p-10 pb-25 flex-1 overflow-y-auto scrollbar-hide">
       <div className="w-276 mx-auto">
@@ -117,8 +106,6 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
                   <CarouselItem key={card.id} className="pl-5 basis-auto">
                     <ExperienceCard
                       title={card.category}
-                      count={counts[card.category] ?? 0}
-                      bgColor={card.bgColor}
                       illustration={card.illustration}
                     />
                   </CarouselItem>
