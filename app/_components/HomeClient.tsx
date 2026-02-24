@@ -85,7 +85,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
   };
 
   return (
-    <main className="w-full mx-auto p-10 pb-25 flex-1 overflow-y-auto scrollbar-hide">
+    <main className="w-full mx-auto p-10 pb-25 flex-1 overflow-y-auto scrollbar-hide outline-none">
       <div className="w-276 mx-auto">
         <h1 className="text-headline-1 text-gray-400 mb-16">
           오늘 지원할 공고에 딱 맞는 경험, 로짓과 함께 골라 볼까요?
