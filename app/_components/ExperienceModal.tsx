@@ -123,11 +123,12 @@ export function ExperienceModal({
       totalSteps={2}
       title={title}
       description={description}
+      contentClassName="h-165"
       headerExtra={
         mode === "create" ? (
           <button
             type="button"
-            onClick={() => formRef.current?.fillWithExample(EXAMPLE_EXPERIENCE)}
+            onClick={() => formRef.current?.fillWithExample(EXAMPLE_EXPERIENCE, step)}
             className="rounded-lg px-3.5 py-0.5 text-body-7-3 text-primary-400 border border-gray-70 bg-gray-20 cursor-pointer hover:bg-gray-70 transition-colors"
           >
             예시 불러오기

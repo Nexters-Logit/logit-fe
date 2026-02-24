@@ -62,6 +62,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
       totalSteps={2}
       title={title}
       description={description}
+      contentClassName="h-168"
       headerExtra={
         <button
           type="button"

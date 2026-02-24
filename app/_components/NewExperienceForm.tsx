@@ -56,18 +56,30 @@ const experienceFormSchema = z
     if (data.experience_format === EXPERIENCE_FORMAT.STAR) {
       for (const field of ["situation", "task", "action", "result"] as const) {
         if (data[field].trim().length < minLen) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: msg, path: [field] });
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: msg,
+            path: [field],
+          });
         }
       }
     } else if (data.experience_format === EXPERIENCE_FORMAT.PSI) {
       for (const field of ["problem", "solution", "insight"] as const) {
         if (data[field].trim().length < minLen) {
-          ctx.addIssue({ code: z.ZodIssueCode.custom, message: msg, path: [field] });
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: msg,
+            path: [field],
+          });
         }
       }
     } else if (data.experience_format === EXPERIENCE_FORMAT.FREE) {
       if (data.content.trim().length < 1) {
-        ctx.addIssue({ code: z.ZodIssueCode.custom, message: "내용을 입력해주세요", path: ["content"] });
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "내용을 입력해주세요",
+          path: ["content"],
+        });
       }
     }
   });
@@ -83,7 +95,7 @@ interface NewExperienceFormProps {
 }
 
 export interface NewExperienceFormRef {
-  fillWithExample: (data: ExperienceCreate) => void;
+  fillWithExample: (data: ExperienceCreate, step: 1 | 2) => void;
 }
 
 /** ExperienceCreate의 날짜(YYYY-MM-DD)를 폼 형식(YYYY.MM.DD)으로 변환 */
@@ -152,6 +164,7 @@ export const NewExperienceForm = forwardRef<
     reset,
     trigger,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<ExperienceFormValues>({
     resolver: zodResolver(experienceFormSchema),
@@ -159,6 +172,28 @@ export const NewExperienceForm = forwardRef<
   });
 
   const experienceFormat = watch("experience_format");
+  const watchedTitle = watch("title");
+  const watchedStartDate = watch("start_date");
+  const watchedExperienceType = watch("experience_type");
+
+  const isStep2Empty = (() => {
+    if (experienceFormat === EXPERIENCE_FORMAT.STAR) {
+      return (
+        !watch("situation")?.trim() &&
+        !watch("task")?.trim() &&
+        !watch("action")?.trim() &&
+        !watch("result")?.trim()
+      );
+    }
+    if (experienceFormat === EXPERIENCE_FORMAT.PSI) {
+      return (
+        !watch("problem")?.trim() &&
+        !watch("solution")?.trim() &&
+        !watch("insight")?.trim()
+      );
+    }
+    return !watch("content")?.trim();
+  })();
 
   // edit 모드에서 initialData가 변경되면 폼을 reset
   useEffect(() => {
@@ -184,24 +219,25 @@ export const NewExperienceForm = forwardRef<
   }, [mode, initialData, reset]);
 
   useImperativeHandle(ref, () => ({
-    fillWithExample(data: ExperienceCreate) {
-      const format = data.format_type ?? EXPERIENCE_FORMAT.STAR;
-      reset({
-        title: data.title,
-        start_date: toFormDate(data.start_date),
-        end_date: toFormDate(data.end_date),
-        experience_type: data.experience_type,
-        category: data.category,
-        experience_format: format,
-        situation: data.situation ?? "",
-        task: data.task ?? "",
-        action: data.action ?? "",
-        result: data.result ?? "",
-        problem: data.problem ?? "",
-        solution: data.solution ?? "",
-        insight: data.insight ?? "",
-        content: data.content ?? "",
-      });
+    fillWithExample(data: ExperienceCreate, step: 1 | 2) {
+      if (step === 1) {
+        setValue("title", data.title);
+        setValue("start_date", toFormDate(data.start_date));
+        setValue("end_date", toFormDate(data.end_date));
+        setValue("experience_type", data.experience_type);
+        setValue("category", data.category);
+      } else {
+        const format = data.format_type ?? EXPERIENCE_FORMAT.STAR;
+        setValue("experience_format", format);
+        setValue("situation", data.situation ?? "");
+        setValue("task", data.task ?? "");
+        setValue("action", data.action ?? "");
+        setValue("result", data.result ?? "");
+        setValue("problem", data.problem ?? "");
+        setValue("solution", data.solution ?? "");
+        setValue("insight", data.insight ?? "");
+        setValue("content", data.content ?? "");
+      }
     },
   }));
 
@@ -277,19 +313,28 @@ export const NewExperienceForm = forwardRef<
       onSubmit={handleSubmit(handleFormSubmit, onValidationError)}
       className="flex flex-1 flex-col min-h-0"
     >
-      <div className="flex-1 overflow-y-auto px-8 pb-6">
+      <div className="flex-1 overflow-y-auto px-7.5 pb-6">
         {/* 1페이지: 기본정보 */}
         {step === 1 && (
           <div className="flex flex-col gap-5">
             {/* 제목 */}
             <div className="flex flex-col gap-2">
-              <label htmlFor="title" className="text-body-7-2 text-gray-400">
-                경험 제목<span className="text-alert">*</span>
-              </label>
+              <div className="flex items-center justify-between">
+                <label htmlFor="title" className="text-body-7-2 text-gray-400">
+                  경험 제목<span className="text-alert">*</span>
+                </label>
+                <span className="text-body-8-2 text-gray-200">
+                  <span className="text-gray-400">
+                    {watch("title")?.length ?? 0}
+                  </span>{" "}
+                  / 100
+                </span>
+              </div>
               <Input
                 id="title"
-                placeholder="예 ) 로짓 데이터 분석을 통한 이탈율 개선"
+                placeholder="예 ) 로짓 데이터 분석을 통한 이탈률 개선"
                 className="h-11 text-body-5-4"
+                maxLength={100}
                 aria-invalid={!!errors.title}
                 {...register("title")}
               />
@@ -418,7 +463,7 @@ export const NewExperienceForm = forwardRef<
                 htmlFor="experience_format"
                 className="text-body-7-2 text-gray-400"
               >
-                경험정리방법
+                경험 정리 방법
               </label>
               <Controller
                 name="experience_format"
@@ -449,17 +494,26 @@ export const NewExperienceForm = forwardRef<
             {experienceFormat === EXPERIENCE_FORMAT.STAR && (
               <>
                 <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="situation"
-                    className="text-body-7-2 text-gray-400"
-                  >
-                    Situation (상황)을 입력해주세요
-                    <span className="text-alert">*</span>
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="situation"
+                      className="text-body-7-2 text-gray-400"
+                    >
+                      Situation (상황)을 입력해주세요
+                      <span className="text-alert">*</span>
+                    </label>
+                    <span className="text-body-8-2 text-gray-200">
+                      <span className="text-gray-400">
+                        {watch("situation")?.length ?? 0}
+                      </span>{" "}
+                      / 1000
+                    </span>
+                  </div>
                   <Textarea
                     id="situation"
-                    placeholder="구체적인 상황 정보 (언제, 어디서, 누구와, 어떻게 등) 처음 보는 사람도 이해할 수 있도록 작성해주세요)"
+                    placeholder="언제, 어디서 어떤 상황이었는지 적어주세요. (예: ○○프로젝트 / 인턴 근무 중 / 동아리 활동 중 등)"
                     rows={2}
+                    maxLength={1000}
                     aria-invalid={!!errors.situation}
                     {...register("situation")}
                   />
@@ -470,14 +524,26 @@ export const NewExperienceForm = forwardRef<
                   )}
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="task" className="text-body-7-2 text-gray-400">
-                    Task (과제/목표)를 입력해주세요
-                    <span className="text-alert">*</span>
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="task"
+                      className="text-body-7-2 text-gray-400"
+                    >
+                      Task (과제/목표)를 입력해주세요
+                      <span className="text-alert">*</span>
+                    </label>
+                    <span className="text-body-8-2 text-gray-200">
+                      <span className="text-gray-400">
+                        {watch("task")?.length ?? 0}
+                      </span>{" "}
+                      / 1000
+                    </span>
+                  </div>
                   <Textarea
                     id="task"
-                    placeholder="인식한 과제와 목표에 대해 작성해주세요"
+                    placeholder="그 상황에서 본인이 맡은 역할과 달성해야 했던 목표를 적어주세요."
                     rows={2}
+                    maxLength={1000}
                     aria-invalid={!!errors.task}
                     {...register("task")}
                   />
@@ -488,17 +554,26 @@ export const NewExperienceForm = forwardRef<
                   )}
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="action"
-                    className="text-body-7-2 text-gray-400"
-                  >
-                    Action (행동)을 입력해주세요
-                    <span className="text-alert">*</span>
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="action"
+                      className="text-body-7-2 text-gray-400"
+                    >
+                      Action (행동)을 입력해주세요
+                      <span className="text-alert">*</span>
+                    </label>
+                    <span className="text-body-8-2 text-gray-200">
+                      <span className="text-gray-400">
+                        {watch("action")?.length ?? 0}
+                      </span>{" "}
+                      / 1000
+                    </span>
+                  </div>
                   <Textarea
                     id="action"
-                    placeholder="과제 해결 또는 목표 달성을 위한 구체적 행동과 이유를 작성해주세요"
+                    placeholder="문제를 해결하기 위해 어떤 고민을 했고, 어떤 선택을 해서, 무엇을 실행했는지 순서대로 적어주세요."
                     rows={2}
+                    maxLength={1000}
                     aria-invalid={!!errors.action}
                     {...register("action")}
                   />
@@ -509,17 +584,26 @@ export const NewExperienceForm = forwardRef<
                   )}
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="result"
-                    className="text-body-7-2 text-gray-400"
-                  >
-                    Result (결과)를 입력해주세요
-                    <span className="text-alert">*</span>
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="result"
+                      className="text-body-7-2 text-gray-400"
+                    >
+                      Result (결과)를 입력해주세요
+                      <span className="text-alert">*</span>
+                    </label>
+                    <span className="text-body-8-2 text-gray-200">
+                      <span className="text-gray-400">
+                        {watch("result")?.length ?? 0}
+                      </span>{" "}
+                      / 1000
+                    </span>
+                  </div>
                   <Textarea
                     id="result"
-                    placeholder="경험(행동)의 결과와 그로 인해 배운 점과 아쉬운 점 등을 작성해주세요"
+                    placeholder="수치, 평가, 피드백 등을 포함해, 그 결과 어떤 변화나 성과가 있었는지 적어주세요."
                     rows={2}
+                    maxLength={1000}
                     aria-invalid={!!errors.result}
                     {...register("result")}
                   />
@@ -536,17 +620,26 @@ export const NewExperienceForm = forwardRef<
             {experienceFormat === EXPERIENCE_FORMAT.PSI && (
               <>
                 <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="problem"
-                    className="text-body-7-2 text-gray-400"
-                  >
-                    Problem (문제)을 입력해주세요
-                    <span className="text-alert">*</span>
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="problem"
+                      className="text-body-7-2 text-gray-400"
+                    >
+                      Problem (문제 상황)을 입력해주세요
+                      <span className="text-alert">*</span>
+                    </label>
+                    <span className="text-body-8-2 text-gray-200">
+                      <span className="text-gray-400">
+                        {watch("problem")?.length ?? 0}
+                      </span>{" "}
+                      / 1000
+                    </span>
+                  </div>
                   <Textarea
                     id="problem"
-                    placeholder="직면한 문제나 도전 상황을 구체적으로 작성해주세요"
+                    placeholder="해결이 필요했던 문제나 불편함을 적어주세요."
                     rows={2}
+                    maxLength={1000}
                     aria-invalid={!!errors.problem}
                     {...register("problem")}
                   />
@@ -557,17 +650,26 @@ export const NewExperienceForm = forwardRef<
                   )}
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="solution"
-                    className="text-body-7-2 text-gray-400"
-                  >
-                    Solution (해결)을 입력해주세요
-                    <span className="text-alert">*</span>
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="solution"
+                      className="text-body-7-2 text-gray-400"
+                    >
+                      Solution (해결 과정)을 입력해주세요
+                      <span className="text-alert">*</span>
+                    </label>
+                    <span className="text-body-8-2 text-gray-200">
+                      <span className="text-gray-400">
+                        {watch("solution")?.length ?? 0}
+                      </span>{" "}
+                      / 1000
+                    </span>
+                  </div>
                   <Textarea
                     id="solution"
-                    placeholder="문제 해결을 위해 취한 행동과 방법을 작성해주세요"
+                    placeholder="그 문제를 해결하기 위해 어떤 방식으로 접근하고 실행했는지 적어주세요."
                     rows={2}
+                    maxLength={1000}
                     aria-invalid={!!errors.solution}
                     {...register("solution")}
                   />
@@ -578,17 +680,26 @@ export const NewExperienceForm = forwardRef<
                   )}
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label
-                    htmlFor="insight"
-                    className="text-body-7-2 text-gray-400"
-                  >
-                    Insight (인사이트)를 입력해주세요
-                    <span className="text-alert">*</span>
-                  </label>
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="insight"
+                      className="text-body-7-2 text-gray-400"
+                    >
+                      Insight (배운 점)을 입력해주세요
+                      <span className="text-alert">*</span>
+                    </label>
+                    <span className="text-body-8-2 text-gray-200">
+                      <span className="text-gray-400">
+                        {watch("insight")?.length ?? 0}
+                      </span>{" "}
+                      / 1000
+                    </span>
+                  </div>
                   <Textarea
                     id="insight"
-                    placeholder="해결 과정을 통해 얻은 결과와 성과, 배운 점을 작성해주세요"
+                    placeholder="이 경험을 통해 얻은 배운 점이나 관점의 변화를 적어주세요."
                     rows={2}
+                    maxLength={1000}
                     aria-invalid={!!errors.insight}
                     {...register("insight")}
                   />
@@ -604,17 +715,26 @@ export const NewExperienceForm = forwardRef<
             {/* 자유형식: 단일 텍스트 영역 */}
             {experienceFormat === EXPERIENCE_FORMAT.FREE && (
               <div className="flex flex-col gap-2">
-                <label
-                  htmlFor="content"
-                  className="text-body-7-2 text-gray-400"
-                >
-                  경험을 자유 형식으로 작성해주세요
-                  <span className="text-alert">*</span>
-                </label>
+                <div className="flex items-center justify-between">
+                  <label
+                    htmlFor="content"
+                    className="text-body-7-2 text-gray-400"
+                  >
+                    경험기입
+                    <span className="text-alert">*</span>
+                  </label>
+                  <span className="text-body-8-2 text-gray-200">
+                    <span className="text-gray-400">
+                      {watch("content")?.length ?? 0}
+                    </span>{" "}
+                    / 1000
+                  </span>
+                </div>
                 <Textarea
                   id="content"
-                  placeholder="경험한 내용을 자유롭게 작성해주세요. 상황, 본인의 역할, 결과와 배운 점 등을 포함하면 좋습니다."
+                  placeholder="경험에서 특히 강조하고 싶은 점이나 다른 형식으로는 담기지 않은 이야기를 자유롭게 적어주세요."
                   rows={8}
+                  maxLength={1000}
                   className="min-h-44"
                   aria-invalid={!!errors.content}
                   {...register("content")}
@@ -631,46 +751,45 @@ export const NewExperienceForm = forwardRef<
       </div>
 
       {/* 버튼 영역 */}
-      <div className="shrink-0 flex items-center justify-center px-8 py-5 gap-4">
-        <div>
-          {step === 2 && (
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={handlePrev}
-              disabled={isPending}
-              className="h-11 gap-2 px-5 text-body-5-2 text-primary-200"
-            >
-              이전으로
-            </Button>
-          )}
-        </div>
-        <div>
-          {step === 1 ? (
-            <Button
-              type="button"
-              onClick={handleNext}
-              className="h-11 gap-2 px-5 text-body-5-2 text-white"
-            >
-              다음으로
-            </Button>
-          ) : (
-            <Button
-              type="submit"
-              disabled={isPending}
-              onClick={() => setHasAttemptedStep2Submit(true)}
-              className="h-11 px-6 text-body-5-2 text-white"
-            >
-              {isPending
-                ? mode === "edit"
-                  ? "수정 중..."
-                  : "등록 중..."
-                : mode === "edit"
-                  ? "경험 수정하기"
-                  : "경험 등록하기"}
-            </Button>
-          )}
-        </div>
+      <div className="shrink-0 flex items-center justify-center h-25 px-7.5 gap-4.5">
+        {step === 2 && (
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={handlePrev}
+            disabled={isPending}
+            className="h-11 w-41.25 text-body-5-2 text-primary-200"
+          >
+            이전으로
+          </Button>
+        )}
+        {step === 1 ? (
+          <Button
+            type="button"
+            onClick={handleNext}
+            disabled={
+              !watchedTitle || !watchedStartDate || !watchedExperienceType
+            }
+            className="h-11 w-41.25 text-body-5-2 text-white"
+          >
+            다음으로
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            disabled={isPending || isStep2Empty}
+            onClick={() => setHasAttemptedStep2Submit(true)}
+            className="h-11 w-41.25 text-body-5-2 text-white"
+          >
+            {isPending
+              ? mode === "edit"
+                ? "수정 중..."
+                : "등록 중..."
+              : mode === "edit"
+                ? "경험 수정하기"
+                : "경험 등록하기"}
+          </Button>
+        )}
       </div>
     </form>
   );
