@@ -2,6 +2,7 @@
 
 import type { Experience } from "@/types/api";
 import Image from "next/image";
+import { ExperienceOptionsMenu } from "./ExperienceOptionsMenu";
 interface ReportExperienceRowProps {
   experience: Experience;
   onClick?: () => void;
@@ -62,17 +63,19 @@ export function ReportExperienceRow({
             <span className="text-body-9-3 text-gray-200">태그 없음</span>
           )}
         </div>
-        <div className="text-body-7-3 text-gray-200">
+        <div className="regular_16 text-gray-300">
           {experience.experience_type}
         </div>
       </div>
 
       {/* 우측: 경험 타입 / 기간 */}
       <div className="shrink-0 text-right flex flex-col items-end gap-1 min-w-40">
-        <span className="text-body-9-3 text-gray-200">
+        <span className="regular_14 text-gray-300">
           {formatDateRange(experience.start_date, experience.end_date)}
         </span>
       </div>
+
+      <ExperienceOptionsMenu />
     </div>
   );
 }

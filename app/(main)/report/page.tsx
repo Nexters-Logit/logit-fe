@@ -1,9 +1,9 @@
 import { Suspense } from "react";
-import Link from "next/link";
 import { ReportExperienceListServer } from "../../_components/report/ReportExperienceListServer";
 import { ReportExperienceListSkeleton } from "../../_components/report/ReportExperienceListSkeleton";
 import { ExperienceAnalysisSection } from "../../_components/report/ExperienceAnalysisSection";
 import { ReportPageTitle } from "../../_components/report/ReportPageTitle";
+import { ReportExperienceButton } from "../../_components/report/ReportExperienceButton";
 
 export default function ReportPage() {
   return (
@@ -16,12 +16,7 @@ export default function ReportPage() {
         <section>
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-title-2-2 text-gray-400">경험 목록</h2>
-            <Link
-              href="/experience/new"
-              className="inline-flex items-center justify-center px-5 h-11 rounded-3.5 bg-primary-100 text-body-5-2 text-white hover:bg-primary-80 transition-colors"
-            >
-              경험 등록
-            </Link>
+            <ReportExperienceButton />
           </div>
           <Suspense fallback={<ReportExperienceListSkeleton />}>
             <ReportExperienceListServer />
