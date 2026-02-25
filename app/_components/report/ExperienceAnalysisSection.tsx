@@ -15,6 +15,40 @@ export function ExperienceAnalysisSection() {
   const typeCounts = (data?.type_counts ?? []) as TypeCount[];
   const categoryCounts = (data?.category_counts ?? []) as CategoryCount[];
   const tagCounts = (data?.tag_counts ?? []) as TagCount[];
+
+  const getTypeLabel = (item: TypeCount) =>
+    "type" in item
+      ? item.type
+      : "category" in item
+        ? item.category
+        : "tag" in item
+          ? item.tag
+          : "";
+
+  const topTypeItem = typeCounts.length
+    ? typeCounts.reduce((a, b) => (a.count >= b.count ? a : b))
+    : null;
+  const bottomTypeItem = typeCounts.length
+    ? typeCounts.reduce((a, b) => (a.count <= b.count ? a : b))
+    : null;
+  const topTypeLabel = topTypeItem
+    ? getTypeLabel(topTypeItem)
+    : "최다 경험 유형";
+  const bottomTypeLabel = bottomTypeItem
+    ? getTypeLabel(bottomTypeItem)
+    : "최소 경험 유형";
+
+  const topCategoryItem = categoryCounts.length
+    ? categoryCounts.reduce((a, b) => (a.count >= b.count ? a : b))
+    : null;
+  const topCategoryLabel = topCategoryItem
+    ? topCategoryItem.category
+    : "최다 해쉬태그";
+
+  const topTagItem = tagCounts.length
+    ? tagCounts.reduce((a, b) => (a.count >= b.count ? a : b))
+    : null;
+  const topTagLabel = topTagItem ? topTagItem.tag : "최다 해쉬태그";
   return (
     <section className="mb-16">
       <h2 className="text-title-2-2 text-gray-400 mb-5">경험 분석</h2>
@@ -24,8 +58,8 @@ export function ExperienceAnalysisSection() {
         <ReportChartCard
           iconSrc="/icons/report-experience.svg"
           iconAlt="경험 유형 아이콘"
-          title="최다 경험 유형이 두드러져요"
-          description="최소 경험 유형을 보완하면 더 균형 잡힌 역량의 인재로 보일 수 있어요!"
+          title={`${topTypeLabel} 경험이 두드러져요`}
+          description={`${bottomTypeLabel} 경험을 보완하면 더 균형 잡힌 역량의 인재로 보일 수 있어요!`}
           data={typeCounts}
         >
           <TypeCountsBarChart data={typeCounts} />
@@ -33,8 +67,8 @@ export function ExperienceAnalysisSection() {
         <ReportChartCard
           iconSrc="/icons/report-tag.svg"
           iconAlt="해쉬태그 아이콘"
-          title="최다 해쉬태그에 강점이 있어요"
-          description="{ 각 해쉬태그 별 전문성을 강조하는 지정 멘트 }"
+          title={`${topCategoryLabel}에 강점이 있어요.`}
+          description="{카테고리 별 지정멘트}"
           data={categoryCounts}
         >
           <CategoryCountsDonutChart data={categoryCounts} />
@@ -42,8 +76,8 @@ export function ExperienceAnalysisSection() {
         <ReportChartCard
           iconSrc="/icons/report-category.svg"
           iconAlt="카테고리 아이콘"
-          title="{최다 경험 종류}이 가장 많아요"
-          description="{카테고리 별 지정멘트}"
+          title={`${topTagLabel}이 가장 많아요`}
+          description="{ 각 해쉬태그 별 전문성을 강조하는 지정 멘트 }"
           data={tagCounts}
         >
           <ExperienceBarChart data={tagCounts} />
