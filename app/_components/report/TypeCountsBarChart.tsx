@@ -4,10 +4,7 @@ import { Bar, BarChart, Cell, LabelList, XAxis } from "recharts";
 
 export type TypeCount = {
   count: number;
-} & (
-  | { type: string; category?: never }
-  | { category: string; type?: never }
-);
+} & ({ type: string; category?: never } | { category: string; type?: never });
 
 export type TypeCountsBarChartProps = {
   data: TypeCount[];

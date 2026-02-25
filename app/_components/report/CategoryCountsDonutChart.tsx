@@ -71,7 +71,7 @@ export function CategoryCountsDonutChart({
           cy="50%"
           innerRadius={64}
           outerRadius={88}
-          paddingAngle={6}
+          paddingAngle={1}
           minAngle={15}
           cornerRadius={999}
         >

@@ -13,7 +13,7 @@ const MOCK_TYPE_COUNTS = [
   { type: "리더십", count: 2 },
   { type: "문제해결", count: 1 },
   { type: "유대", count: 2 },
-  { type: "문제해결", count: 1 },
+  { type: "공유", count: 1 },
 ];
 
 const MOCK_CATEGORY_COUNTS: CategoryCount[] = [
@@ -30,7 +30,7 @@ export function ExperienceAnalysisSection() {
     <section className="mb-16">
       <h2 className="text-title-2-2 text-gray-400 mb-5">경험 분석</h2>
       {/* 1104px 패널 (고정 폭) */}
-      <div className="flex gap-5 w-[1104px] px-7.5 py-5 rounded-7.5 bg-gray-20 border border-gray-70 mx-auto">
+      <div className="flex gap-4 p-5 rounded-7.5 bg-gray-20 border border-gray-70 mx-auto">
         {/* 343px 카드들 (고정 폭/높이, flex-shrink: 0) */}
         <ReportChartCard
           iconSrc="/icons/report-experience.svg"
