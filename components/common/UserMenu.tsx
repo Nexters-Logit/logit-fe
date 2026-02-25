@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef } from "react";
 import Image from "next/image";
 import {
   DropdownMenu,
@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getAccessToken, logout } from "@/libs/auth";
+import { logout } from "@/libs/auth";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import { showToast } from "@/libs/toast";
 import { useLoginModal } from "@/app/_components/LoginModalContext";
@@ -67,20 +67,9 @@ async function handleCopyMcpToken() {
 
 export function UserMenu() {
   const { setLoginModalOpen } = useLoginModal();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const isLoggedIn = mounted && !!getAccessToken();
   const { data: user } = useCurrentUser();
 
-  if (!mounted) {
-    return <AvatarButton label="계정" />;
-  }
-
-  if (!isLoggedIn) {
+  if (!user) {
     return (
       <AvatarButton
         label="로그인"
