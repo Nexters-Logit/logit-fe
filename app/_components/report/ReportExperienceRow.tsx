@@ -6,8 +6,10 @@ import type { Experience } from "@/types/api";
 import Image from "next/image";
 import { getExperience } from "@/app/_actions/experiences";
 import { showToast } from "@/libs/toast";
+import { useDeleteExperience } from "@/app/_hooks/useDeleteExperience";
 import { ExperienceOptionsMenu } from "./ExperienceOptionsMenu";
 import { ExperienceModal } from "../ExperienceModal";
+import { DeleteExperienceDialog } from "../DeleteExperienceDialog";
 
 interface ReportExperienceRowProps {
   experience: Experience;
@@ -26,10 +28,12 @@ export function ReportExperienceRow({
   onClick,
 }: ReportExperienceRowProps) {
   const router = useRouter();
+  const deleteExperience = useDeleteExperience();
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [experienceToEdit, setExperienceToEdit] = useState<Experience | null>(
     null,
   );
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const tags =
     experience.tags
@@ -55,6 +59,23 @@ export function ReportExperienceRow({
   const handleEditSuccess = () => {
     handleEditModalClose(false);
     router.refresh();
+  };
+
+  const handleDeleteClick = () => {
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    deleteExperience.mutate(experience.id, {
+      onSuccess: () => {
+        setDeleteDialogOpen(false);
+        router.refresh();
+        showToast.success("경험이 삭제되었습니다.");
+      },
+      onError: () => {
+        showToast.error("삭제 중 오류가 발생했습니다.");
+      },
+    });
   };
 
   return (
@@ -108,7 +129,10 @@ export function ReportExperienceRow({
         </span>
       </div>
 
-      <ExperienceOptionsMenu onEdit={handleEdit} />
+      <ExperienceOptionsMenu
+        onEdit={handleEdit}
+        onDelete={handleDeleteClick}
+      />
     </div>
 
       {experienceToEdit !== null ? (
@@ -120,6 +144,14 @@ export function ReportExperienceRow({
           onSuccess={handleEditSuccess}
         />
       ) : null}
+
+      <DeleteExperienceDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        experienceTitle={experience.title || "제목 없음"}
+        onConfirm={handleDeleteConfirm}
+        isPending={deleteExperience.isPending}
+      />
     </>
   );
 }
