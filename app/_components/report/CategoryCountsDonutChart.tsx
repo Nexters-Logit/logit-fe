@@ -1,6 +1,6 @@
 "use client";
 
-import { Cell, LabelList, Pie, PieChart } from "recharts";
+import { Cell, LabelList, Pie, PieChart, type LabelProps } from "recharts";
 import {
   TYPE_COUNT_COLORS,
   TYPE_COUNT_LABEL_COLORS,
@@ -15,13 +15,18 @@ type CategoryCountsDonutChartProps = {
   data: CategoryCount[];
 };
 
-function renderDonutLabel(props: any) {
+function renderDonutLabel(props: LabelProps) {
   const { value, index = 0, viewBox } = props;
-  if (value == null || value === false || !viewBox) {
+  if (value == null || value === false || !viewBox || !("cx" in viewBox)) {
     return null;
   }
 
-  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle } = viewBox;
+  const cx = viewBox.cx ?? 0;
+  const cy = viewBox.cy ?? 0;
+  const innerRadius = viewBox.innerRadius ?? 0;
+  const outerRadius = viewBox.outerRadius ?? 0;
+  const startAngle = viewBox.startAngle ?? 0;
+  const endAngle = viewBox.endAngle ?? 0;
 
   const midAngle = (startAngle + endAngle) / 2;
   const RADIAN = Math.PI / 180;
