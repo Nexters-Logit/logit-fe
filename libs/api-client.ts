@@ -164,4 +164,7 @@ export const API_ENDPOINTS = {
   ) => `/api/v1/projects/chats/${questionId}${buildQueryString(params)}`,
   // Report
   experienceSummary: "/api/v1/report/experience-summary",
+
+  // Users
+  usersMe: "/api/v1/users/me",
 } as const;
