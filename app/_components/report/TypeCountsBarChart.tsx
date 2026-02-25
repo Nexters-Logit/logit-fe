@@ -20,7 +20,7 @@ export const TYPE_COUNT_COLORS = [
   "#FAE8FF",
 ];
 
-const TYPE_COUNT_LABEL_COLORS = [
+export const TYPE_COUNT_LABEL_COLORS = [
   "#34AD62",
   "#409AB6",
   "#8160C4",

@@ -1,7 +1,10 @@
 "use client";
 
 import { Cell, LabelList, Pie, PieChart } from "recharts";
-import { TYPE_COUNT_COLORS } from "./TypeCountsBarChart";
+import {
+  TYPE_COUNT_COLORS,
+  TYPE_COUNT_LABEL_COLORS,
+} from "./TypeCountsBarChart";
 
 export type CategoryCount = {
   category: string;
@@ -11,6 +14,39 @@ export type CategoryCount = {
 type CategoryCountsDonutChartProps = {
   data: CategoryCount[];
 };
+
+function renderDonutLabel(props: any) {
+  const { value, index = 0, viewBox } = props;
+  if (value == null || value === false || !viewBox) {
+    return null;
+  }
+
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle } = viewBox;
+
+  const midAngle = (startAngle + endAngle) / 2;
+  const RADIAN = Math.PI / 180;
+  const radius = (innerRadius + outerRadius) / 2;
+
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  const color =
+    TYPE_COUNT_LABEL_COLORS[index % TYPE_COUNT_LABEL_COLORS.length];
+
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor="middle"
+      fill={color}
+      fontSize={12}
+      fontWeight={700}
+      dominantBaseline="middle"
+    >
+      {value}
+    </text>
+  );
+}
 
 export function CategoryCountsDonutChart({
   data,
@@ -48,8 +84,7 @@ export function CategoryCountsDonutChart({
           <LabelList
             dataKey="count"
             position="inside"
-            className="fill-gray-400"
-            fontSize={12}
+            content={renderDonutLabel}
           />
         </Pie>
       </PieChart>
