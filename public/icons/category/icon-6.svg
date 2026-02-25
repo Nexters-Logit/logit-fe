@@ -1,3 +1,1 @@
-<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 17.9999 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path id="Union" d="M10.4772 5.43375L14.3194 1.59153L16.4084 3.68053L12.5662 7.52275H17.9999V10.4771H12.5664L16.4086 14.3193L14.3195 16.4084L10.4772 12.566V18H7.52295V12.566L3.68063 16.4084L1.59153 14.3194L5.43385 10.4771H0V7.52275H5.43395L1.59173 3.68053L3.68073 1.59153L7.52295 5.43365V0H10.4772V5.43375Z" fill="var(--fill-0, #A283E6)"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" overflow="visible" preserveAspectRatio="none" style="display:block" viewBox="0 0 18 18"><path fill="var(--fill-0, #a283e6)" d="m10.477 5.434 3.842-3.842 2.09 2.089-3.843 3.842H18v2.954h-5.434l3.843 3.842-2.09 2.09-3.842-3.843V18H7.523v-5.434L3.68 16.408 1.59 14.32l3.843-3.842H0V7.523h5.434L1.592 3.68 3.68 1.59l3.842 3.843V0h2.954z"/></svg>
