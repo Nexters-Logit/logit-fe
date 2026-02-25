@@ -19,6 +19,13 @@ export async function getExperiences(): Promise<Experience[]> {
 }
 
 /**
+ * 경험 상세 조회
+ */
+export async function getExperience(id: string): Promise<Experience> {
+  return apiFetch<Experience>(API_ENDPOINTS.experience(id));
+}
+
+/**
  * 경험 생성
  */
 export async function createExperience(

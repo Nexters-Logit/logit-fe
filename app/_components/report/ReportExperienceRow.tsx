@@ -1,8 +1,14 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Experience } from "@/types/api";
 import Image from "next/image";
+import { getExperience } from "@/app/_actions/experiences";
+import { showToast } from "@/libs/toast";
 import { ExperienceOptionsMenu } from "./ExperienceOptionsMenu";
+import { ExperienceModal } from "../ExperienceModal";
+
 interface ReportExperienceRowProps {
   experience: Experience;
   onClick?: () => void;
@@ -19,18 +25,45 @@ export function ReportExperienceRow({
   experience,
   onClick,
 }: ReportExperienceRowProps) {
+  const router = useRouter();
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [experienceToEdit, setExperienceToEdit] = useState<Experience | null>(
+    null,
+  );
+
   const tags =
     experience.tags
       ?.split(",")
       .map((tag) => tag.trim())
       .filter(Boolean) ?? [];
 
+  const handleEdit = async () => {
+    try {
+      const data = await getExperience(experience.id);
+      setExperienceToEdit(data);
+      setEditModalOpen(true);
+    } catch {
+      showToast.error("경험 정보를 불러오는데 실패했습니다.");
+    }
+  };
+
+  const handleEditModalClose = (open: boolean) => {
+    setEditModalOpen(open);
+    if (!open) setExperienceToEdit(null);
+  };
+
+  const handleEditSuccess = () => {
+    handleEditModalClose(false);
+    router.refresh();
+  };
+
   return (
-    <div
-      role="row"
-      onClick={onClick}
-      className="flex items-center justify-between py-3.5 border-b border-gray-70 w-full cursor-pointer hover:bg-gray-20 transition-colors"
-    >
+    <>
+      <div
+        role="row"
+        onClick={onClick}
+        className="flex items-center justify-between py-3.5 border-b border-gray-70 w-full cursor-pointer hover:bg-gray-20 transition-colors"
+      >
       <div className="flex items-center gap-6 min-w-0 flex-1">
         {/* 제목 */}
         <span className="text-body-5-5 text-primary-600 truncate shrink min-w-0 w-64">
@@ -75,7 +108,18 @@ export function ReportExperienceRow({
         </span>
       </div>
 
-      <ExperienceOptionsMenu />
+      <ExperienceOptionsMenu onEdit={handleEdit} />
     </div>
+
+      {experienceToEdit !== null ? (
+        <ExperienceModal
+          open={editModalOpen}
+          onOpenChange={handleEditModalClose}
+          mode="edit"
+          experience={experienceToEdit}
+          onSuccess={handleEditSuccess}
+        />
+      ) : null}
+    </>
   );
 }
