@@ -39,7 +39,7 @@ export function DueBadge({ dueDate }: DueBadgeProps) {
 
   return (
     <span
-      className={`flex items-center justify-center h-7 min-w-12.5 px-2.5 rounded-lg font-semibold text-base leading-140 ${badge.className}`}
+      className={`flex items-center justify-center h-7 w-17.5 rounded-lg font-semibold text-base leading-140 ${badge.className}`}
     >
       {badge.label}
     </span>

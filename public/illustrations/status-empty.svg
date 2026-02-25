@@ -1,9 +1,1 @@
-<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path id="Subtract" fill-rule="evenodd" clip-rule="evenodd" d="M70.5918 0.262375C76.1444 -1.22544 81.2255 3.85558 79.7376 9.40818L62.3068 74.4607C60.8189 80.0132 53.8783 81.873 49.8135 77.8083C45.2543 73.2491 31.5769 59.5715 36.1361 64.1306C30.3516 58.2702 30.284 48.6122 36.1361 42.7601L35.9971 42.8972C30.0855 48.6609 20.6207 48.6152 14.7655 42.7601L2.19172 30.1866C-1.87302 26.1218 -0.0131961 19.1811 5.53936 17.6932L70.5918 0.262375ZM57.3677 21.5266C51.4561 27.2903 41.9913 27.2446 36.1361 21.3895L36.2732 21.5284C42.0369 27.44 41.9912 36.9048 36.1361 42.7601C42.0374 36.8588 51.6054 36.8588 57.5067 42.7601L57.3694 42.621C51.6058 36.7094 51.6515 27.2446 57.5067 21.3895L57.3677 21.5266Z" fill="url(#paint0_linear_0_4)"/>
-<defs>
-<linearGradient id="paint0_linear_0_4" x1="80" y1="-6.18803" x2="16.7243" y2="57.0877" gradientUnits="userSpaceOnUse">
-<stop stop-color="#DEE4FF"/>
-<stop offset="1" stop-color="#DCF5F4"/>
-</linearGradient>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" overflow="visible" preserveAspectRatio="none" style="display:block" viewBox="0 0 80 80"><path fill="url(#a)" fill-rule="evenodd" d="M70.592.262c5.552-1.487 10.633 3.594 9.146 9.146L62.307 74.461c-1.488 5.552-8.429 7.412-12.494 3.347L36.137 64.131c-5.784-5.86-5.852-15.519 0-21.37l-.139.136c-5.911 5.764-15.376 5.718-21.231-.137L2.191 30.187C-1.873 26.122-.013 19.18 5.539 17.693zM57.368 21.527c-5.912 5.763-15.377 5.718-21.232-.137l.137.138c5.764 5.912 5.718 15.377-.137 21.232 5.901-5.901 15.47-5.901 21.37 0l-.137-.139c-5.763-5.912-5.718-15.376.138-21.231z" clip-rule="evenodd"/><defs><linearGradient id="a" x1="80" x2="16.724" y1="-6.188" y2="57.088" gradientUnits="userSpaceOnUse"><stop stop-color="#dee4ff"/><stop offset="1" stop-color="#dcf5f4"/></linearGradient></defs></svg>

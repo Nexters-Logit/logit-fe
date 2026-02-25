@@ -50,7 +50,7 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
         <DialogTitle className="sr-only">로그인</DialogTitle>
         <div className="gap-2 flex flex-col items-center justify-center">
           <Image
-            src="/icons/logo_symbol_3d.svg"
+            src="/icons/logo_symbol_3d.webp"
             alt="Logit logo"
             width={60}
             height={60}

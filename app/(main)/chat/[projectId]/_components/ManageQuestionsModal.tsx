@@ -189,7 +189,7 @@ export function ManageQuestionsModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="flex max-h-[90vh] min-h-136.75 flex-col overflow-hidden rounded-5 border-0 p-0 shadow-chat sm:max-w-207"
+        className="flex max-h-[90vh] h-168 flex-col overflow-hidden rounded-5 border-0 p-0 shadow-chat sm:max-w-207"
         showCloseButton={false}
         onPointerDownOutside={(e) => {
           e.preventDefault();
@@ -231,6 +231,8 @@ export function ManageQuestionsModal({
                 }
                 onRemove={() => handleRemoveField(index)}
                 showRemoveButton={fields.length > 1}
+                questionError={!field.question.trim() && field.max_length != null}
+                maxLengthError={!!field.question.trim() && field.max_length == null}
               />
             ))}
 
@@ -252,11 +254,11 @@ export function ManageQuestionsModal({
           </div>
         </div>
 
-        <div className="flex items-center justify-center px-7.5 py-7">
+        <div className="shrink-0 flex items-center justify-center h-25 px-7.5 gap-4.5">
           <Button
             type="button"
             onClick={handleSave}
-            disabled={isPending || !hasChanges}
+            disabled={isPending || !hasChanges || fields.some(f => f.question.trim() && f.max_length == null)}
             className="w-41.25"
           >
             {isPending ? "저장 중..." : "문항 수정"}

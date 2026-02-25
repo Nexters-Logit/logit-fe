@@ -27,7 +27,14 @@ const projectFormSchema = z.object({
     )
     .refine((questions) => questions.some((q) => q.question.trim()), {
       message: "최소 1개의 문항을 입력해주세요",
-    }),
+    })
+    .refine(
+      (questions) =>
+        questions.every(
+          (q) => !q.question.trim() || (q.max_length != null && !Number.isNaN(q.max_length)),
+        ),
+      { message: "글자수를 입력해주세요" },
+    ),
 });
 
 type ProjectFormValues = z.infer<typeof projectFormSchema>;
@@ -46,6 +53,7 @@ export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>
   function NewProjectForm({ onSubmit, isPending = false, onStepChange }, ref) {
   const [step, setStep] = useState<1 | 2>(1);
   const [isOngoing, setIsOngoing] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const goToStep = (newStep: 1 | 2) => {
     setStep(newStep);
@@ -71,6 +79,11 @@ export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>
       questions: [{ question: "", max_length: null }],
     },
   });
+
+  const watchedCompany = watch("company");
+  const watchedJobPosition = watch("job_position");
+  const watchedRecruitNotice = watch("recruit_notice");
+  const watchedQuestions = watch("questions");
 
   const { fields, append, remove, replace } = useFieldArray({
     control,
@@ -123,18 +136,24 @@ export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="flex flex-1 flex-col min-h-0">
-      <div className="flex-1 overflow-y-auto px-8 pb-6">
+      <div className="flex-1 overflow-y-auto px-7.5 pb-6">
       {/* 1페이지: 기본정보 */}
       {step === 1 && (
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
-            <label htmlFor="company" className="text-body-7-2 text-gray-400">
-              회사명<span className="text-alert">*</span>
-            </label>
+            <div className="flex items-center justify-between">
+              <label htmlFor="company" className="text-body-7-2 text-gray-400">
+                기업명<span className="text-alert">*</span>
+              </label>
+              <span className="text-body-8-2 text-gray-200">
+                <span className="text-gray-400">{watch("company")?.length ?? 0}</span> / 100자
+              </span>
+            </div>
             <Input
               id="company"
               placeholder="예 ) 주식회사 로짓 컴퍼니"
               className="h-11 text-body-5-4"
+              maxLength={100}
               aria-invalid={!!errors.company}
               {...register("company")}
             />
@@ -146,16 +165,22 @@ export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>
           </div>
 
           <div className="flex flex-col gap-2">
-            <label
-              htmlFor="job_position"
-              className="text-body-7-2 text-gray-400"
-            >
-              직무<span className="text-alert">*</span>
-            </label>
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="job_position"
+                className="text-body-7-2 text-gray-400"
+              >
+                직무명<span className="text-alert">*</span>
+              </label>
+              <span className="text-body-8-2 text-gray-200">
+                <span className="text-gray-400">{watch("job_position")?.length ?? 0}</span> / 100자
+              </span>
+            </div>
             <Input
               id="job_position"
-              placeholder="예 ) 프론트엔드 개발자"
+              placeholder="예 ) 프로덕트 디자이너"
               className="h-11 text-body-5-4"
+              maxLength={100}
               aria-invalid={!!errors.job_position}
               {...register("job_position")}
             />
@@ -167,16 +192,22 @@ export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>
           </div>
 
           <div className="flex flex-col gap-2">
-            <label
-              htmlFor="recruit_notice"
-              className="text-body-7-2 text-gray-400"
-            >
-              채용 공고<span className="text-alert">*</span>
-            </label>
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="recruit_notice"
+                className="text-body-7-2 text-gray-400"
+              >
+                채용 공고<span className="text-alert">*</span>
+              </label>
+              <span className="text-body-8-2 text-gray-200">
+                <span className="text-gray-400">{watch("recruit_notice")?.length ?? 0}</span> / 3000자
+              </span>
+            </div>
             <Textarea
               id="recruit_notice"
               placeholder="해당 직무의 주요 업무, 자격 요건, 우대 사항 등을 모두 복사해서 붙여 넣어주세요."
               rows={4}
+              maxLength={3000}
               className="text-body-5-4"
               aria-invalid={!!errors.recruit_notice}
               {...register("recruit_notice")}
@@ -237,16 +268,22 @@ export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>
           </div>
 
           <div className="flex flex-col gap-2">
-            <label
-              htmlFor="company_talent"
-              className="text-body-7-2 text-gray-400"
-            >
-              기업의 인재상을 입력해주세요
-            </label>
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="company_talent"
+                className="text-body-7-2 text-gray-400"
+              >
+                기업의 인재상을 입력해주세요
+              </label>
+              <span className="text-body-8-2 text-gray-200">
+                <span className="text-gray-400">{watch("company_talent")?.length ?? 0}</span> / 1000자
+              </span>
+            </div>
             <Input
               id="ideal_candidate_profile"
               placeholder="공식 홈페이지의 '인재상'이나 '핵심 가치' 를 입력해주세요."
               className="h-11 text-body-5-4"
+              maxLength={1000}
               {...register("company_talent")}
             />
           </div>
@@ -266,6 +303,8 @@ export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>
               onMaxLengthChange={(value) => setValue(`questions.${index}.max_length`, value)}
               onRemove={() => remove(index)}
               showRemoveButton={fields.length > 1}
+              questionError={submitted && !watch(`questions.${index}.question`)?.trim() && (watch(`questions.${index}.max_length`) != null)}
+              maxLengthError={submitted && !!watch(`questions.${index}.question`)?.trim() && watch(`questions.${index}.max_length`) == null}
             />
           ))}
 
@@ -290,42 +329,40 @@ export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>
       </div>
 
       {/* 버튼 영역 */}
-      <div className="shrink-0 flex items-center justify-center px-8 py-5 gap-4">
-        <div>
-          {step === 2 && (
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => goToStep(1)}
-              disabled={isPending}
-              className="h-11 gap-2 px-5 text-body-5-2 text-primary-200"
-            >
-              이전으로
-            </Button>
-          )}
-        </div>
-        <div>
-          {step === 1 ? (
-            <Button
-              type="button"
-              onClick={async () => {
-                const valid = await trigger(["company", "job_position", "recruit_notice"]);
-                if (valid) goToStep(2);
-              }}
-              className="h-11 gap-2 px-5 text-body-5-2 text-white"
-            >
-              다음으로
-            </Button>
-          ) : (
-            <Button
-              type="submit"
-              disabled={isPending}
-              className="h-11 px-6 text-body-5-2 text-white"
-            >
-              {isPending ? "생성 중..." : "프로젝트 생성"}
-            </Button>
-          )}
-        </div>
+      <div className="shrink-0 flex items-center justify-center h-25 px-7.5 gap-4.5">
+        {step === 2 && (
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={() => goToStep(1)}
+            disabled={isPending}
+            className="h-11 w-41.25 text-body-5-2 text-primary-200"
+          >
+            이전으로
+          </Button>
+        )}
+        {step === 1 ? (
+          <Button
+            type="button"
+            disabled={!watchedCompany || !watchedJobPosition || !watchedRecruitNotice}
+            onClick={async () => {
+              const valid = await trigger(["company", "job_position", "recruit_notice"]);
+              if (valid) goToStep(2);
+            }}
+            className="h-11 w-41.25 text-body-5-2 text-white"
+          >
+            다음으로
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            onClick={() => setSubmitted(true)}
+            disabled={isPending || !watchedQuestions?.some(q => q.question?.trim()) || watchedQuestions?.some(q => q.question?.trim() && (q.max_length == null || Number.isNaN(q.max_length)))}
+            className="h-11 w-41.25 text-body-5-2 text-white"
+          >
+            {isPending ? "생성 중..." : "프로젝트 생성"}
+          </Button>
+        )}
       </div>
     </form>
   );

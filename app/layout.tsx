@@ -41,6 +41,20 @@ export const metadata: Metadata = {
     description: "경험을 기록하고, 자기소개서를 쉽게 작성하세요",
     type: "website",
     locale: "ko_KR",
+    images: [
+      {
+        url: "/logos/og-image.png",
+        width: 1200,
+        height: 628,
+        alt: "Logit",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Logit - 자기소개서 작성 도우미",
+    description: "경험을 기록하고, 자기소개서를 쉽게 작성하세요",
+    images: ["/logos/og-image.png"],
   },
 };
 

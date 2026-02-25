@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { cn } from "@/libs/utils";
 
 interface StepFormModalProps {
   open: boolean;
@@ -19,6 +20,7 @@ interface StepFormModalProps {
   title: string;
   description: string;
   headerExtra?: ReactNode;
+  contentClassName?: string;
   children: ReactNode;
 }
 
@@ -31,12 +33,13 @@ export function StepFormModal({
   title,
   description,
   headerExtra,
+  contentClassName,
   children,
 }: StepFormModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="flex max-h-[90vh] flex-col overflow-hidden rounded-2xl border-0 p-0 shadow-chat sm:max-w-2xl"
+        className={cn("flex max-h-[90vh] flex-col overflow-hidden rounded-5 border-0 p-0 shadow-chat sm:max-w-207", contentClassName)}
         showCloseButton={false}
         onPointerDownOutside={(e) => {
           e.preventDefault();
@@ -44,7 +47,7 @@ export function StepFormModal({
         }}
         onEscapeKeyDown={onClose}
       >
-        <div className="shrink-0 px-8 pt-6 pb-7 gap-1.5">
+        <div className="shrink-0 px-7.5 pt-7.5 pb-4 gap-1.5">
           <DialogHeader className="relative">
             <button
               type="button"

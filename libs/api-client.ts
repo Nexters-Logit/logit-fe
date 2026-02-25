@@ -156,6 +156,12 @@ export const API_ENDPOINTS = {
   questionComplete: (projectId: string, questionId: string) =>
     `/api/v1/projects/${projectId}/questions/${questionId}/complete`,
 
+  // Users
+  usersMe: "/api/v1/users/me",
+
+  // Subscriptions
+  mcpToken: "/api/v1/subscriptions/me/mcp-token",
+
   // Chats
   chats: "/api/v1/projects/chats",
   chatHistory: (
