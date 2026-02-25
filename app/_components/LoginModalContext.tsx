@@ -26,8 +26,16 @@ export function LoginModalProvider({ children }: { children: ReactNode }) {
       .some((c) => c.startsWith("login_required="));
 
     if (hasFlag) {
+      const justLoggedOut = document.cookie
+        .split(";")
+        .map((c) => c.trim())
+        .some((c) => c.startsWith("just_logged_out="));
+      if (justLoggedOut) {
+        document.cookie = "login_required=; path=/; max-age=0";
+        document.cookie = "just_logged_out=; path=/; max-age=0";
+        return;
+      }
       setLoginModalOpen(true);
-      // 한 번만 쓰고 제거
       document.cookie = "login_required=; path=/; max-age=0";
     }
   }, []);
