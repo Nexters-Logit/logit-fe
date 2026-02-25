@@ -27,7 +27,14 @@ const projectFormSchema = z.object({
     )
     .refine((questions) => questions.some((q) => q.question.trim()), {
       message: "최소 1개의 문항을 입력해주세요",
-    }),
+    })
+    .refine(
+      (questions) =>
+        questions.every(
+          (q) => !q.question.trim() || (q.max_length != null && !Number.isNaN(q.max_length)),
+        ),
+      { message: "글자수를 입력해주세요" },
+    ),
 });
 
 type ProjectFormValues = z.infer<typeof projectFormSchema>;
@@ -46,6 +53,7 @@ export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>
   function NewProjectForm({ onSubmit, isPending = false, onStepChange }, ref) {
   const [step, setStep] = useState<1 | 2>(1);
   const [isOngoing, setIsOngoing] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const goToStep = (newStep: 1 | 2) => {
     setStep(newStep);
@@ -295,6 +303,8 @@ export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>
               onMaxLengthChange={(value) => setValue(`questions.${index}.max_length`, value)}
               onRemove={() => remove(index)}
               showRemoveButton={fields.length > 1}
+              questionError={submitted && !watch(`questions.${index}.question`)?.trim() && (watch(`questions.${index}.max_length`) != null)}
+              maxLengthError={submitted && !!watch(`questions.${index}.question`)?.trim() && watch(`questions.${index}.max_length`) == null}
             />
           ))}
 
@@ -346,7 +356,8 @@ export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>
         ) : (
           <Button
             type="submit"
-            disabled={isPending || !watchedQuestions?.some(q => q.question?.trim())}
+            onClick={() => setSubmitted(true)}
+            disabled={isPending || !watchedQuestions?.some(q => q.question?.trim()) || watchedQuestions?.some(q => q.question?.trim() && (q.max_length == null || Number.isNaN(q.max_length)))}
             className="h-11 w-41.25 text-body-5-2 text-white"
           >
             {isPending ? "생성 중..." : "프로젝트 생성"}

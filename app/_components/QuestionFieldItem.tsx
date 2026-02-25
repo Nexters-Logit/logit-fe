@@ -11,6 +11,8 @@ interface QuestionFieldItemProps {
   onMaxLengthChange: (value: number | null) => void;
   onRemove?: () => void;
   showRemoveButton?: boolean;
+  questionError?: boolean;
+  maxLengthError?: boolean;
 }
 
 export function QuestionFieldItem({
@@ -20,44 +22,61 @@ export function QuestionFieldItem({
   onMaxLengthChange,
   onRemove,
   showRemoveButton = true,
+  questionError = false,
+  maxLengthError = false,
 }: QuestionFieldItemProps) {
+  const hasError = questionError || maxLengthError;
+
   return (
-    <div className="flex items-center gap-2">
-      <Input
-        placeholder="문항을 입력해주세요"
-        className="flex-1 h-10 text-body-5-4"
-        value={questionValue}
-        onChange={(e) => onQuestionChange(e.target.value)}
-      />
-      <div className="relative flex items-center">
+    <div className="flex flex-col gap-1.5">
+      <div className="flex items-center gap-2">
         <Input
-          type="text"
-          inputMode="numeric"
-          placeholder="글자수"
-          className="h-10 w-25 text-body-5-4 text-center pr-7"
-          value={maxLengthValue ?? ""}
-          onChange={(e) => {
-            const value = e.target.value.replace(/[^0-9]/g, "");
-            onMaxLengthChange(value ? Number(value) : null);
-          }}
+          placeholder="문항을 입력해주세요"
+          className="flex-1 h-10 text-body-5-4"
+          aria-invalid={questionError}
+          value={questionValue}
+          onChange={(e) => onQuestionChange(e.target.value)}
         />
-        <span className="absolute right-3 text-body-5-4 text-primary-400 pointer-events-none">
-          자
-        </span>
-      </div>
-      {showRemoveButton && onRemove && (
-        <button
-          type="button"
-          onClick={onRemove}
-          className="shrink-0 size-10 flex items-center justify-center border border-gray-70 rounded-lg hover:bg-gray-20 transition-colors cursor-pointer"
-        >
-          <Image
-            src="/icons/icon-trash-gray.svg"
-            alt="삭제"
-            width={20}
-            height={20}
+        <div className="relative flex items-center">
+          <Input
+            type="text"
+            inputMode="numeric"
+            placeholder="글자수"
+            className="h-10 w-25 text-body-5-4 text-center pr-7"
+            aria-invalid={maxLengthError}
+            value={maxLengthValue ?? ""}
+            onChange={(e) => {
+              const value = e.target.value.replace(/[^0-9]/g, "");
+              onMaxLengthChange(value ? Number(value) : null);
+            }}
           />
-        </button>
+          <span className="absolute right-3 text-body-5-4 text-primary-400 pointer-events-none">
+            자
+          </span>
+        </div>
+        {showRemoveButton && onRemove && (
+          <button
+            type="button"
+            onClick={onRemove}
+            className="shrink-0 size-10 flex items-center justify-center border border-gray-70 rounded-lg hover:bg-gray-20 transition-colors cursor-pointer"
+          >
+            <Image
+              src="/icons/icon-trash-gray.svg"
+              alt="삭제"
+              width={20}
+              height={20}
+            />
+          </button>
+        )}
+      </div>
+      {hasError && (
+        <p className="text-body-9-3 text-alert">
+          {questionError && maxLengthError
+            ? "문항과 글자수를 입력해주세요"
+            : questionError
+              ? "문항을 입력해주세요"
+              : "글자수를 입력해주세요"}
+        </p>
       )}
     </div>
   );

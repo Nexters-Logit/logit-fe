@@ -1,11 +1,1 @@
-<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Frame 2087331286">
-<path id="Subtract" fill-rule="evenodd" clip-rule="evenodd" d="M26.2077 5.03884C27.8789 4.59102 29.4082 6.12033 28.9604 7.79159L23.714 27.3714C23.2662 29.0426 21.1771 29.6024 19.9537 28.379L15.3234 23.7487C15.5174 23.8891 15.703 24.0466 15.8778 24.2214L15.8365 24.1795C14.1017 22.4002 14.1155 19.5515 15.8778 17.7891L15.836 17.8304C14.0567 19.5652 11.2079 19.5515 9.44556 17.7891L9.48685 17.831C9.64527 17.9935 9.78906 18.1649 9.91832 18.3436L5.62027 14.0456C4.39684 12.8221 4.95662 10.7331 6.62786 10.2853L26.2077 5.03884ZM22.2682 11.3982C20.4889 13.133 17.6401 13.1192 15.8778 11.3569L15.9191 11.3987C17.6539 13.178 17.6401 16.0268 15.8778 17.7891C17.654 16.013 20.5338 16.013 22.31 17.7891L22.2687 17.7473C20.534 15.968 20.5477 13.1192 22.31 11.3569L22.2682 11.3982Z" fill="url(#paint0_linear_0_7)"/>
-</g>
-<defs>
-<linearGradient id="paint0_linear_0_7" x1="-12.0538" y1="4.95986" x2="36.3128" y2="11.2446" gradientUnits="userSpaceOnUse">
-<stop stop-color="#89B9FF"/>
-<stop offset="1" stop-color="#94E1FF"/>
-</linearGradient>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" overflow="visible" preserveAspectRatio="none" style="display:block" viewBox="0 0 34 34"><path fill="url(#a)" fill-rule="evenodd" d="M26.208 5.039c1.67-.448 3.2 1.081 2.752 2.753l-5.246 19.58c-.448 1.67-2.537 2.23-3.76 1.007l-4.63-4.63q.29.21.554.472l-.042-.041a4.55 4.55 0 0 1 .042-6.39l-.042.04a4.55 4.55 0 0 1-6.39-.04l.04.041q.24.244.432.513L5.62 14.046c-1.223-1.224-.663-3.313 1.008-3.76zm-3.94 6.36a4.55 4.55 0 0 1-6.39-.042l.041.042a4.55 4.55 0 0 1-.041 6.39 4.55 4.55 0 0 1 6.432 0l-.041-.042a4.55 4.55 0 0 1 .041-6.39z" clip-rule="evenodd"/><defs><linearGradient id="a" x1="-12.054" x2="36.313" y1="4.96" y2="11.245" gradientUnits="userSpaceOnUse"><stop stop-color="#89b9ff"/><stop offset="1" stop-color="#94e1ff"/></linearGradient></defs></svg>
