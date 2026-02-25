@@ -2,14 +2,23 @@
 
 import { Bar, BarChart, Cell, LabelList, XAxis } from "recharts";
 
-type TypeCount = {
+export type TypeCount = {
   type: string;
   count: number;
 };
 
-type TypeCountsBarChartProps = {
+export type TypeCountsBarChartProps = {
   data: TypeCount[];
 };
+
+export const TYPE_COUNT_COLORS = [
+  "#BFEFEC",
+  "#C5ECF8",
+  "#DDE1FF",
+  "#E4DAF8",
+  "#EDD8F3",
+  "#F4D8E9",
+];
 
 export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
   if (!data.length) {
@@ -43,23 +52,13 @@ export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
           tickMargin={8}
         />
         <Bar dataKey="count" radius={8} barSize={BAR_WIDTH}>
-          {data.map((entry, index) => {
-            const COLORS = [
-              "#BFEFEC",
-              "#C5ECF8",
-              "#DDE1FF",
-              "#E4DAF8",
-              "#EDD8F3",
-              "#F4D8E9",
-            ];
-            return (
-              <Cell
-                // type 값이 unique 라는 가정
-                key={entry.type}
-                fill={COLORS[index % COLORS.length]}
-              />
-            );
-          })}
+          {data.map((entry, index) => (
+            <Cell
+              // type 값이 unique 라는 가정
+              key={entry.type}
+              fill={TYPE_COUNT_COLORS[index % TYPE_COUNT_COLORS.length]}
+            />
+          ))}
           <LabelList
             dataKey="count"
             position="top"

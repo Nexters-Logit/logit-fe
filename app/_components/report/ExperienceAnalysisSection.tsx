@@ -24,6 +24,7 @@ export function ExperienceAnalysisSection() {
           iconAlt="경험 유형 아이콘"
           title="최다 경험 유형이 두드러져요"
           description="최소 경험 유형을 보완하면 더 균형 잡힌 역량의 인재로 보일 수 있어요!"
+          data={MOCK_TYPE_COUNTS}
         >
           <TypeCountsBarChart data={MOCK_TYPE_COUNTS} />
         </ReportChartCard>

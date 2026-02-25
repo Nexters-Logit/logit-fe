@@ -1,4 +1,6 @@
 import Image from "next/image";
+import type { TypeCount } from "./TypeCountsBarChart";
+import { ChartInfo } from "./TypeCountsLegend";
 
 type ReportChartCardProps = {
   iconSrc: string;
@@ -6,6 +8,8 @@ type ReportChartCardProps = {
   title: string;
   description: string;
   children: React.ReactNode;
+  //TODO: 데이터 타입 정의
+  data?: TypeCount[];
 };
 
 export function ReportChartCard({
@@ -14,6 +18,7 @@ export function ReportChartCard({
   title,
   description,
   children,
+  data,
 }: ReportChartCardProps) {
   return (
     <div className="flex flex-col shrink-0 w-[343px] h-[479px] rounded-7.5 bg-white p-5">
@@ -29,6 +34,7 @@ export function ReportChartCard({
       <div className="flex justify-center items-center h-full mt-6 mb-14">
         {children}
       </div>
+      {Array.isArray(data) && <ChartInfo data={data} />}
     </div>
   );
 }
