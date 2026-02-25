@@ -1,6 +1,5 @@
 "use client";
 
-import { forwardRef } from "react";
 import Image from "next/image";
 import {
   DropdownMenu,
@@ -15,13 +14,16 @@ import { useLoginModal } from "@/app/_components/LoginModalContext";
 import { useCurrentUser } from "@/app/_hooks/useCurrentUser";
 import { Link2, LogOut } from "lucide-react";
 
-const AvatarButton = forwardRef<
-  HTMLButtonElement,
-  {
-    profileImageUrl?: string | null;
-    label: string;
-  } & React.ButtonHTMLAttributes<HTMLButtonElement>
->(function AvatarButton({ profileImageUrl, label, ...props }, ref) {
+function AvatarButton({
+  profileImageUrl,
+  label,
+  ref,
+  ...props
+}: {
+  profileImageUrl?: string | null;
+  label: string;
+  ref?: React.Ref<HTMLButtonElement>;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   if (profileImageUrl) {
     return (
       <button
@@ -53,7 +55,7 @@ const AvatarButton = forwardRef<
       <div className="w-8 h-8 rounded-full bg-primary-70" />
     </button>
   );
-});
+}
 
 async function handleCopyMcpToken() {
   try {
@@ -67,7 +69,11 @@ async function handleCopyMcpToken() {
 
 export function UserMenu() {
   const { setLoginModalOpen } = useLoginModal();
-  const { data: user } = useCurrentUser();
+  const { data: user, isLoading } = useCurrentUser();
+
+  if (isLoading) {
+    return <AvatarButton label="계정" />;
+  }
 
   if (!user) {
     return (
