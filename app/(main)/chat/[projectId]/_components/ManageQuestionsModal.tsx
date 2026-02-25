@@ -231,6 +231,8 @@ export function ManageQuestionsModal({
                 }
                 onRemove={() => handleRemoveField(index)}
                 showRemoveButton={fields.length > 1}
+                questionError={!field.question.trim() && field.max_length != null}
+                maxLengthError={!!field.question.trim() && field.max_length == null}
               />
             ))}
 
@@ -256,7 +258,7 @@ export function ManageQuestionsModal({
           <Button
             type="button"
             onClick={handleSave}
-            disabled={isPending || !hasChanges}
+            disabled={isPending || !hasChanges || fields.some(f => f.question.trim() && f.max_length == null)}
             className="w-41.25"
           >
             {isPending ? "저장 중..." : "문항 수정"}
