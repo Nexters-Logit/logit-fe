@@ -10,7 +10,7 @@ export function ChartInfo({ data }: ChartInfoProps) {
   return (
     <div className="grid grid-cols-3 gap-y-2">
       {data.slice(0, 6).map((item, index) => (
-        <div key={index} className="flex items-center gap-1.5">
+        <div key={index} className="flex items-center gap-1">
           <span
             className="w-2 h-2 rounded-full"
             style={{
@@ -22,14 +22,13 @@ export function ChartInfo({ data }: ChartInfoProps) {
             {"type" in item
               ? item.type
               : "category" in item
-              ? item.category
-              : "tag" in item
-              ? item.tag
-              : ""}
+                ? item.category
+                : "tag" in item
+                  ? item.tag
+                  : ""}
           </span>
         </div>
       ))}
     </div>
   );
 }
-

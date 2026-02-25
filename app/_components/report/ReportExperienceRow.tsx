@@ -85,55 +85,55 @@ export function ReportExperienceRow({
         onClick={onClick}
         className="flex items-center justify-between py-3.5 border-b border-gray-70 w-full cursor-pointer hover:bg-gray-20 transition-colors"
       >
-      <div className="flex items-center gap-6 min-w-0 flex-1">
-        {/* 제목 */}
-        <span className="text-body-5-5 text-primary-600 truncate shrink min-w-0 w-64">
-          {experience.title || "제목 없음"}
-        </span>
+        <div className="flex items-center gap-6 min-w-0 flex-1">
+          {/* 제목 */}
+          <span className="text-body-5-5 text-primary-600 truncate shrink min-w-0 w-64">
+            {experience.title || "제목 없음"}
+          </span>
 
-        <div className="flex gap-2 w-80">
-          {tags.length > 0 ? (
-            tags.map((tag, index) => (
-              <div
-                key={tag}
-                className={`flex items-center gap-1.5 px-1.5 py-1 rounded-full text-body-9-3 text-primary-600 ${
-                  index === 0
-                    ? "bg-icon-bg-3 text-primary-600"
-                    : "bg-gray-20 text-primary-400"
-                }`}
-              >
-                {index === 0 && (
-                  <Image
-                    src="/icons/icon-main-check.svg"
-                    alt={tag}
-                    width={12}
-                    height={12}
-                  />
-                )}
-                {tag}
-              </div>
-            ))
-          ) : (
-            <span className="text-body-9-3 text-gray-200">태그 없음</span>
-          )}
+          <div className="flex gap-2 w-80">
+            {tags.length > 0 ? (
+              tags.map((tag, index) => (
+                <div
+                  key={tag}
+                  className={`flex items-center gap-1.5 px-1.5 py-1 rounded-full text-body-9-3 text-primary-600 ${
+                    index === 0
+                      ? "bg-icon-bg-3 text-primary-600"
+                      : "bg-gray-20 text-primary-400"
+                  }`}
+                >
+                  {index === 0 && (
+                    <Image
+                      src="/icons/icon-main-check.svg"
+                      alt={tag}
+                      width={12}
+                      height={12}
+                    />
+                  )}
+                  {tag}
+                </div>
+              ))
+            ) : (
+              <span className="text-body-9-3 text-gray-200">태그 없음</span>
+            )}
+          </div>
+          <div className="regular_16 text-gray-300">
+            {experience.experience_type}
+          </div>
         </div>
-        <div className="regular_16 text-gray-300">
-          {experience.experience_type}
+
+        {/* 우측: 경험 타입 / 기간 */}
+        <div className="shrink-0 text-right flex flex-col items-end gap-1 min-w-40">
+          <span className="regular_14 text-gray-300">
+            {formatDateRange(experience.start_date, experience.end_date)}
+          </span>
         </div>
-      </div>
 
-      {/* 우측: 경험 타입 / 기간 */}
-      <div className="shrink-0 text-right flex flex-col items-end gap-1 min-w-40">
-        <span className="regular_14 text-gray-300">
-          {formatDateRange(experience.start_date, experience.end_date)}
-        </span>
+        <ExperienceOptionsMenu
+          onEdit={handleEdit}
+          onDelete={handleDeleteClick}
+        />
       </div>
-
-      <ExperienceOptionsMenu
-        onEdit={handleEdit}
-        onDelete={handleDeleteClick}
-      />
-    </div>
 
       {experienceToEdit !== null ? (
         <ExperienceModal
