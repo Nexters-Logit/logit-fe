@@ -72,7 +72,7 @@ export function UserMenu() {
   const { data: user, isLoading } = useCurrentUser();
 
   if (isLoading) {
-    return <AvatarButton label="계정" />;
+    return <AvatarButton label="로그인" />;
   }
 
   if (!user) {
