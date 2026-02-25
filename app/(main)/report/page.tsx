@@ -4,25 +4,28 @@ import { ReportExperienceListSkeleton } from "../../_components/report/ReportExp
 import { ExperienceAnalysisSection } from "../../_components/report/ExperienceAnalysisSection";
 import { ReportPageTitle } from "../../_components/report/ReportPageTitle";
 import { ReportExperienceButton } from "../../_components/report/ReportExperienceButton";
+import { ReportPageGuard } from "../../_components/report/ReportPageGuard";
 
 export default function ReportPage() {
   return (
-    <main className="w-full mx-auto p-10 pb-25 flex-1 overflow-y-auto scrollbar-hide">
-      <div className="w-276 mx-auto">
-        <ReportPageTitle />
+    <ReportPageGuard>
+      <main className="w-full mx-auto p-10 pb-25 flex-1 overflow-y-auto scrollbar-hide">
+        <div className="w-276 mx-auto">
+          <ReportPageTitle />
 
-        <ExperienceAnalysisSection />
+          <ExperienceAnalysisSection />
 
-        <section>
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-title-2-2 text-gray-400">경험 목록</h2>
-            <ReportExperienceButton />
-          </div>
-          <Suspense fallback={<ReportExperienceListSkeleton />}>
-            <ReportExperienceListServer />
-          </Suspense>
-        </section>
-      </div>
-    </main>
+          <section>
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-title-2-2 text-gray-400">경험 목록</h2>
+              <ReportExperienceButton />
+            </div>
+            <Suspense fallback={<ReportExperienceListSkeleton />}>
+              <ReportExperienceListServer />
+            </Suspense>
+          </section>
+        </div>
+      </main>
+    </ReportPageGuard>
   );
 }
