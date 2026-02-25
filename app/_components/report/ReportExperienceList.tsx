@@ -28,7 +28,7 @@ export function ReportExperienceList({
       </div>
     );
   }
-  console.log(experiences);
+
   return (
     <div className="mt-5">
       {/* 테이블 헤더 */}

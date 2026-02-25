@@ -19,7 +19,13 @@ export function ChartInfo({ data }: ChartInfoProps) {
             }}
           />
           <span className="regular_14 text-gray-200">
-            {"type" in item ? item.type : item.category}
+            {"type" in item
+              ? item.type
+              : "category" in item
+              ? item.category
+              : "tag" in item
+              ? item.tag
+              : ""}
           </span>
         </div>
       ))}

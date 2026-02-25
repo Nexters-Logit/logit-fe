@@ -6,6 +6,7 @@ import {
   CategoryCountsDonutChart,
   type CategoryCount,
 } from "./CategoryCountsDonutChart";
+import { ExperienceBarChart, type TagCount } from "./ExperienceBarChart";
 
 const MOCK_TYPE_COUNTS = [
   { type: "도전", count: 4 },
@@ -23,6 +24,15 @@ const MOCK_CATEGORY_COUNTS: CategoryCount[] = [
   { category: "카테고리 D", count: 13 },
   { category: "카테고리 E", count: 5 },
   { category: "카테고리 F", count: 2 },
+];
+
+const MOCK_TAG_COUNTS: TagCount[] = [
+  { tag: "문제해결", count: 80 },
+  { tag: "협업", count: 72 },
+  { tag: "소통", count: 62 },
+  { tag: "성장", count: 24 },
+  { tag: "주도성", count: 12 },
+  { tag: "책임감", count: 4 },
 ];
 
 export function ExperienceAnalysisSection() {
@@ -53,10 +63,11 @@ export function ExperienceAnalysisSection() {
         <ReportChartCard
           iconSrc="/icons/report-category.svg"
           iconAlt="카테고리 아이콘"
-          title="최다 경험 종류이 가장 많아요"
-          description="카테고리 별 지정멘트"
+          title="{최다 경험 종류}이 가장 많아요"
+          description="{카테고리 별 지정멘트}"
+          data={MOCK_TAG_COUNTS}
         >
-          <div>3</div>
+          <ExperienceBarChart data={MOCK_TAG_COUNTS} />
         </ReportChartCard>
       </div>
     </section>
