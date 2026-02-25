@@ -10,10 +10,7 @@ export function ChartInfo({ data }: ChartInfoProps) {
   return (
     <div className="grid grid-cols-3 gap-y-2">
       {data.slice(0, 6).map((item, index) => (
-        <div
-          key={`${item.type}-${index}`}
-          className="flex items-center gap-1.5"
-        >
+        <div key={index} className="flex items-center gap-1.5">
           <span
             className="w-2 h-2 rounded-full"
             style={{
@@ -21,7 +18,9 @@ export function ChartInfo({ data }: ChartInfoProps) {
                 TYPE_COUNT_COLORS[index % TYPE_COUNT_COLORS.length],
             }}
           />
-          <span className="regular_14 text-gray-200">{item.type}</span>
+          <span className="regular_14 text-gray-200">
+            {"type" in item ? item.type : item.category}
+          </span>
         </div>
       ))}
     </div>

@@ -45,7 +45,8 @@ export function ExperienceAnalysisSection() {
           iconSrc="/icons/report-tag.svg"
           iconAlt="해쉬태그 아이콘"
           title="최다 해쉬태그에 강점이 있어요"
-          description="각 해쉬태그 별 전문성을 강조하는 지정 멘트"
+          description="{ 각 해쉬태그 별 전문성을 강조하는 지정 멘트 }"
+          data={MOCK_CATEGORY_COUNTS}
         >
           <CategoryCountsDonutChart data={MOCK_CATEGORY_COUNTS} />
         </ReportChartCard>

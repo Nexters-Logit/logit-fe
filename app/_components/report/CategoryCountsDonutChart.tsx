@@ -30,8 +30,7 @@ function renderDonutLabel(props: any) {
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-  const color =
-    TYPE_COUNT_LABEL_COLORS[index % TYPE_COUNT_LABEL_COLORS.length];
+  const color = TYPE_COUNT_LABEL_COLORS[index % TYPE_COUNT_LABEL_COLORS.length];
 
   return (
     <text
@@ -73,6 +72,7 @@ export function CategoryCountsDonutChart({
           innerRadius={64}
           outerRadius={88}
           paddingAngle={6}
+          minAngle={15}
           cornerRadius={999}
         >
           {data.map((entry, index) => (
