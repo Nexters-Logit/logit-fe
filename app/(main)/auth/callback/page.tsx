@@ -2,11 +2,14 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { setAuthTokens } from "@/libs/auth";
-import { API_BASE_URL } from "@/libs/api-client";
+import { apiFetch, API_BASE_URL, API_ENDPOINTS } from "@/libs/api-client";
+import type { UserPublic } from "@/types/api";
 
 function AuthCallbackContent() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
 
@@ -40,6 +43,10 @@ function AuthCallbackContent() {
         const data: { access_token: string } = await res.json();
 
         setAuthTokens(data.access_token);
+        await queryClient.prefetchQuery({
+          queryKey: ["currentUser"],
+          queryFn: () => apiFetch<UserPublic>(API_ENDPOINTS.usersMe),
+        });
         router.replace("/");
       } catch (e) {
         setError(
