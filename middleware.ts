@@ -62,8 +62,6 @@ export async function middleware(req: NextRequest) {
   const accessToken = req.cookies.get(ACCESS_TOKEN_COOKIE)?.value ?? null;
   const refreshToken = req.cookies.get("refresh_token")?.value ?? null;
 
-  // console.log("refreshToken", refreshToken);
-  // console.log("accessToken", accessToken);
   // 리프레시 토큰이 없으면 패스
   if (!refreshToken) {
     return NextResponse.next();
