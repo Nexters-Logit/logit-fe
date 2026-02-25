@@ -101,7 +101,7 @@ export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
           dataKey="type"
           tickLine={false}
           axisLine={false}
-          tickMargin={8}
+          tick={false}
         />
         <Bar dataKey="count" radius={8} barSize={BAR_WIDTH}>
           {data.map((entry, index) => (
