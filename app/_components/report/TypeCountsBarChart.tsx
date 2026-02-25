@@ -16,9 +16,61 @@ export const TYPE_COUNT_COLORS = [
   "#C5ECF8",
   "#DDE1FF",
   "#E4DAF8",
-  "#EDD8F3",
-  "#F4D8E9",
+  "#F8DAEC",
+  "#FAE8FF",
 ];
+
+const TYPE_COUNT_LABEL_COLORS = [
+  "#34AD62",
+  "#409AB6",
+  "#8160C4",
+  "#6A77D7",
+  "#B84B8C",
+  "#DBA3C5",
+];
+
+type CountLabelProps = {
+  x?: number | string;
+  y?: number | string;
+  width?: number | string;
+  height?: number | string;
+  value?: number | string | null | boolean;
+  index?: number;
+};
+
+function renderCountLabel(props: CountLabelProps) {
+  const { x, y, width, height, value, index = 0 } = props;
+  if (
+    x == null ||
+    y == null ||
+    width == null ||
+    height == null ||
+    value == null ||
+    value === false
+  ) {
+    return null;
+  }
+
+  const color = TYPE_COUNT_LABEL_COLORS[index % TYPE_COUNT_LABEL_COLORS.length];
+
+  const centerX = Number(x) + Number(width) / 2;
+  // 막대 상단에서 약간 위로 올려서 표시
+  const topY = Number(y) - 6;
+
+  return (
+    <text
+      x={centerX}
+      y={topY}
+      textAnchor="middle"
+      fill={color}
+      fontSize={12}
+      fontWeight={700}
+      dominantBaseline="alphabetic"
+    >
+      {value}
+    </text>
+  );
+}
 
 export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
   if (!data.length) {
@@ -63,8 +115,7 @@ export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
             dataKey="count"
             position="top"
             offset={8}
-            className="fill-gray-400"
-            fontSize={12}
+            content={renderCountLabel}
           />
         </Bar>
       </BarChart>

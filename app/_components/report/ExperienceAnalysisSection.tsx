@@ -2,14 +2,27 @@
 
 import { ReportChartCard } from "./ReportChartCard";
 import { TypeCountsBarChart } from "./TypeCountsBarChart";
+import {
+  CategoryCountsDonutChart,
+  type CategoryCount,
+} from "./CategoryCountsDonutChart";
 
 const MOCK_TYPE_COUNTS = [
   { type: "도전", count: 4 },
   { type: "협업", count: 3 },
   { type: "리더십", count: 2 },
   { type: "문제해결", count: 1 },
-  { type: "리더십", count: 2 },
+  { type: "유대", count: 2 },
   { type: "문제해결", count: 1 },
+];
+
+const MOCK_CATEGORY_COUNTS: CategoryCount[] = [
+  { category: "카테고리 A", count: 33 },
+  { category: "카테고리 B", count: 29 },
+  { category: "카테고리 C", count: 22 },
+  { category: "카테고리 D", count: 13 },
+  { category: "카테고리 E", count: 5 },
+  { category: "카테고리 F", count: 2 },
 ];
 
 export function ExperienceAnalysisSection() {
@@ -34,7 +47,7 @@ export function ExperienceAnalysisSection() {
           title="최다 해쉬태그에 강점이 있어요"
           description="각 해쉬태그 별 전문성을 강조하는 지정 멘트"
         >
-          <div>2</div>
+          <CategoryCountsDonutChart data={MOCK_CATEGORY_COUNTS} />
         </ReportChartCard>
         <ReportChartCard
           iconSrc="/icons/report-category.svg"
