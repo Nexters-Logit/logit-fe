@@ -35,9 +35,7 @@ export function clearAuthTokens(): void {
   deleteCookie(ACCESS_TOKEN_COOKIE);
 }
 
-const API_BASE_URL = "https://api-dev.logit.ai.kr";
-const LOGOUT_API_URL = `${API_BASE_URL}/api/v1/auth/logout`;
-const REFRESH_API_URL = `${API_BASE_URL}/api/v1/auth/refresh`;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 let refreshPromise: Promise<boolean> | null = null;
 
@@ -57,17 +55,15 @@ export async function refreshAuthTokens(): Promise<boolean> {
 
   refreshPromise = (async () => {
     try {
-      const res = await fetch(REFRESH_API_URL, {
+      const res = await fetch(`${API_BASE_URL}/api/v1/auth/refresh`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({}),
       });
       if (!res.ok) return false;
-      console.log("refreshAuthTokens", res);
       const data: RefreshResponse = await res.json();
       if (data.access_token) {
-        console.log("setAuthTokens", data.access_token);
         setAuthTokens(data.access_token);
       }
       return !!data.access_token;
@@ -92,7 +88,7 @@ export async function logout(): Promise<void> {
 
   if (accessToken) {
     try {
-      await fetch(LOGOUT_API_URL, {
+      await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
         method: "POST",
         credentials: "include",
         headers: {
