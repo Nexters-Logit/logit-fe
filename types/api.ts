@@ -87,6 +87,32 @@ export interface MatchedExperienceResponse {
 }
 
 // ============================================================================
+// Experience Summary (Report)
+// ============================================================================
+
+export interface ExperienceTypeCount {
+  type: string;
+  count: number;
+}
+
+export interface ExperienceCategoryCount {
+  category: string;
+  count: number;
+}
+
+export interface ExperienceTagCount {
+  tag: string;
+  count: number;
+}
+
+export interface ExperienceSummaryResponse {
+  type_counts: ExperienceTypeCount[];
+  category_counts: ExperienceCategoryCount[];
+  tag_counts: ExperienceTagCount[];
+  total: number;
+}
+
+// ============================================================================
 // Project
 // ============================================================================
 

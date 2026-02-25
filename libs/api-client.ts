@@ -162,4 +162,6 @@ export const API_ENDPOINTS = {
     questionId: string,
     params?: { cursor?: string; size?: number },
   ) => `/api/v1/projects/chats/${questionId}${buildQueryString(params)}`,
+  // Report
+  experienceSummary: "/api/v1/report/experience-summary",
 } as const;
