@@ -12,7 +12,7 @@ import { showToast } from "@/libs/toast";
 import type { Experience, ExperienceCreate } from "@/types/api";
 
 const EXAMPLE_EXPERIENCE: ExperienceCreate = {
-  title: "주식회사 로짓 컴퍼니",
+  title: "주식회사 로짓 컴퍼니 인턴 경험",
   start_date: "2025-01-01",
   end_date: "2026-01-01",
   experience_type: "인턴",
@@ -128,7 +128,9 @@ export function ExperienceModal({
         mode === "create" ? (
           <button
             type="button"
-            onClick={() => formRef.current?.fillWithExample(EXAMPLE_EXPERIENCE, step)}
+            onClick={() =>
+              formRef.current?.fillWithExample(EXAMPLE_EXPERIENCE, step)
+            }
             className="rounded-lg px-3.5 py-0.5 text-body-7-3 text-primary-400 border border-gray-70 bg-gray-20 cursor-pointer hover:bg-gray-70 transition-colors"
           >
             예시 불러오기
