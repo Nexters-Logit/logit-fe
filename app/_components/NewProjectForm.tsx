@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, forwardRef, useImperativeHandle } from "react";
+import { useState, useImperativeHandle, type Ref } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -9,7 +9,7 @@ import type { ProjectCreate, QuestionCreate } from "@/types/api";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { formatDateInput } from "@/libs/utils";
+import { DateInput } from "@/components/common/DateInput";
 import { QuestionFieldItem } from "./QuestionFieldItem";
 
 const projectFormSchema = z.object({
@@ -44,13 +44,13 @@ export interface NewProjectFormRef {
 }
 
 interface NewProjectFormProps {
+  ref?: Ref<NewProjectFormRef>;
   onSubmit: (data: ProjectCreate) => void;
   isPending?: boolean;
   onStepChange?: (step: 1 | 2) => void;
 }
 
-export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>(
-  function NewProjectForm({ onSubmit, isPending = false, onStepChange }, ref) {
+export function NewProjectForm({ ref, onSubmit, isPending = false, onStepChange }: NewProjectFormProps) {
   const [step, setStep] = useState<1 | 2>(1);
   const [isOngoing, setIsOngoing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -252,16 +252,13 @@ export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>
               name="due_date"
               control={control}
               render={({ field }) => (
-                <Input
-                  type="text"
-                  placeholder="YYYY. MM. DD"
+                <DateInput
                   className="h-10 text-body-5-4"
                   disabled={isOngoing}
-                  {...field}
                   value={field.value}
-                  onChange={(e) =>
-                    field.onChange(formatDateInput(e.target.value))
-                  }
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  name={field.name}
                 />
               )}
             />
@@ -366,4 +363,4 @@ export const NewProjectForm = forwardRef<NewProjectFormRef, NewProjectFormProps>
       </div>
     </form>
   );
-});
+}
