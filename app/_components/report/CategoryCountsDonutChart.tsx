@@ -79,6 +79,8 @@ export function CategoryCountsDonutChart({
           paddingAngle={1}
           minAngle={15}
           cornerRadius={999}
+          animationDuration={800}
+          animationEasing="ease-out"
         >
           {data.map((entry, index) => (
             <Cell
