@@ -14,6 +14,7 @@ import { NewProjectModal } from "./NewProjectModal";
 import { ExperienceModal } from "./ExperienceModal";
 import { getAccessToken } from "@/libs/auth";
 import { useLoginModal } from "./LoginModalContext";
+import { getProjects } from "@/app/_actions/projects";
 import { EXPERIENCE_CATEGORY } from "@/types/api";
 
 const EXPERIENCE_CARDS = [
@@ -134,7 +135,14 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
       <ExperienceModal
         open={isExperienceModalOpen}
         onOpenChange={setExperienceModalOpen}
-        onSuccess={() => setProjectModalOpen(true)}
+        onSuccess={async () => {
+          const projects = await getProjects({ skip: 0, limit: 1 }).catch(
+            () => [],
+          );
+          if (projects.length === 0) {
+            setProjectModalOpen(true);
+          }
+        }}
       />
     </main>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useImperativeHandle, forwardRef, useEffect } from "react";
+import { useState, useImperativeHandle, useEffect, type Ref } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { formatDateInput } from "@/libs/utils";
+import { DateInput } from "@/components/common/DateInput";
 import {
   Select,
   SelectContent,
@@ -86,7 +86,12 @@ const experienceFormSchema = z
 
 type ExperienceFormValues = z.infer<typeof experienceFormSchema>;
 
+export interface NewExperienceFormRef {
+  fillWithExample: (data: ExperienceCreate, step: 1 | 2) => void;
+}
+
 interface NewExperienceFormProps {
+  ref?: Ref<NewExperienceFormRef>;
   onSubmit: (data: ExperienceCreate) => void;
   isPending?: boolean;
   onStepChange?: (step: 1 | 2) => void;
@@ -94,22 +99,19 @@ interface NewExperienceFormProps {
   initialData?: Experience;
 }
 
-export interface NewExperienceFormRef {
-  fillWithExample: (data: ExperienceCreate, step: 1 | 2) => void;
-}
-
 /** ExperienceCreate의 날짜(YYYY-MM-DD)를 폼 형식(YYYY.MM.DD)으로 변환 */
 function toFormDate(date: string): string {
   return date ? date.replace(/-/g, ".") : "";
 }
 
-export const NewExperienceForm = forwardRef<
-  NewExperienceFormRef,
-  NewExperienceFormProps
->(function NewExperienceForm(
-  { onSubmit, isPending = false, onStepChange, mode = "create", initialData },
+export function NewExperienceForm({
   ref,
-) {
+  onSubmit,
+  isPending = false,
+  onStepChange,
+  mode = "create",
+  initialData,
+}: NewExperienceFormProps) {
   const [step, setStep] = useState<1 | 2>(1);
   const [hasAttemptedStep1Next, setHasAttemptedStep1Next] = useState(false);
   const [hasAttemptedStep2Submit, setHasAttemptedStep2Submit] = useState(false);
@@ -357,16 +359,13 @@ export const NewExperienceForm = forwardRef<
                     name="start_date"
                     control={control}
                     render={({ field }) => (
-                      <Input
-                        type="text"
-                        placeholder="YYYY.MM.DD"
+                      <DateInput
                         className="h-11 flex-1 text-body-5-4"
                         aria-invalid={!!errors.start_date}
-                        {...field}
                         value={field.value}
-                        onChange={(e) =>
-                          field.onChange(formatDateInput(e.target.value))
-                        }
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        name={field.name}
                       />
                     )}
                   />
@@ -384,16 +383,13 @@ export const NewExperienceForm = forwardRef<
                     name="end_date"
                     control={control}
                     render={({ field }) => (
-                      <Input
-                        type="text"
-                        placeholder="YYYY.MM.DD"
+                      <DateInput
                         className="h-11 flex-1 text-body-5-4"
                         aria-invalid={!!errors.end_date}
-                        {...field}
                         value={field.value}
-                        onChange={(e) =>
-                          field.onChange(formatDateInput(e.target.value))
-                        }
+                        onChange={field.onChange}
+                        onBlur={field.onBlur}
+                        name={field.name}
                       />
                     )}
                   />
@@ -793,4 +789,4 @@ export const NewExperienceForm = forwardRef<
       </div>
     </form>
   );
-});
+}

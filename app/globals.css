@@ -436,6 +436,17 @@ body {
   font-family: var(--font-pretendard), system-ui, sans-serif;
 }
 
+/* Chart Bar Animation */
+@keyframes grow-bar {
+  from {
+    width: 0%;
+  }
+}
+
+.animate-grow-bar {
+  animation: grow-bar 1s ease-out both;
+}
+
 /* Streaming Text Effect */
 @keyframes shimmer {
   0% {

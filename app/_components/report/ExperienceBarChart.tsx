@@ -1,6 +1,9 @@
 "use client";
 
-import { TYPE_COUNT_COLORS, TYPE_COUNT_LABEL_COLORS } from "./TypeCountsBarChart";
+import {
+  TYPE_COUNT_COLORS,
+  TYPE_COUNT_LABEL_COLORS,
+} from "./TypeCountsBarChart";
 
 export type TagCount = {
   tag: string;
@@ -27,29 +30,22 @@ export function ExperienceBarChart({ data }: ExperienceBarChartProps) {
     <div className="flex flex-col gap-2.5 w-61.25">
       {sorted.map((item, index) => {
         const progress = (item.count / max) * 100;
-        const color =
-          TYPE_COUNT_COLORS[index % TYPE_COUNT_COLORS.length];
+        const color = TYPE_COUNT_COLORS[index % TYPE_COUNT_COLORS.length];
         const labelColor =
           TYPE_COUNT_LABEL_COLORS[index % TYPE_COUNT_LABEL_COLORS.length];
 
         return (
-          <div
-            key={item.tag}
-            className="flex items-center gap-3.5"
-          >
-            <span
-              className="semibold_16"
-              style={{ color: labelColor }}
-            >
+          <div key={item.tag} className="flex items-center gap-3.5">
+            <span className="semibold_16" style={{ color: labelColor }}>
               {item.count}
             </span>
             <div className="flex-1 h-4 rounded-full bg-gray-10 overflow-hidden">
               <div
-                className="h-full rounded-full"
+                className="h-full rounded-full animate-grow-bar"
                 style={{
                   width: `${progress}%`,
                   backgroundColor: color,
-                  transition: "width 0.3s ease",
+                  animationDelay: `${index * 100}ms`,
                 }}
               />
             </div>
@@ -59,4 +55,3 @@ export function ExperienceBarChart({ data }: ExperienceBarChartProps) {
     </div>
   );
 }
-
