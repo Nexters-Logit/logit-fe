@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import {
   TYPE_COUNT_COLORS,
   TYPE_COUNT_LABEL_COLORS,
@@ -14,7 +15,15 @@ type ExperienceBarChartProps = {
 export function ExperienceBarChart({ data }: ExperienceBarChartProps) {
   if (!data.length) {
     return (
-      <p className="text-sm text-gray-200">표시할 경험 데이터가 없습니다.</p>
+      <div className="flex flex-col items-center gap-7">
+        <Image
+          src="/icons/experience_empty3.svg"
+          alt="경험 등록이 필요해요"
+          width={84}
+          height={84}
+        />
+        <p className="medium_15 text-gray-100">경험 등록이 필요해요</p>
+      </div>
     );
   }
 
@@ -22,7 +31,7 @@ export function ExperienceBarChart({ data }: ExperienceBarChartProps) {
   const max = sorted[0]?.count || 1;
 
   return (
-    <div className="flex flex-col gap-2.5 w-61.25">
+    <div className="flex flex-col gap-2.5 w-61.25 min-h-[180px]">
       {sorted.map((item, index) => {
         const progress = (item.count / max) * 100;
         const color = TYPE_COUNT_COLORS[index % TYPE_COUNT_COLORS.length];

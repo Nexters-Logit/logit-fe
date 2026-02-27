@@ -1,7 +1,7 @@
 "use client";
 
 import { Bar, BarChart, Cell, LabelList, XAxis } from "recharts";
-
+import Image from "next/image";
 export type TypeCount =
   | { count: number; type: string; category?: never; tag?: never }
   | { count: number; category: string; type?: never; tag?: never }
@@ -75,9 +75,15 @@ function renderCountLabel(props: CountLabelProps) {
 export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
   if (!data.length) {
     return (
-      <p className="text-sm text-gray-200">
-        표시할 경험 유형 데이터가 없습니다.
-      </p>
+      <div className="flex flex-col items-center gap-7">
+        <Image
+          src="/icons/experience_empty.svg"
+          alt="경험 등록이 필요해요"
+          width={84}
+          height={84}
+        />
+        <p className="medium_15 text-gray-100">경험 등록이 필요해요</p>
+      </div>
     );
   }
 
@@ -135,3 +141,4 @@ export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
       </BarChart>
     </div>
   );
+}
