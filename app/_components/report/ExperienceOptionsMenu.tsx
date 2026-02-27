@@ -26,10 +26,10 @@ export function ExperienceOptionsMenu({
           onClick={(e) => e.stopPropagation()}
         >
           <Image
-            src="/icons/icon-more-vertical.svg"
+            src="/icons/vertical_menu.svg"
             alt="옵션"
-            width={20}
-            height={20}
+            width={40}
+            height={40}
           />
         </button>
       </DropdownMenuTrigger>

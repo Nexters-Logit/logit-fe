@@ -1,6 +1,7 @@
 "use client";
 
 import { Cell, LabelList, Pie, PieChart, type LabelProps } from "recharts";
+import Image from "next/image";
 import {
   TYPE_COUNT_COLORS,
   TYPE_COUNT_LABEL_COLORS,
@@ -57,16 +58,22 @@ export function CategoryCountsDonutChart({
 }: CategoryCountsDonutChartProps) {
   if (!data.length) {
     return (
-      <p className="text-sm text-gray-200">
-        표시할 카테고리 데이터가 없습니다.
-      </p>
+      <div className="flex flex-col items-center gap-7">
+        <Image
+          src="/icons/experience_empty2.svg"
+          alt="경험 등록이 필요해요"
+          width={84}
+          height={84}
+        />
+        <p className="medium_15 text-gray-100">경험 등록이 필요해요</p>
+      </div>
     );
   }
 
   const total = data.reduce((sum, item) => sum + item.count, 0);
 
   return (
-    <div className="relative w-53 h-45 flex items-center justify-center">
+    <div className="relative w-53 h-45 flex items-center justify-center pointer-events-none">
       <PieChart width={185} height={185}>
         <Pie
           data={data}
@@ -79,7 +86,8 @@ export function CategoryCountsDonutChart({
           paddingAngle={1}
           minAngle={15}
           cornerRadius={999}
-          animationDuration={800}
+          animationBegin={0}
+          animationDuration={600}
           animationEasing="ease-out"
         >
           {data.map((entry, index) => (

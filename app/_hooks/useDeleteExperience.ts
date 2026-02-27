@@ -5,7 +5,9 @@ export function useDeleteExperience() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deleteExperience(id),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["experiences"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["experiences"] });
+      queryClient.invalidateQueries({ queryKey: ["experienceSummary"] });
+    },
   });
 }

@@ -10,6 +10,7 @@ import { useDeleteExperience } from "@/app/_hooks/useDeleteExperience";
 import { ExperienceOptionsMenu } from "./ExperienceOptionsMenu";
 import { ExperienceModal } from "../ExperienceModal";
 import { DeleteExperienceDialog } from "../DeleteExperienceDialog";
+import { ExperienceDetailModal } from "@/app/(main)/chat/[projectId]/_components/Experience/ExperienceDetailModal";
 
 interface ReportExperienceRowProps {
   experience: Experience;
@@ -34,6 +35,7 @@ export function ReportExperienceRow({
     null,
   );
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [detailOpen, setDetailOpen] = useState(false);
 
   const tags =
     experience.tags
@@ -45,6 +47,7 @@ export function ReportExperienceRow({
     try {
       const data = await getExperience(experience.id);
       setExperienceToEdit(data);
+      setDetailOpen(false);
       setEditModalOpen(true);
     } catch {
       showToast.error("경험 정보를 불러오는데 실패했습니다.");
@@ -82,16 +85,24 @@ export function ReportExperienceRow({
     <>
       <div
         role="row"
-        onClick={onClick}
+        onClick={() => {
+          onClick?.();
+          setDetailOpen(true);
+        }}
         className="flex items-center justify-between py-3.5 border-b border-gray-70 w-full cursor-pointer hover:bg-gray-20 transition-colors"
       >
-        <div className="flex items-center gap-6 min-w-0 flex-1">
-          {/* 제목 */}
-          <span className="text-body-5-5 text-primary-600 truncate shrink min-w-0 w-64">
-            {experience.title || "제목 없음"}
-          </span>
-
-          <div className="flex gap-2 w-80">
+        <div className="flex items-center gap-16 flex-1 min-w-[866px]">
+          {/* 파란색 바 */}
+          <div className="flex items-center gap-5">
+            <span
+              className="w-0.5 h-6 rounded-xl shrink-0"
+              style={{ backgroundColor: "#40A5FF" }}
+            />
+            <span className="text-body-5-5 text-primary-600 truncate shrink min-w-0 w-[260px]">
+              {experience.title || "제목 없음"}
+            </span>
+          </div>
+          <div className="flex gap-2 w-[310px]">
             {tags.length > 0 ? (
               tags.map((tag, index) => (
                 <div
@@ -122,18 +133,28 @@ export function ReportExperienceRow({
           </div>
         </div>
 
-        {/* 우측: 경험 타입 / 기간 */}
-        <div className="shrink-0 text-right flex flex-col items-end gap-1 min-w-40">
-          <span className="regular_14 text-gray-300">
-            {formatDateRange(experience.start_date, experience.end_date)}
-          </span>
+        <div className="flex items-center justify-between flex-1">
+          <div className="shrink-0 flex flex-col gap-1">
+            <span className="regular_16 text-gray-300">
+              {formatDateRange(experience.start_date, experience.end_date)}
+            </span>
+          </div>
+          {/* 우측: 경험 타입 / 기간 */}
+          <div className="flex items-center justify-end gap-3">
+            <ExperienceOptionsMenu
+              onEdit={handleEdit}
+              onDelete={handleDeleteClick}
+            />
+          </div>
         </div>
-
-        <ExperienceOptionsMenu
-          onEdit={handleEdit}
-          onDelete={handleDeleteClick}
-        />
       </div>
+
+      <ExperienceDetailModal
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        experience={experience}
+        onEdit={handleEdit}
+      />
 
       {experienceToEdit !== null ? (
         <ExperienceModal

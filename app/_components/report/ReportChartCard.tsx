@@ -31,7 +31,7 @@ export function ReportChartCard({
       />
       <h3 className="semibold_22 text-gray-400 mb-1.5 break-keep">{title}</h3>
       <p className="regular_16 text-gray-200 break-keep">{description}</p>
-      <div className="flex justify-center items-center h-full mt-6 mb-14">
+      <div className="flex justify-center items-center mt-6 mb-14">
         {children}
       </div>
       {Array.isArray(data) && <ChartInfo data={data} />}

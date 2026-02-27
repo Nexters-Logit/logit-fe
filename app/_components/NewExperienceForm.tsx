@@ -229,16 +229,32 @@ export function NewExperienceForm({
         setValue("experience_type", data.experience_type);
         setValue("category", data.category);
       } else {
-        const format = data.format_type ?? EXPERIENCE_FORMAT.STAR;
-        setValue("experience_format", format);
-        setValue("situation", data.situation ?? "");
-        setValue("task", data.task ?? "");
-        setValue("action", data.action ?? "");
-        setValue("result", data.result ?? "");
-        setValue("problem", data.problem ?? "");
-        setValue("solution", data.solution ?? "");
-        setValue("insight", data.insight ?? "");
-        setValue("content", data.content ?? "");
+        // 현재 선택된 경험 정리 방법(experience_format)을 유지한 채 필드만 예시로 채움
+        const targetFormat =
+          (experienceFormat as string | undefined) ?? EXPERIENCE_FORMAT.STAR;
+
+        // Step2 필드 초기화
+        setValue("situation", "");
+        setValue("task", "");
+        setValue("action", "");
+        setValue("result", "");
+        setValue("problem", "");
+        setValue("solution", "");
+        setValue("insight", "");
+        setValue("content", "");
+
+        if (targetFormat === EXPERIENCE_FORMAT.STAR) {
+          setValue("situation", data.situation ?? "");
+          setValue("task", data.task ?? "");
+          setValue("action", data.action ?? "");
+          setValue("result", data.result ?? "");
+        } else if (targetFormat === EXPERIENCE_FORMAT.PSI) {
+          setValue("problem", data.problem ?? "");
+          setValue("solution", data.solution ?? "");
+          setValue("insight", data.insight ?? "");
+        } else if (targetFormat === EXPERIENCE_FORMAT.FREE) {
+          setValue("content", data.content ?? "");
+        }
       }
     },
   }));
@@ -465,7 +481,21 @@ export function NewExperienceForm({
                 name="experience_format"
                 control={control}
                 render={({ field }) => (
-                  <Select value={field.value} onValueChange={field.onChange}>
+                  <Select
+                    value={field.value}
+                    onValueChange={(next) => {
+                      // 드롭다운 변경 시 Step2 입력값 초기화
+                      setValue("situation", "");
+                      setValue("task", "");
+                      setValue("action", "");
+                      setValue("result", "");
+                      setValue("problem", "");
+                      setValue("solution", "");
+                      setValue("insight", "");
+                      setValue("content", "");
+                      field.onChange(next);
+                    }}
+                  >
                     <SelectTrigger
                       id="experience_format"
                       className="h-11 text-body-5-4"
