@@ -55,14 +55,24 @@ const TYPE_DESCRIPTIONS: Record<string, string> = {
     "스스로 목표를 설정하고 끝까지 완수해낸 자기주도적 실행력이 훌륭합니다.",
 };
 
+// /** tag_counts가 비어있을 때 사용할 더미 태그 데이터 (최대 6개) */
+// const FALLBACK_TAG_COUNTS: TypeCount[] = [
+//   { tag: "데이터분석", count: 0 },
+//   { tag: "퍼포먼스마케팅", count: 3 },
+//   { tag: "광고집행", count: 0 },
+//   { tag: "커뮤니케이션", count: 3 },
+//   { tag: "문서작성", count: 2 },
+//   { tag: "문제해결", count: 2 },
+// ];
+
 export function ExperienceAnalysisSection() {
   const { data, isLoading } = useExperienceSummary();
-  console.log(data);
   if (isLoading) return <ExperienceAnalysisSkeleton />;
 
   const typeCounts = (data?.type_counts ?? []) as TypeCount[];
   const categoryCounts = (data?.category_counts ?? []) as CategoryCount[];
-  const tagCounts = ((data?.tag_counts ?? []) as TypeCount[]).slice(0, 6);
+  const rawTagCounts = (data?.tag_counts ?? []) as TypeCount[];
+  const tagCounts = rawTagCounts.slice(0, 6);
 
   const topTypeItem = typeCounts.length
     ? typeCounts.reduce((a, b) => (a.count >= b.count ? a : b))
@@ -90,7 +100,6 @@ export function ExperienceAnalysisSection() {
   const typeDescription =
     TYPE_DESCRIPTIONS[topTypeLabel] ??
     `${topTypeLabel} 경험을 통해 다양한 역량을 쌓아왔습니다.`;
-  console.log(tagCounts);
   return (
     <section className="mb-16">
       <h2 className="text-title-2-2 text-gray-400 mb-5">경험 분석</h2>
