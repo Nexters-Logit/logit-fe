@@ -4,7 +4,7 @@ import { ReportChartCard } from "./ReportChartCard";
 import { TypeCountsBarChart, type TypeCount } from "./TypeCountsBarChart";
 import {
   CategoryCountsDonutChart,
-  type CategoryCount,
+  type TagCount,
 } from "./CategoryCountsDonutChart";
 import { ExperienceBarChart } from "./ExperienceBarChart";
 import { ExperienceAnalysisSkeleton } from "./ExperienceAnalysisSkeleton";
@@ -68,10 +68,11 @@ const TYPE_DESCRIPTIONS: Record<string, string> = {
 export function ExperienceAnalysisSection() {
   const { data, isLoading } = useExperienceSummary();
   if (isLoading) return <ExperienceAnalysisSkeleton />;
+  console.log(data);
 
   const typeCounts = (data?.type_counts ?? []) as TypeCount[];
-  const categoryCounts = (data?.category_counts ?? []) as CategoryCount[];
-  const rawTagCounts = (data?.tag_counts ?? []) as TypeCount[];
+  const categoryCounts = (data?.category_counts ?? []) as TypeCount[];
+  const rawTagCounts = (data?.tag_counts ?? []) as TagCount[];
   const tagCounts = rawTagCounts.slice(0, 6);
 
   const topTypeItem = typeCounts.length
@@ -86,45 +87,62 @@ export function ExperienceAnalysisSection() {
   const topCategoryItem = categoryCounts.length
     ? categoryCounts.reduce((a, b) => (a.count >= b.count ? a : b))
     : null;
-  const topCategoryLabel = topCategoryItem?.category ?? "최다 해쉬태그";
 
+  const bottomCategoryItem = categoryCounts.length
+    ? categoryCounts.reduce((a, b) => (a.count <= b.count ? a : b))
+    : null;
+  console.log(categoryCounts);
+  const totalCategoryCount = categoryCounts.reduce(
+    (sum, item) => sum + item.count,
+    0,
+  );
   const topTagItem = tagCounts.length
     ? tagCounts.reduce((a, b) => (a.count >= b.count ? a : b))
     : null;
   const topTagLabel = topTagItem?.tag ?? "최다 해쉬태그";
 
   const categoryDescription =
-    CATEGORY_DESCRIPTIONS[topCategoryLabel] ??
-    `${topCategoryLabel} 역량이 돋보입니다.`;
+    totalCategoryCount > 3
+      ? `현재 ${bottomCategoryItem?.category} 관련 경험이 적은 편이에요. 이 부분을 보완하면 더 입체적인 자소서가 될 거예요!`
+      : `현재 경험 유형이 ${topCategoryItem?.category} 중심으로 구성되어 있어요. 경험 유형을 다양화하면 더 입체적인 자소서가 될 거예요!`;
 
   const typeDescription =
-    TYPE_DESCRIPTIONS[topTypeLabel] ??
-    `${topTypeLabel} 경험을 통해 다양한 역량을 쌓아왔습니다.`;
+    typeCounts.length > 3
+      ? `현재 ${bottomTypeLabel} 관련 경험이 적은 편이에요. 이 부분을 보완하면 더 입체적인 자소서가 될 거예요!`
+      : `현재 경험 유형이 ${topTypeLabel} 중심으로 구성되어 있어요. 경험 유형을 다양화하면 더 입체적인 자소서가 될 거예요!`;
+
+  // TYPE_DESCRIPTIONS[topTypeLabel] ??
+  // `${topTypeLabel} 경험을 통해 다양한 역량을 쌓아왔습니다.`;
+
+  console.log(tagCounts);
   return (
     <section className="mb-16">
       <h2 className="text-title-2-2 text-gray-400 mb-5">경험 분석</h2>
       {/* 1104px 패널 (고정 폭) */}
       <div className="flex gap-4 p-5 rounded-7.5 bg-gray-20 border border-gray-70 mx-auto">
-        {/* 343px 카드들 (고정 폭/높이, flex-shrink: 0) */}
+        {/* 카테고리 */}
         <ReportChartCard
           iconSrc="/icons/report-experience.svg"
           iconAlt="경험 유형 아이콘"
-          title={`${topTagLabel} 경험이 두드러져요`}
-          description={typeDescription}
-          data={tagCounts}
-        >
-          {/* 태그 기반 막대 차트 */}
-          <TypeCountsBarChart data={tagCounts} />
-        </ReportChartCard>
-        <ReportChartCard
-          iconSrc="/icons/report-tag.svg"
-          iconAlt="해쉬태그 아이콘"
-          title={`${topCategoryLabel}에 강점이 있어요.`}
+          title={`${topCategoryItem?.category} 경험이 두드러져요`}
           description={categoryDescription}
           data={categoryCounts}
         >
-          <CategoryCountsDonutChart data={categoryCounts} />
+          <TypeCountsBarChart data={categoryCounts} />
         </ReportChartCard>
+
+        {/* 해쉬태그 기반 도넛차트 */}
+        <ReportChartCard
+          iconSrc="/icons/report-tag.svg"
+          iconAlt="해쉬태그 아이콘"
+          title={`${topTagLabel}에 강점이 있어요.`}
+          description={"변경 필요함"}
+          data={tagCounts}
+        >
+          {/* 태그 기반 도넛 차트 */}
+          <CategoryCountsDonutChart data={tagCounts} />
+        </ReportChartCard>
+
         <ReportChartCard
           iconSrc="/icons/report-category.svg"
           iconAlt="카테고리 아이콘"

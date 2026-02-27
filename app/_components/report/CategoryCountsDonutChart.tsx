@@ -7,13 +7,13 @@ import {
   TYPE_COUNT_LABEL_COLORS,
 } from "./TypeCountsBarChart";
 
-export type CategoryCount = {
-  category: string;
+export type TagCount = {
+  tag: string;
   count: number;
 };
 
 type CategoryCountsDonutChartProps = {
-  data: CategoryCount[];
+  data: TagCount[];
 };
 
 function renderDonutLabel(props: LabelProps) {
@@ -92,7 +92,7 @@ export function CategoryCountsDonutChart({
         >
           {data.map((entry, index) => (
             <Cell
-              key={entry.category}
+              key={entry.tag}
               fill={TYPE_COUNT_COLORS[index % TYPE_COUNT_COLORS.length]}
             />
           ))}
