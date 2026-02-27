@@ -61,7 +61,7 @@ export function ReportChartCard({
           </>
         </div>
       )}
-      <div className="flex justify-center items-center mb-14 mt-1">
+      <div className="flex justify-center items-center mb-10 mt-5">
         {children}
       </div>
       {hasNonZeroData && <ChartInfo data={data!} />}
