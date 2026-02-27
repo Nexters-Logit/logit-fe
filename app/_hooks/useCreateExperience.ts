@@ -6,7 +6,10 @@ export function useCreateExperience() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: ExperienceCreate) => createExperience(data),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["experiences"] }),
+    onSuccess: () => {
+      // 경험 목록 및 리포트 상단 경험 요약 모두 최신화
+      queryClient.invalidateQueries({ queryKey: ["experiences"] });
+      queryClient.invalidateQueries({ queryKey: ["experienceSummary"] });
+    },
   });
 }

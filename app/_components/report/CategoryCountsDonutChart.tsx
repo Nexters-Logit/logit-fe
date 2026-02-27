@@ -7,13 +7,13 @@ import {
   TYPE_COUNT_LABEL_COLORS,
 } from "./TypeCountsBarChart";
 
-export type CategoryCount = {
-  category: string;
+export type TagCount = {
+  tag: string;
   count: number;
 };
 
 type CategoryCountsDonutChartProps = {
-  data: CategoryCount[];
+  data: TagCount[];
 };
 
 function renderDonutLabel(props: LabelProps) {
@@ -56,9 +56,11 @@ function renderDonutLabel(props: LabelProps) {
 export function CategoryCountsDonutChart({
   data,
 }: CategoryCountsDonutChartProps) {
-  if (!data.length) {
+  const total = data.reduce((sum, item) => sum + item.count, 0);
+
+  if (!data.length || total === 0) {
     return (
-      <div className="flex flex-col items-center gap-7">
+      <div className="flex flex-col items-center gap-7 mt-30">
         <Image
           src="/icons/experience_empty2.svg"
           alt="경험 등록이 필요해요"
@@ -69,8 +71,6 @@ export function CategoryCountsDonutChart({
       </div>
     );
   }
-
-  const total = data.reduce((sum, item) => sum + item.count, 0);
 
   return (
     <div className="relative w-53 h-45 flex items-center justify-center pointer-events-none">
@@ -92,7 +92,7 @@ export function CategoryCountsDonutChart({
         >
           {data.map((entry, index) => (
             <Cell
-              key={entry.category}
+              key={entry.tag}
               fill={TYPE_COUNT_COLORS[index % TYPE_COUNT_COLORS.length]}
             />
           ))}

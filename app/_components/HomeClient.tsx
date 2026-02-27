@@ -20,8 +20,8 @@ import { EXPERIENCE_CATEGORY } from "@/types/api";
 const EXPERIENCE_CARDS = [
   {
     id: 1,
-    category: EXPERIENCE_CATEGORY.PROACTIVE_EXECUTION,
-    illustration: "/illustrations/card-type04.webp",
+    category: EXPERIENCE_CATEGORY.CUSTOMER_VALUE,
+    illustration: "/illustrations/card-type01.webp",
   },
   {
     id: 2,
@@ -30,23 +30,23 @@ const EXPERIENCE_CARDS = [
   },
   {
     id: 3,
-    category: EXPERIENCE_CATEGORY.LOGICAL_ANALYSIS,
-    illustration: "/illustrations/card-type05.webp",
-  },
-  {
-    id: 4,
-    category: EXPERIENCE_CATEGORY.CREATIVE_PROBLEM_SOLVING,
-    illustration: "/illustrations/card-type06.webp",
-  },
-  {
-    id: 5,
     category: EXPERIENCE_CATEGORY.COLLABORATIVE_COMMUNICATION,
     illustration: "/illustrations/card-type03.webp",
   },
   {
+    id: 4,
+    category: EXPERIENCE_CATEGORY.PROACTIVE_EXECUTION,
+    illustration: "/illustrations/card-type04.webp",
+  },
+  {
+    id: 5,
+    category: EXPERIENCE_CATEGORY.LOGICAL_ANALYSIS,
+    illustration: "/illustrations/card-type05.webp",
+  },
+  {
     id: 6,
-    category: EXPERIENCE_CATEGORY.PERSISTENT_RESPONSIBILITY,
-    illustration: "/illustrations/card-type08.webp",
+    category: EXPERIENCE_CATEGORY.CREATIVE_PROBLEM_SOLVING,
+    illustration: "/illustrations/card-type06.webp",
   },
   {
     id: 7,
@@ -55,8 +55,8 @@ const EXPERIENCE_CARDS = [
   },
   {
     id: 8,
-    category: EXPERIENCE_CATEGORY.CUSTOMER_VALUE,
-    illustration: "/illustrations/card-type01.webp",
+    category: EXPERIENCE_CATEGORY.PERSISTENT_RESPONSIBILITY,
+    illustration: "/illustrations/card-type08.webp",
   },
 ];
 
