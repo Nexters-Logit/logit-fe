@@ -6,7 +6,7 @@ import {
   CategoryCountsDonutChart,
   type CategoryCount,
 } from "./CategoryCountsDonutChart";
-import { ExperienceBarChart, type TagCount } from "./ExperienceBarChart";
+import { ExperienceBarChart } from "./ExperienceBarChart";
 import { ExperienceAnalysisSkeleton } from "./ExperienceAnalysisSkeleton";
 import { useExperienceSummary } from "@/app/_hooks/useExperienceSummary";
 import { EXPERIENCE_CATEGORY, EXPERIENCE_TYPE } from "@/types/api";
@@ -55,14 +55,24 @@ const TYPE_DESCRIPTIONS: Record<string, string> = {
     "스스로 목표를 설정하고 끝까지 완수해낸 자기주도적 실행력이 훌륭합니다.",
 };
 
+// /** tag_counts가 비어있을 때 사용할 더미 태그 데이터 (최대 6개) */
+// const FALLBACK_TAG_COUNTS: TypeCount[] = [
+//   { tag: "데이터분석", count: 0 },
+//   { tag: "퍼포먼스마케팅", count: 3 },
+//   { tag: "광고집행", count: 0 },
+//   { tag: "커뮤니케이션", count: 3 },
+//   { tag: "문서작성", count: 2 },
+//   { tag: "문제해결", count: 2 },
+// ];
+
 export function ExperienceAnalysisSection() {
   const { data, isLoading } = useExperienceSummary();
-
   if (isLoading) return <ExperienceAnalysisSkeleton />;
 
   const typeCounts = (data?.type_counts ?? []) as TypeCount[];
   const categoryCounts = (data?.category_counts ?? []) as CategoryCount[];
-  const tagCounts = (data?.tag_counts ?? []) as TagCount[];
+  const rawTagCounts = (data?.tag_counts ?? []) as TypeCount[];
+  const tagCounts = rawTagCounts.slice(0, 6);
 
   const topTypeItem = typeCounts.length
     ? typeCounts.reduce((a, b) => (a.count >= b.count ? a : b))
@@ -90,7 +100,6 @@ export function ExperienceAnalysisSection() {
   const typeDescription =
     TYPE_DESCRIPTIONS[topTypeLabel] ??
     `${topTypeLabel} 경험을 통해 다양한 역량을 쌓아왔습니다.`;
-
   return (
     <section className="mb-16">
       <h2 className="text-title-2-2 text-gray-400 mb-5">경험 분석</h2>
@@ -100,11 +109,12 @@ export function ExperienceAnalysisSection() {
         <ReportChartCard
           iconSrc="/icons/report-experience.svg"
           iconAlt="경험 유형 아이콘"
-          title={`${topTypeLabel} 경험이 두드러져요`}
-          description={`${bottomTypeLabel} 경험을 보완하면 더 균형 잡힌 역량의 인재로 보일 수 있어요!`}
-          data={typeCounts}
+          title={`${topTagLabel} 경험이 두드러져요`}
+          description={typeDescription}
+          data={tagCounts}
         >
-          <TypeCountsBarChart data={typeCounts} />
+          {/* 태그 기반 막대 차트 */}
+          <TypeCountsBarChart data={tagCounts} />
         </ReportChartCard>
         <ReportChartCard
           iconSrc="/icons/report-tag.svg"
@@ -118,11 +128,12 @@ export function ExperienceAnalysisSection() {
         <ReportChartCard
           iconSrc="/icons/report-category.svg"
           iconAlt="카테고리 아이콘"
-          title={`${topTagLabel}이 가장 많아요`}
-          description={typeDescription}
-          data={tagCounts}
+          title={`${topTypeLabel}이 가장 많아요`}
+          description={`${bottomTypeLabel} 경험을 보완하면 더 균형 잡힌 역량의 인재로 보일 수 있어요!`}
+          data={typeCounts}
         >
-          <ExperienceBarChart data={tagCounts} />
+          {/* 경험 유형 기반 가로 막대 차트 */}
+          <ExperienceBarChart data={typeCounts} />
         </ReportChartCard>
       </div>
     </section>

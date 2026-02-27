@@ -1,7 +1,7 @@
 "use client";
 
 import { Bar, BarChart, Cell, LabelList, XAxis } from "recharts";
-
+import Image from "next/image";
 export type TypeCount =
   | { count: number; type: string; category?: never; tag?: never }
   | { count: number; category: string; type?: never; tag?: never }
@@ -75,39 +75,59 @@ function renderCountLabel(props: CountLabelProps) {
 export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
   if (!data.length) {
     return (
-      <p className="text-sm text-gray-200">
-        표시할 경험 유형 데이터가 없습니다.
-      </p>
+      <div className="flex flex-col items-center gap-7">
+        <Image
+          src="/icons/experience_empty.svg"
+          alt="경험 등록이 필요해요"
+          width={84}
+          height={84}
+        />
+        <p className="medium_15 text-gray-100">경험 등록이 필요해요</p>
+      </div>
     );
   }
 
   const BAR_WIDTH = 20;
   const BAR_GAP = 18;
 
+  const chartData = data.map((item, index) => {
+    const label =
+      "type" in item && item.type
+        ? item.type
+        : "category" in item && item.category
+          ? item.category
+          : "tag" in item && item.tag
+            ? item.tag
+            : `item-${index}`;
+    return { ...item, label };
+  });
+
   return (
-    <div className="w-53 h-45 flex justify-center items-center">
+    <div className="w-53 h-45 flex justify-center items-center pointer-events-none">
       <BarChart
         width={212}
         height={180}
-        data={data}
+        data={chartData}
         margin={{
           top: 16,
           left: 8,
           right: 8,
         }}
         barCategoryGap={BAR_GAP}
+        className="outline-none focus:outline-none"
       >
-        <XAxis
-          dataKey="type"
-          tickLine={false}
-          axisLine={false}
-          tick={false}
-        />
-        <Bar dataKey="count" radius={8} barSize={BAR_WIDTH}>
-          {data.map((entry, index) => (
+        <XAxis dataKey="label" tickLine={false} axisLine={false} tick={false} />
+        <Bar
+          dataKey="count"
+          radius={8}
+          barSize={BAR_WIDTH}
+          minPointSize={14}
+          animationBegin={0}
+          animationDuration={600}
+        >
+          {chartData.map((entry, index) => (
             <Cell
-              // type 값이 unique 라는 가정
-              key={entry.type}
+              key={entry.label}
               fill={TYPE_COUNT_COLORS[index % TYPE_COUNT_COLORS.length]}
             />
           ))}
