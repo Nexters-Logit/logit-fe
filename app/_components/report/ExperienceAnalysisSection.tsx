@@ -179,7 +179,6 @@ const TAG_GROUPS: {
 export function ExperienceAnalysisSection() {
   const { data, isLoading } = useExperienceSummary();
   if (isLoading) return <ExperienceAnalysisSkeleton />;
-  console.log(data);
 
   const rawTypeCounts = (data?.type_counts ?? []) as TypeCount[];
   const rawCategoryCounts = (data?.category_counts ?? []) as TypeCount[];
@@ -188,12 +187,27 @@ export function ExperienceAnalysisSection() {
     const found = rawCategoryCounts.find((item) => item.category === category);
     return found ?? ({ category, count: 0 } as TypeCount);
   });
-  const typeCounts: TypeCount[] = TYPE_ORDER.map((type) => {
-    const found = rawTypeCounts.find(
-      (item) => "type" in item && item.type === type,
-    );
-    return (found ?? { type, count: 0 }) as TypeCount;
-  });
+  // typeCounts는 먼저 실제 count>0 인 경험 유형을 나열하고,
+  // 6개가 안 되면 정해진 TYPE_ORDER 순서로 남은 유형들을 count 0으로 채운다.
+  const nonZeroTypeCounts: TypeCount[] = rawTypeCounts.filter(
+    (item) => item.count > 0 && "type" in item && !!item.type,
+  );
+  const existingTypes = new Set(
+    nonZeroTypeCounts
+      .filter((item) => "type" in item && !!item.type)
+      .map((item) => (item as { type: string; count: number }).type),
+  );
+  const filledTypeCounts: TypeCount[] = [...nonZeroTypeCounts];
+
+  for (const type of TYPE_ORDER) {
+    if (filledTypeCounts.length >= 6) break;
+    if (!existingTypes.has(type)) {
+      filledTypeCounts.push({ type, count: 0 } as TypeCount);
+      existingTypes.add(type);
+    }
+  }
+
+  const typeCounts = filledTypeCounts.slice(0, 6);
 
   const rawTagCounts = (data?.tag_counts ?? []) as TagCount[];
   const tagCounts = rawTagCounts.slice(0, 6);
@@ -254,7 +268,6 @@ export function ExperienceAnalysisSection() {
       ? bestTagGroup.group.buildDescription(topTagLabel)
       : "해쉬태그 데이터를 더 쌓으면 강점 분석을 보여드릴 수 있어요.";
 
-  console.log(tagCounts);
   return (
     <section className="mb-16">
       <h2 className="text-title-2-2 text-gray-400 mb-5">경험 분석</h2>
