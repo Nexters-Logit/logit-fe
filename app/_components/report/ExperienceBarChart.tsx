@@ -13,9 +13,11 @@ type ExperienceBarChartProps = {
 };
 
 export function ExperienceBarChart({ data }: ExperienceBarChartProps) {
-  if (!data.length) {
+  const total = data.reduce((sum, item) => sum + item.count, 0);
+
+  if (!data.length || total === 0) {
     return (
-      <div className="flex flex-col items-center gap-7">
+      <div className="flex flex-col items-center gap-7 mt-30">
         <Image
           src="/icons/experience_empty3.svg"
           alt="경험 등록이 필요해요"
@@ -49,7 +51,7 @@ export function ExperienceBarChart({ data }: ExperienceBarChartProps) {
             <span className="semibold_16" style={{ color: labelColor }}>
               {item.count}
             </span>
-            <div className="flex-1 h-4 rounded-full bg-gray-10 overflow-hidden">
+            <div className="flex-1 h-4 rounded-full bg-gray-20 overflow-hidden">
               <div
                 className="h-full rounded-full animate-grow-bar"
                 style={{

@@ -73,9 +73,11 @@ function renderCountLabel(props: CountLabelProps) {
 }
 
 export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
-  if (!data.length) {
+  const total = data.reduce((sum, item) => sum + item.count, 0);
+
+  if (!data.length || total === 0) {
     return (
-      <div className="flex flex-col items-center gap-7">
+      <div className="flex flex-col items-center gap-7 mt-30">
         <Image
           src="/icons/experience_empty.svg"
           alt="경험 등록이 필요해요"

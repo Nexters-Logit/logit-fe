@@ -2,6 +2,7 @@
 
 import StatusEmpty from "@/components/StatusEmpty";
 import type { Experience } from "@/types/api";
+import { useUserMe } from "@/app/_hooks/useUserMe";
 import { ReportExperienceRow } from "./ReportExperienceRow";
 
 interface ReportExperienceListProps {
@@ -13,6 +14,8 @@ export function ReportExperienceList({
   experiences,
   hasToken,
 }: ReportExperienceListProps) {
+  const { data: user } = useUserMe();
+  const displayName = user?.full_name ? `${user.full_name}님의` : "사용자님의";
   if (!hasToken) {
     return (
       <div className="mt-5 flex justify-center py-10">
@@ -24,7 +27,7 @@ export function ReportExperienceList({
   if (experiences.length === 0) {
     return (
       <div className="mt-5 flex justify-center py-10">
-        <StatusEmpty message="등록된 경험이 없어요" />
+        <StatusEmpty message={`${displayName} 경험을 등록해보세요.`} />
       </div>
     );
   }
