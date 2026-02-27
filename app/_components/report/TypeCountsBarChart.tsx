@@ -97,7 +97,7 @@ export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
   });
 
   return (
-    <div className="w-53 h-45 flex justify-center items-center">
+    <div className="w-53 h-45 flex justify-center items-center pointer-events-none">
       <BarChart
         width={212}
         height={180}
@@ -108,6 +108,7 @@ export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
           right: 8,
         }}
         barCategoryGap={BAR_GAP}
+        className="outline-none focus:outline-none"
       >
         <XAxis dataKey="label" tickLine={false} axisLine={false} tick={false} />
         <Bar dataKey="count" radius={8} barSize={BAR_WIDTH} minPointSize={14}>

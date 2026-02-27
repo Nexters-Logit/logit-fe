@@ -66,7 +66,7 @@ export function CategoryCountsDonutChart({
   const total = data.reduce((sum, item) => sum + item.count, 0);
 
   return (
-    <div className="relative w-53 h-45 flex items-center justify-center">
+    <div className="relative w-53 h-45 flex items-center justify-center pointer-events-none">
       <PieChart width={185} height={185}>
         <Pie
           data={data}
