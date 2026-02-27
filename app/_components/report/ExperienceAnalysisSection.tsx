@@ -55,15 +55,15 @@ const TYPE_DESCRIPTIONS: Record<string, string> = {
     "스스로 목표를 설정하고 끝까지 완수해낸 자기주도적 실행력이 훌륭합니다.",
 };
 
-// /** tag_counts가 비어있을 때 사용할 더미 태그 데이터 (최대 6개) */
-// const FALLBACK_TAG_COUNTS: TypeCount[] = [
-//   { tag: "데이터분석", count: 0 },
-//   { tag: "퍼포먼스마케팅", count: 3 },
-//   { tag: "광고집행", count: 0 },
-//   { tag: "커뮤니케이션", count: 3 },
-//   { tag: "문서작성", count: 2 },
-//   { tag: "문제해결", count: 2 },
-// ];
+// 리포트 차트에서 사용할 카테고리 표시 순서 (고정 6개)
+const CATEGORY_ORDER: string[] = [
+  EXPERIENCE_CATEGORY.TECHNICAL_EXPERTISE,
+  EXPERIENCE_CATEGORY.CUSTOMER_VALUE,
+  EXPERIENCE_CATEGORY.COLLABORATIVE_COMMUNICATION,
+  EXPERIENCE_CATEGORY.PROACTIVE_EXECUTION,
+  EXPERIENCE_CATEGORY.LOGICAL_ANALYSIS,
+  EXPERIENCE_CATEGORY.CREATIVE_PROBLEM_SOLVING,
+];
 
 export function ExperienceAnalysisSection() {
   const { data, isLoading } = useExperienceSummary();
@@ -71,7 +71,12 @@ export function ExperienceAnalysisSection() {
   console.log(data);
 
   const typeCounts = (data?.type_counts ?? []) as TypeCount[];
-  const categoryCounts = (data?.category_counts ?? []) as TypeCount[];
+  const rawCategoryCounts = (data?.category_counts ?? []) as TypeCount[];
+  // 카테고리 막대는 항상 6개를 고정 순서로 보여주기 위해 부족한 카테고리는 count 0으로 채운다.
+  const categoryCounts: TypeCount[] = CATEGORY_ORDER.map((category) => {
+    const found = rawCategoryCounts.find((item) => item.category === category);
+    return found ?? { category, count: 0 } as TypeCount;
+  });
   const rawTagCounts = (data?.tag_counts ?? []) as TagCount[];
   const tagCounts = rawTagCounts.slice(0, 6);
 
