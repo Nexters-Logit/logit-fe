@@ -84,12 +84,24 @@ export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
   const BAR_WIDTH = 20;
   const BAR_GAP = 18;
 
+  const chartData = data.map((item, index) => {
+    const label =
+      "type" in item && item.type
+        ? item.type
+        : "category" in item && item.category
+          ? item.category
+          : "tag" in item && item.tag
+            ? item.tag
+            : `item-${index}`;
+    return { ...item, label };
+  });
+
   return (
     <div className="w-53 h-45 flex justify-center items-center">
       <BarChart
         width={212}
         height={180}
-        data={data}
+        data={chartData}
         margin={{
           top: 16,
           left: 8,
@@ -97,17 +109,11 @@ export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
         }}
         barCategoryGap={BAR_GAP}
       >
-        <XAxis
-          dataKey="type"
-          tickLine={false}
-          axisLine={false}
-          tick={false}
-        />
+        <XAxis dataKey="label" tickLine={false} axisLine={false} tick={false} />
         <Bar dataKey="count" radius={8} barSize={BAR_WIDTH}>
-          {data.map((entry, index) => (
+          {chartData.map((entry, index) => (
             <Cell
-              // type 값이 unique 라는 가정
-              key={entry.type}
+              key={entry.label}
               fill={TYPE_COUNT_COLORS[index % TYPE_COUNT_COLORS.length]}
             />
           ))}

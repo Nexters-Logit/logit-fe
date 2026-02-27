@@ -3,22 +3,19 @@
 import {
   TYPE_COUNT_COLORS,
   TYPE_COUNT_LABEL_COLORS,
+  type TypeCount,
 } from "./TypeCountsBarChart";
 
-export type TagCount = {
-  tag: string;
-  count: number;
-};
-
 type ExperienceBarChartProps = {
-  data: TagCount[];
+  /** type_counts, category_counts, tag_counts 모두 허용 */
+  data: TypeCount[];
 };
 
 export function ExperienceBarChart({ data }: ExperienceBarChartProps) {
   if (!data.length) {
     return (
       <p className="text-sm text-gray-200">
-        표시할 해시태그 데이터가 없습니다.
+        표시할 경험 데이터가 없습니다.
       </p>
     );
   }
@@ -34,8 +31,14 @@ export function ExperienceBarChart({ data }: ExperienceBarChartProps) {
         const labelColor =
           TYPE_COUNT_LABEL_COLORS[index % TYPE_COUNT_LABEL_COLORS.length];
 
+        const key =
+          ("tag" in item && item.tag) ||
+          ("type" in item && item.type) ||
+          ("category" in item && item.category) ||
+          String(index);
+
         return (
-          <div key={item.tag} className="flex items-center gap-3.5">
+          <div key={key} className="flex items-center gap-3.5">
             <span className="semibold_16" style={{ color: labelColor }}>
               {item.count}
             </span>
