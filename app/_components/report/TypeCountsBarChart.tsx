@@ -111,7 +111,14 @@ export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
         className="outline-none focus:outline-none"
       >
         <XAxis dataKey="label" tickLine={false} axisLine={false} tick={false} />
-        <Bar dataKey="count" radius={8} barSize={BAR_WIDTH} minPointSize={14}>
+        <Bar
+          dataKey="count"
+          radius={8}
+          barSize={BAR_WIDTH}
+          minPointSize={14}
+          animationBegin={0}
+          animationDuration={600}
+        >
           {chartData.map((entry, index) => (
             <Cell
               key={entry.label}
@@ -128,4 +135,3 @@ export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
       </BarChart>
     </div>
   );
-}

@@ -48,6 +48,7 @@ export function ExperienceBarChart({ data }: ExperienceBarChartProps) {
                   width: `max(${progress}%, 10px)`,
                   backgroundColor: color,
                   animationDelay: `${index * 100}ms`,
+                  animationDuration: "600ms",
                 }}
               />
             </div>
