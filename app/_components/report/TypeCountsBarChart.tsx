@@ -110,12 +110,7 @@ export function TypeCountsBarChart({ data }: TypeCountsBarChartProps) {
         barCategoryGap={BAR_GAP}
       >
         <XAxis dataKey="label" tickLine={false} axisLine={false} tick={false} />
-        <Bar
-          dataKey="count"
-          radius={8}
-          barSize={BAR_WIDTH}
-          minPointSize={10}
-        >
+        <Bar dataKey="count" radius={8} barSize={BAR_WIDTH} minPointSize={14}>
           {chartData.map((entry, index) => (
             <Cell
               key={entry.label}

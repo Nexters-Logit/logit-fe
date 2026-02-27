@@ -14,9 +14,7 @@ type ExperienceBarChartProps = {
 export function ExperienceBarChart({ data }: ExperienceBarChartProps) {
   if (!data.length) {
     return (
-      <p className="text-sm text-gray-200">
-        표시할 경험 데이터가 없습니다.
-      </p>
+      <p className="text-sm text-gray-200">표시할 경험 데이터가 없습니다.</p>
     );
   }
 
@@ -46,7 +44,8 @@ export function ExperienceBarChart({ data }: ExperienceBarChartProps) {
               <div
                 className="h-full rounded-full animate-grow-bar"
                 style={{
-                  width: `${progress}%`,
+                  // count가 작아도 최소 10px은 보이도록 보장
+                  width: `max(${progress}%, 10px)`,
                   backgroundColor: color,
                   animationDelay: `${index * 100}ms`,
                 }}

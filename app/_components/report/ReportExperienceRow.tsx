@@ -10,6 +10,7 @@ import { useDeleteExperience } from "@/app/_hooks/useDeleteExperience";
 import { ExperienceOptionsMenu } from "./ExperienceOptionsMenu";
 import { ExperienceModal } from "../ExperienceModal";
 import { DeleteExperienceDialog } from "../DeleteExperienceDialog";
+import { ExperienceDetailModal } from "@/app/(main)/chat/[projectId]/_components/Experience/ExperienceDetailModal";
 
 interface ReportExperienceRowProps {
   experience: Experience;
@@ -34,6 +35,7 @@ export function ReportExperienceRow({
     null,
   );
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [detailOpen, setDetailOpen] = useState(false);
 
   const tags =
     experience.tags
@@ -45,6 +47,7 @@ export function ReportExperienceRow({
     try {
       const data = await getExperience(experience.id);
       setExperienceToEdit(data);
+      setDetailOpen(false);
       setEditModalOpen(true);
     } catch {
       showToast.error("경험 정보를 불러오는데 실패했습니다.");
@@ -82,7 +85,10 @@ export function ReportExperienceRow({
     <>
       <div
         role="row"
-        onClick={onClick}
+        onClick={() => {
+          onClick?.();
+          setDetailOpen(true);
+        }}
         className="flex items-center justify-between py-3.5 border-b border-gray-70 w-full cursor-pointer hover:bg-gray-20 transition-colors"
       >
         <div className="flex items-center gap-6 min-w-0 flex-1">
@@ -134,6 +140,13 @@ export function ReportExperienceRow({
           onDelete={handleDeleteClick}
         />
       </div>
+
+      <ExperienceDetailModal
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        experience={experience}
+        onEdit={handleEdit}
+      />
 
       {experienceToEdit !== null ? (
         <ExperienceModal
