@@ -14,5 +14,7 @@ export async function ReportExperienceListServer() {
       })
     : [];
 
+  console.log(experiences);
+
   return <ReportExperienceList experiences={experiences} hasToken={hasToken} />;
 }

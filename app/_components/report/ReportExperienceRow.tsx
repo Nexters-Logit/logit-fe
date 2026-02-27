@@ -12,6 +12,17 @@ import { ExperienceModal } from "../ExperienceModal";
 import { DeleteExperienceDialog } from "../DeleteExperienceDialog";
 import { ExperienceDetailModal } from "@/app/(main)/chat/[projectId]/_components/Experience/ExperienceDetailModal";
 
+const CATEGORY_ICON_MAP: Record<string, string> = {
+  "기술적 전문성": "/icons/category/icon-1.svg",
+  "고객 가치 지향": "/icons/category/icon-2.svg",
+  "협력적 소통": "/icons/category/icon-3.svg",
+  "주도적 실행력": "/icons/category/icon-4.svg",
+  "논리적 분석력": "/icons/category/icon-5.svg",
+  "창의적 문제해결": "/icons/category/icon-6.svg",
+  "유연한 적응력": "/icons/category/icon-7.svg",
+  "끈기 있는 책임감": "/icons/category/icon-8.svg",
+};
+
 interface ReportExperienceRowProps {
   experience: Experience;
   onClick?: () => void;
@@ -103,30 +114,35 @@ export function ReportExperienceRow({
             </span>
           </div>
           <div className="flex gap-2 w-[310px]">
-            {tags.length > 0 ? (
-              tags.map((tag, index) => (
-                <div
-                  key={tag}
-                  className={`flex items-center gap-1.5 px-1.5 py-1 rounded-full text-body-9-3 text-primary-600 ${
-                    index === 0
-                      ? "bg-icon-bg-3 text-primary-600"
-                      : "bg-gray-20 text-primary-400"
-                  }`}
-                >
-                  {index === 0 && (
-                    <Image
-                      src="/icons/icon-main-check.svg"
-                      alt={tag}
-                      width={12}
-                      height={12}
-                    />
-                  )}
-                  {tag}
-                </div>
-              ))
-            ) : (
-              <span className="text-body-9-3 text-gray-200">태그 없음</span>
-            )}
+            {(() => {
+              // 첫 번째는 category, 두 번째/세 번째는 tags를 순서대로 사용
+              const displayTags = [experience.category, ...tags].slice(0, 3);
+
+              return displayTags.map((label, index) => {
+                const iconSrc = CATEGORY_ICON_MAP[label];
+
+                return (
+                  <div
+                    key={`${label}-${index}`}
+                    className={`flex items-center gap-1.5 px-1.5 py-1 rounded-full text-body-9-3 ${
+                      index === 0
+                        ? "bg-icon-bg-3 text-primary-600"
+                        : "bg-gray-20 text-primary-400"
+                    }`}
+                  >
+                    {index === 0 && iconSrc && (
+                      <Image
+                        src={iconSrc}
+                        alt={label}
+                        width={16}
+                        height={16}
+                      />
+                    )}
+                    {label}
+                  </div>
+                );
+              });
+            })()}
           </div>
           <div className="regular_16 text-gray-300">
             {experience.experience_type}

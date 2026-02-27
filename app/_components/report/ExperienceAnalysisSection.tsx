@@ -75,6 +75,107 @@ const TYPE_ORDER: string[] = [
   EXPERIENCE_TYPE.PERSONAL,
 ];
 
+// 해쉬태그 그룹 정의 및 지정 멘트 템플릿
+const TAG_GROUPS: {
+  key: string;
+  tags: string[];
+  buildDescription: (topTag: string) => string;
+}[] = [
+  {
+    key: "COMMON",
+    tags: [
+      "문서작성",
+      "일정관리",
+      "요구사항 정의",
+      "프로세스 개선",
+      "데이터 분석",
+      "커뮤니케이션",
+      "리서치",
+      "문제해결",
+      "협업도구",
+    ],
+    buildDescription: (topTag) =>
+      `업무의 기초가 되는 ${topTag} 역량이 탄탄하게 갖춰져 있습니다.`,
+  },
+  {
+    key: "IT",
+    tags: [
+      "프론트엔드",
+      "백엔드",
+      "앱개발",
+      "인프라/클라우드",
+      "DB 설계",
+      "트러블슈팅",
+      "API 연동",
+      "AI/LLM",
+      "코드리뷰",
+      "시스템아키텍처",
+    ],
+    buildDescription: (topTag) =>
+      `${topTag} 기술을 바탕으로 복잡한 문제를 해결하는 기술 전문가입니다.`,
+  },
+  {
+    key: "DESIGN",
+    tags: [
+      "UX/UI",
+      "브랜딩",
+      "그래픽디자인",
+      "프로토타이핑",
+      "디자인시스템",
+      "영상편집",
+      "모션그래픽",
+      "3D 모델링",
+      "사용자테스트",
+    ],
+    buildDescription: (topTag) =>
+      `${topTag}를 통해 사용자 중심의 가치를 시각적으로 구현하는 디자이너입니다.`,
+  },
+  {
+    key: "BIZ",
+    tags: [
+      "서비스 기획",
+      "PM/PO",
+      "사업개발",
+      "전략기획",
+      "시장분석",
+      "지표설정",
+      "벤치마킹",
+      "수익모델 설계",
+    ],
+    buildDescription: (topTag) =>
+      `${topTag} 역량을 발휘하여 비즈니스 모델과 서비스의 방향을 결정하는 기획자입니다.`,
+  },
+  {
+    key: "MARKETING",
+    tags: [
+      "콘텐츠제작",
+      "퍼포먼스 마케팅",
+      "SNS 운영",
+      "광고집행",
+      "검색최적화",
+      "CRM",
+      "B2B/B2C 영업",
+      "제안서 작성",
+    ],
+    buildDescription: (topTag) =>
+      `${topTag} 지표를 기반으로 고객의 마음을 사로잡고 성과를 만들어내는 마케터입니다.`,
+  },
+  {
+    key: "OPS",
+    tags: [
+      "고객응대",
+      "서비스 운영",
+      "QA 테스트",
+      "인사/채용",
+      "조직문화",
+      "재무/회계",
+      "이벤트 기획",
+    ],
+    buildDescription: (topTag) =>
+      `${topTag} 활동을 통해 서비스 안정성을 높이고 조직의 성장을 돕는 조율자입니다.`,
+  },
+];
+
 export function ExperienceAnalysisSection() {
   const { data, isLoading } = useExperienceSummary();
   if (isLoading) return <ExperienceAnalysisSkeleton />;
@@ -133,8 +234,25 @@ export function ExperienceAnalysisSection() {
       ? `현재 ${bottomTypeLabel} 관련 경험이 적은 편이에요. 이 부분을 보완하면 더 입체적인 자소서가 될 거예요!`
       : `현재 경험 유형이 ${topTypeLabel} 중심으로 구성되어 있어요. 경험 유형을 다양화하면 더 입체적인 자소서가 될 거예요!`;
 
-  // TYPE_DESCRIPTIONS[topTypeLabel] ??
-  // `${topTypeLabel} 경험을 통해 다양한 역량을 쌓아왔습니다.`;
+  // 해쉬태그 별 지정 멘트 계산
+  const tagGroupStats = TAG_GROUPS.map((group) => {
+    const inGroup = rawTagCounts.filter((t) => group.tags.includes(t.tag));
+    const total = inGroup.reduce((sum, t) => sum + t.count, 0);
+    const topInGroup =
+      inGroup.length > 0
+        ? inGroup.reduce((a, b) => (a.count >= b.count ? a : b))
+        : null;
+    return { group, total, topInGroup };
+  });
+
+  const bestTagGroup = tagGroupStats.reduce((best, current) =>
+    current.total > best.total ? current : best,
+  );
+
+  const tagDescription =
+    bestTagGroup.total > 0 && bestTagGroup.topInGroup
+      ? bestTagGroup.group.buildDescription(topTagLabel)
+      : "해쉬태그 데이터를 더 쌓으면 강점 분석을 보여드릴 수 있어요.";
 
   console.log(tagCounts);
   return (
@@ -160,7 +278,7 @@ export function ExperienceAnalysisSection() {
           iconAlt="해쉬태그 아이콘"
           title={`${topTagLabel}에 강점이 있어요.`}
           emptyTitle="역량 키워드"
-          description={"변경 필요함"}
+          description={tagDescription}
           data={tagCounts}
         >
           {/* 태그 기반 도넛 차트 */}

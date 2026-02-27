@@ -18,7 +18,7 @@ export function ChartInfo({ data }: ChartInfoProps) {
                 TYPE_COUNT_COLORS[index % TYPE_COUNT_COLORS.length],
             }}
           />
-          <span className="regular_14 text-gray-200">
+          <span className="regular_14 text-gray-200 overflow-hidden text-ellipsis whitespace-nowrap">
             {"type" in item
               ? item.type
               : "category" in item
