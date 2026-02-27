@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { getAccessToken } from "@/libs/auth";
 import { useLoginModal } from "../LoginModalContext";
 import { ExperienceModal } from "../ExperienceModal";
+import { Button } from "@/components/ui/button";
 
 export function ReportExperienceButton() {
   const router = useRouter();
@@ -26,13 +27,13 @@ export function ReportExperienceButton() {
 
   return (
     <>
-      <button
+      <Button
         type="button"
         onClick={handleClick}
-        className="inline-flex items-center justify-center px-5 h-11 rounded-3.5 bg-primary-100 text-body-5-2 text-white hover:bg-primary-80 transition-colors cursor-pointer"
+        className="inline-flex items-center justify-center px-5 h-11 rounded-3.5 bg-primary-100 text-body-5-2 text-white hover:bg-primary-80 transition-colors cursor-pointer w-41.25"
       >
         경험 등록
-      </button>
+      </Button>
       <ExperienceModal
         open={isExperienceModalOpen}
         onOpenChange={setExperienceModalOpen}
@@ -41,4 +42,3 @@ export function ReportExperienceButton() {
     </>
   );
 }
-
