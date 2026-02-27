@@ -147,6 +147,7 @@ export function ExperienceAnalysisSection() {
           iconSrc="/icons/report-experience.svg"
           iconAlt="경험 유형 아이콘"
           title={`${topCategoryItem?.category} 경험이 두드러져요`}
+          emptyTitle="핵심 역량"
           description={categoryDescription}
           data={categoryCounts}
         >
@@ -158,6 +159,7 @@ export function ExperienceAnalysisSection() {
           iconSrc="/icons/report-tag.svg"
           iconAlt="해쉬태그 아이콘"
           title={`${topTagLabel}에 강점이 있어요.`}
+          emptyTitle="역량 키워드"
           description={"변경 필요함"}
           data={tagCounts}
         >
@@ -168,6 +170,7 @@ export function ExperienceAnalysisSection() {
         <ReportChartCard
           iconSrc="/icons/report-category.svg"
           iconAlt="카테고리 아이콘"
+          emptyTitle="활동 이력"
           title={`${topTypeLabel}이 가장 많아요`}
           description={TYPE_DESCRIPTIONS[topTypeLabel] ?? "변경 필요함"}
           data={typeCounts}
