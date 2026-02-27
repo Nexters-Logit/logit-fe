@@ -65,18 +65,35 @@ const CATEGORY_ORDER: string[] = [
   EXPERIENCE_CATEGORY.CREATIVE_PROBLEM_SOLVING,
 ];
 
+// 리포트 차트에서 사용할 경험 유형(type) 표시 순서 (고정 6개, Figma 기준)
+const TYPE_ORDER: string[] = [
+  EXPERIENCE_TYPE.INTERN,
+  EXPERIENCE_TYPE.FULL_TIME,
+  EXPERIENCE_TYPE.PART_TIME,
+  EXPERIENCE_TYPE.VOLUNTEER,
+  EXPERIENCE_TYPE.CLUB,
+  EXPERIENCE_TYPE.PERSONAL,
+];
+
 export function ExperienceAnalysisSection() {
   const { data, isLoading } = useExperienceSummary();
   if (isLoading) return <ExperienceAnalysisSkeleton />;
   console.log(data);
 
-  const typeCounts = (data?.type_counts ?? []) as TypeCount[];
+  const rawTypeCounts = (data?.type_counts ?? []) as TypeCount[];
   const rawCategoryCounts = (data?.category_counts ?? []) as TypeCount[];
   // 카테고리 막대는 항상 6개를 고정 순서로 보여주기 위해 부족한 카테고리는 count 0으로 채운다.
   const categoryCounts: TypeCount[] = CATEGORY_ORDER.map((category) => {
     const found = rawCategoryCounts.find((item) => item.category === category);
-    return found ?? { category, count: 0 } as TypeCount;
+    return found ?? ({ category, count: 0 } as TypeCount);
   });
+  const typeCounts: TypeCount[] = TYPE_ORDER.map((type) => {
+    const found = rawTypeCounts.find(
+      (item) => "type" in item && item.type === type,
+    );
+    return (found ?? { type, count: 0 }) as TypeCount;
+  });
+
   const rawTagCounts = (data?.tag_counts ?? []) as TagCount[];
   const tagCounts = rawTagCounts.slice(0, 6);
 
@@ -96,7 +113,7 @@ export function ExperienceAnalysisSection() {
   const bottomCategoryItem = categoryCounts.length
     ? categoryCounts.reduce((a, b) => (a.count <= b.count ? a : b))
     : null;
-  console.log(categoryCounts);
+
   const totalCategoryCount = categoryCounts.reduce(
     (sum, item) => sum + item.count,
     0,
@@ -152,7 +169,7 @@ export function ExperienceAnalysisSection() {
           iconSrc="/icons/report-category.svg"
           iconAlt="카테고리 아이콘"
           title={`${topTypeLabel}이 가장 많아요`}
-          description={`${bottomTypeLabel} 경험을 보완하면 더 균형 잡힌 역량의 인재로 보일 수 있어요!`}
+          description={TYPE_DESCRIPTIONS[topTypeLabel] ?? "변경 필요함"}
           data={typeCounts}
         >
           {/* 경험 유형 기반 가로 막대 차트 */}

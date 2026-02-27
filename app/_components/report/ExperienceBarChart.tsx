@@ -49,7 +49,7 @@ export function ExperienceBarChart({ data }: ExperienceBarChartProps) {
             <span className="semibold_16" style={{ color: labelColor }}>
               {item.count}
             </span>
-            <div className="flex-1 h-4 rounded-full bg-gray-10 overflow-hidden">
+            <div className="flex-1 h-4 rounded-full bg-gray-20 overflow-hidden">
               <div
                 className="h-full rounded-full animate-grow-bar"
                 style={{
