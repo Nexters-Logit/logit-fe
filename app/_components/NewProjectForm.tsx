@@ -354,7 +354,7 @@ export function NewProjectForm({ ref, onSubmit, isPending = false, onStepChange 
           <Button
             type="submit"
             onClick={() => setSubmitted(true)}
-            disabled={isPending || !watchedQuestions?.some(q => q.question?.trim()) || watchedQuestions?.some(q => q.question?.trim() && (q.max_length == null || Number.isNaN(q.max_length)))}
+            disabled={isPending || watchedQuestions?.some(q => !q.question?.trim()) || watchedQuestions?.some(q => q.question?.trim() && (q.max_length == null || Number.isNaN(q.max_length)))}
             className="h-11 w-41.25 text-body-5-2 text-white"
           >
             {isPending ? "생성 중..." : "프로젝트 생성"}
