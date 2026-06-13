@@ -138,6 +138,75 @@ export interface UserMe {
   is_active: boolean;
   oauth_provider: string;
   created_at: string;
+  phone: string | null;
+}
+
+// ============================================================================
+// Subscription
+// ============================================================================
+
+export type SubscriptionType = "mcp" | "logit";
+export type SubscriptionPlan = "basic" | "lite" | "pro";
+
+export interface PlanStatus {
+  subscription_type: SubscriptionType;
+  plan: SubscriptionPlan | null;
+  is_active: boolean;
+  is_auto_renew: boolean;
+  started_at: string | null;
+  expires_at: string | null;
+  amount: number | null;
+  next_payment_date: string | null;
+}
+
+export interface RemainingUsage {
+  chat: number | null;
+  draft: number | null;
+}
+
+export interface SubscriptionStatusResponse {
+  logit: PlanStatus;
+  mcp: PlanStatus;
+  remaining: RemainingUsage;
+}
+
+// ============================================================================
+// Payment
+// ============================================================================
+
+export interface PaymentHistoryItem {
+  id: string;
+  subscription_type: string;
+  plan: string;
+  amount: number;
+  pay_state: number | null;
+  pay_state_label: string | null;
+  paid_at: string | null;
+  created_at: string;
+  card_name: string | null;
+  card_number: string | null;
+  receipt_url: string | null;
+  subscription_started_at: string | null;
+  subscription_expires_at: string | null;
+}
+
+// ============================================================================
+// Plans
+// ============================================================================
+
+export interface PlanData {
+  id: string;
+  subscription_type: SubscriptionType;
+  plan_key: string;
+  name: string;
+  original_price: number;
+  price: number;
+  description: string | null;
+  badge: string | null;
+  features: string[] | null;
+  is_recommended: boolean;
+  is_free: boolean;
+  display_order: number;
 }
 
 // ============================================================================
