@@ -66,6 +66,8 @@
   /* Box Shadow */
   --shadow-chat: 0 4px 20px rgba(0, 0, 0, 0.05);
   --shadow-toast: 4px 10px 20px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 8px 30px rgba(38, 38, 38, 0.04);
+  --shadow-sheet: 0 -12px 40px rgba(23, 24, 30, 0.14);
 
   /* Font Sizes (Tailwind v4 @theme 방식) */
   --text-headline-1: 32px;
