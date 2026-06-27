@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/libs/utils";
-import { formatPrice } from "../plans/_utils/formatPayment";
+import { formatPrice, formatDateKorean } from "../plans/_utils/formatPayment";
 
 type Props = {
   name: string;
@@ -10,6 +10,8 @@ type Props = {
   draftLimit: string;
   chatLimit: string;
   isActive: boolean;
+  isAutoRenew: boolean;
+  expiresAt: string | null;
   isFree?: boolean;
   hasActivePaidPlan: boolean;
   onSubscribe: () => void;
@@ -23,12 +25,15 @@ export function AccountLogitPlanCard({
   draftLimit,
   chatLimit,
   isActive,
+  isAutoRenew,
+  expiresAt,
   isFree = false,
   hasActivePaidPlan,
   onSubscribe,
   onCancel,
 }: Props) {
   const showFreeDefault = isFree && !hasActivePaidPlan;
+  const isCancelPending = isActive && !isAutoRenew;
 
   return (
     <div
@@ -63,11 +68,25 @@ export function AccountLogitPlanCard({
         </div>
       </div>
 
+      {isCancelPending && expiresAt && (
+        <p className="mt-4 text-body-9-3 text-red-400">
+          ⓘ {formatDateKorean(expiresAt)}에 이용 종료 예정입니다.
+        </p>
+      )}
+
       <div className="mt-6">
         {showFreeDefault ? (
           <div className="flex h-10 items-center justify-center rounded-xl bg-gray-50 text-body-7-2 text-gray-200">
             무료로 이용 중
           </div>
+        ) : isCancelPending ? (
+          <button
+            type="button"
+            onClick={onSubscribe}
+            className="h-10 w-full rounded-xl border border-primary-100 text-body-7-2 text-primary-200 transition-colors hover:bg-primary-20"
+          >
+            재구독
+          </button>
         ) : isActive ? (
           <button
             type="button"

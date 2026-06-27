@@ -12,8 +12,8 @@ export function AccountPaymentRow({ item }: { item: PaymentHistoryItem }) {
     ? `${item.card_name}${item.card_number ? ` ${item.card_number}` : ""}`
     : null;
 
-  return (
-    <div className="flex items-start justify-between py-5">
+  const inner = (
+    <>
       <div>
         <p className="text-body-8-3 text-gray-200">결제일 : {formatDate(item.paid_at)}</p>
         <p className="mt-1 text-body-5-2 text-gray-500">{formatPrice(item.amount)}원</p>
@@ -28,6 +28,25 @@ export function AccountPaymentRow({ item }: { item: PaymentHistoryItem }) {
           )}
         </div>
       )}
+    </>
+  );
+
+  if (item.receipt_url) {
+    return (
+      <a
+        href={item.receipt_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-start justify-between py-5 transition-opacity hover:opacity-70"
+      >
+        {inner}
+      </a>
+    );
+  }
+
+  return (
+    <div className="flex items-start justify-between py-5">
+      {inner}
     </div>
   );
 }

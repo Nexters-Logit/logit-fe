@@ -109,7 +109,7 @@ export function AccountPaymentDialog({ plan, onClose }: Props) {
 
   return (
     <Dialog open={!!plan} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent showCloseButton={false} className="max-w-130 rounded-3xl p-8">
+      <DialogContent showCloseButton={false} className="w-full max-w-196.5 rounded-3xl p-8">
         <div className="flex items-start justify-between">
           <div>
             <DialogTitle className="text-title-3 text-gray-500">결제하기</DialogTitle>

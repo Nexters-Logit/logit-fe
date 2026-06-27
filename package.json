@@ -2,6 +2,7 @@
   "name": "logit-fe",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "bun@1.2.21",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",

@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "./api-config";
+
 export const ACCESS_TOKEN_COOKIE = "logit_access_token";
 
 /** 로그아웃 직후 리다이렉트 시 로그인 모달을 띄우지 않도록 하는 신호 (클라이언트만 사용) */
@@ -37,8 +39,6 @@ export function clearAuthTokens(): void {
   if (typeof window === "undefined") return;
   deleteCookie(ACCESS_TOKEN_COOKIE);
 }
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 let refreshPromise: Promise<boolean> | null = null;
 

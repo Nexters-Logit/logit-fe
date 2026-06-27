@@ -346,6 +346,19 @@ export interface QuestionUpdate {
   answer?: string;
 }
 
+// ============================================================================
+// Banner
+// ============================================================================
+
+export interface BannerData {
+  id: number;
+  image_url: string;
+  link_url: string | null;
+  is_visible: boolean;
+  display_order: number;
+  created_at: string;
+}
+
 export interface ExperienceUpdate {
   title: string;
   start_date: string;

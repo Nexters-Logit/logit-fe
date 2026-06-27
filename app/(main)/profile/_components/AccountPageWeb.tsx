@@ -50,6 +50,15 @@ export function AccountPageWeb() {
     }
   }, [hasToken, setLoginModalOpen]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (sessionStorage.getItem("payment_complete") !== "true") return;
+    sessionStorage.removeItem("payment_complete");
+    showToast.success("결제가 완료되었어요! 잠시 후 구독이 활성화됩니다.");
+    queryClient.invalidateQueries({ queryKey: ["subscriptionStatus"] });
+    queryClient.invalidateQueries({ queryKey: ["paymentHistory"] });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   if (!hasToken) {
     return (
       <main className="flex flex-1 items-center justify-center px-10">
@@ -164,52 +173,65 @@ export function AccountPageWeb() {
 
         {/* Plan cards */}
         {tab === "monthly" ? (
-          <div className="grid grid-cols-3 gap-5">
-            <AccountLogitPlanCard
-              name="Free"
-              price={0}
-              draftLimit="1회"
-              chatLimit="5회"
-              isActive={!activeLogitPlanKey}
-              isFree
-              hasActivePaidPlan={!!activeLogitPlanKey}
-              onSubscribe={() => {}}
-              onCancel={() => setCancelTarget("logit")}
-            />
+          <div className="flex gap-5">
+            <div className="flex-1">
+              <AccountLogitPlanCard
+                name="Free"
+                price={0}
+                draftLimit="1회"
+                chatLimit="5회"
+                isActive={!activeLogitPlanKey}
+                isAutoRenew={true}
+                expiresAt={null}
+                isFree
+                hasActivePaidPlan={!!activeLogitPlanKey}
+                onSubscribe={() => {}}
+                onCancel={() => setCancelTarget("logit")}
+              />
+            </div>
             {logitPlansFromDB.map((plan) => {
               const isActive = activeLogitPlanKey === plan.plan_key;
               const metrics = PLAN_METRICS[plan.plan_key] ?? { draft: "-", chat: "-" };
               return (
-                <AccountLogitPlanCard
-                  key={plan.id}
-                  name={plan.name}
-                  price={plan.price}
-                  originalPrice={
-                    plan.original_price > 0 && plan.original_price > plan.price
-                      ? plan.original_price
-                      : undefined
-                  }
-                  draftLimit={metrics.draft}
-                  chatLimit={metrics.chat}
-                  isActive={isActive}
-                  hasActivePaidPlan={!!activeLogitPlanKey}
-                  onSubscribe={() => setPaymentTarget(plan)}
-                  onCancel={() => setCancelTarget("logit")}
-                />
+                <div key={plan.id} className="flex-1">
+                  <AccountLogitPlanCard
+                    name={plan.name}
+                    price={plan.price}
+                    originalPrice={
+                      plan.original_price > 0 && plan.original_price > plan.price
+                        ? plan.original_price
+                        : undefined
+                    }
+                    draftLimit={metrics.draft}
+                    chatLimit={metrics.chat}
+                    isActive={isActive}
+                    isAutoRenew={isActive ? (logitStatus?.is_auto_renew ?? true) : true}
+                    expiresAt={isActive ? (logitStatus?.expires_at ?? null) : null}
+                    hasActivePaidPlan={!!activeLogitPlanKey}
+                    onSubscribe={() => setPaymentTarget(plan)}
+                    onCancel={() => setCancelTarget("logit")}
+                  />
+                </div>
               );
             })}
           </div>
         ) : (
-          <div className="max-w-80">
-            {mcpPlansFromDB.map((plan) => (
-              <AccountMcpPlanCard
-                key={plan.id}
-                plan={plan}
-                isActive={activeMcpPlanKey === plan.plan_key}
-                onSubscribe={() => setPaymentTarget(plan)}
-                onCancel={() => setCancelTarget("mcp")}
-              />
-            ))}
+          <div className="flex gap-5">
+            {mcpPlansFromDB.map((plan) => {
+              const isActive = activeMcpPlanKey === plan.plan_key;
+              return (
+                <div key={plan.id} className="flex-1">
+                  <AccountMcpPlanCard
+                    plan={plan}
+                    isActive={isActive}
+                    isAutoRenew={isActive ? (mcpStatus?.is_auto_renew ?? true) : true}
+                    expiresAt={isActive ? (mcpStatus?.expires_at ?? null) : null}
+                    onSubscribe={() => setPaymentTarget(plan)}
+                    onCancel={() => setCancelTarget("mcp")}
+                  />
+                </div>
+              );
+            })}
           </div>
         )}
 

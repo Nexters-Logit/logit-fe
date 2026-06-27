@@ -167,6 +167,9 @@ export const API_ENDPOINTS = {
   // Plans
   plans: "/api/v1/plans/",
 
+  // Banners
+  banners: "/api/v1/banners/",
+
   // Chats
   chats: "/api/v1/projects/chats",
   chatHistory: (
