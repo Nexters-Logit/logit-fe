@@ -1,7 +1,7 @@
 "use client";
 
 import { useIsMobile } from "@/app/_hooks/useIsMobile";
-import { ProfilePageWeb } from "./ProfilePageWeb";
+import { AccountPageWeb } from "./AccountPageWeb";
 import { ProfilePageMobile } from "./ProfilePageMobile";
 
 export function ProfilePageClient() {
@@ -9,5 +9,5 @@ export function ProfilePageClient() {
 
   if (isMobile === null) return null;
 
-  return isMobile ? <ProfilePageMobile /> : <ProfilePageWeb />;
+  return isMobile ? <ProfilePageMobile /> : <AccountPageWeb />;
 }

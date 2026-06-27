@@ -10,7 +10,7 @@ import type { PlanData, SubscriptionType } from "@/types/api";
 import { useSubscriptionStatus } from "../_hooks/useSubscriptionStatus";
 import { usePlans } from "../_hooks/usePlans";
 import { formatPrice } from "../_utils/formatPayment";
-import { MobileCancelDialog } from "./MobileCancelDialog";
+import { MobileCancelDialog } from "@/components/common/MobileCancelDialog";
 import { MobilePaymentSheet, type MobilePlanInfo } from "./MobilePaymentSheet";
 
 function discountPercent(original: number, price: number) {

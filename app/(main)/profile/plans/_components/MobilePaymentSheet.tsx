@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import { showToast } from "@/libs/toast";
 import { useUserMe } from "@/app/_hooks/useUserMe";
-import { TermsCheckbox } from "./TermsCheckbox";
+import { TermsCheckbox } from "@/components/common/TermsCheckbox";
 
 export type MobilePlanInfo = {
   id: string;

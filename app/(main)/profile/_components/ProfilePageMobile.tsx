@@ -15,7 +15,7 @@ import {
   formatPrice,
   PLAN_DISPLAY_NAME,
 } from "../plans/_utils/formatPayment";
-import { MobileCancelDialog } from "../plans/_components/MobileCancelDialog";
+import { MobileCancelDialog } from "@/components/common/MobileCancelDialog";
 import { MobileLoginScreen } from "./MobileLoginScreen";
 
 function formatKoreanDate(iso: string | null): string {

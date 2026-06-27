@@ -1,13 +1,21 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useIsMobile } from "@/app/_hooks/useIsMobile";
-import { PlansPageWeb } from "./PlansPageWeb";
 import { PlansPageMobile } from "./PlansPageMobile";
 
 export function PlansPageClient() {
   const isMobile = useIsMobile();
+  const router = useRouter();
 
-  if (isMobile === null) return null;
+  useEffect(() => {
+    if (isMobile === false) {
+      router.replace("/profile");
+    }
+  }, [isMobile, router]);
 
-  return isMobile ? <PlansPageMobile /> : <PlansPageWeb />;
+  if (isMobile === null || isMobile === false) return null;
+
+  return <PlansPageMobile />;
 }
