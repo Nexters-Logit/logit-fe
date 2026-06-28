@@ -27,6 +27,7 @@ type Props = {
 
 export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onSubscribe, onCancel }: Props) {
   const isCancelPending = isActive && !isAutoRenew;
+  const canResubscribe = isCancelPending && (!expiresAt || new Date(expiresAt) <= new Date());
   const environments = plan.features ?? [];
 
   return (
@@ -97,13 +98,19 @@ export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onS
             </button>
           </>
         ) : isCancelPending ? (
-          <button
-            type="button"
-            onClick={onSubscribe}
-            className="h-12 w-full rounded-xl border border-primary-100 text-body-7-2 text-primary-200 transition-colors hover:bg-primary-20"
-          >
-            재구독
-          </button>
+          canResubscribe ? (
+            <button
+              type="button"
+              onClick={onSubscribe}
+              className="h-12 w-full rounded-xl border border-primary-100 text-body-7-2 text-primary-200 transition-colors hover:bg-primary-20"
+            >
+              재구독
+            </button>
+          ) : (
+            <div className="flex h-12 items-center justify-center rounded-xl bg-gray-50 text-body-8-3 text-gray-200">
+              {formatDateKorean(expiresAt!)} 종료 후 재구독 가능
+            </div>
+          )
         ) : (
           <button
             type="button"
