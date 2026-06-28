@@ -7,7 +7,7 @@ interface ExperienceCardProps {
 
 export function ExperienceCard({ title, illustration }: ExperienceCardProps) {
   return (
-    <div className="w-full lg:w-65.25 aspect-[261/190] rounded-5 overflow-hidden shrink-0 select-none">
+    <div className="w-65.25 h-47.5 rounded-5 overflow-hidden shrink-0 select-none">
       <Image
         src={illustration}
         alt={title}
