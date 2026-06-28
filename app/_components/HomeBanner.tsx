@@ -28,7 +28,7 @@ export function HomeBanner() {
   if (!banners || banners.length === 0) return null;
 
   return (
-    <div className="relative mb-8 w-full overflow-hidden rounded-2xl">
+    <div className="relative w-full overflow-hidden">
       <Carousel setApi={setApi} opts={{ loop: true }}>
         <CarouselContent>
           {banners.map((banner) => (
