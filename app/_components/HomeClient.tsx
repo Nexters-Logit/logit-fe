@@ -89,24 +89,34 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
   return (
     <main className="w-full mx-auto flex-1 overflow-y-auto scrollbar-hide outline-none">
       <HomeBanner />
-      <div className="w-276 mx-auto p-10 pb-25">
-        <h1 className="text-headline-1 text-gray-400 mb-16">
+      <div className="w-full max-w-276 mx-auto px-4 sm:px-6 lg:px-10 pt-6 sm:pt-8 lg:pt-10 pb-16 sm:pb-20 lg:pb-25">
+        <h1 className="text-body-3-1 sm:text-title-3 lg:text-headline-1 text-gray-400 mb-6 sm:mb-10 lg:mb-16">
           오늘 지원할 공고에 딱 맞는 경험, 로짓과 함께 골라 볼까요?
         </h1>
 
         {/* 경험 유형 섹션 */}
-        <section className="mb-21.25">
+        <section className="mb-10 sm:mb-14 lg:mb-21.25">
           <SectionHeader
             title="경험 유형"
             buttonText="경험 등록"
             onClick={handleExperienceButtonClick}
           />
-          <Carousel opts={{ align: "start", slidesToScroll: 4 }} className="mt-5 w-311 -ml-17.5">
-            <div className="flex items-center gap-7.5 ">
-              <CarouselPrevious className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200 cursor-pointer disabled:bg-gray-20 disabled:text-gray-100 disabled:cursor-default disabled:opacity-40" />
-              <CarouselContent className="-ml-5 ">
+          <Carousel
+            opts={{
+              align: "start",
+              slidesToScroll: 2,
+              breakpoints: {
+                "(min-width: 640px)": { slidesToScroll: 3 },
+                "(min-width: 1024px)": { slidesToScroll: 4 },
+              },
+            }}
+            className="mt-3 sm:mt-5 lg:w-311 lg:-ml-17.5"
+          >
+            <div className="flex items-center gap-3 sm:gap-5 lg:gap-7.5">
+              <CarouselPrevious className="static translate-y-0 w-8 h-8 sm:w-10 sm:h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200 cursor-pointer disabled:bg-gray-20 disabled:text-gray-100 disabled:cursor-default disabled:opacity-40" />
+              <CarouselContent className="-ml-3 sm:-ml-5">
                 {EXPERIENCE_CARDS.map((card) => (
-                  <CarouselItem key={card.id} className="pl-5 basis-auto">
+                  <CarouselItem key={card.id} className="pl-3 sm:pl-5 basis-1/2 sm:basis-1/3 lg:basis-auto">
                     <ExperienceCard
                       title={card.category}
                       illustration={card.illustration}
@@ -114,7 +124,7 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselNext className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200 cursor-pointer disabled:bg-gray-20 disabled:text-gray-100 disabled:cursor-default disabled:opacity-40" />
+              <CarouselNext className="static translate-y-0 w-8 h-8 sm:w-10 sm:h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200 cursor-pointer disabled:bg-gray-20 disabled:text-gray-100 disabled:cursor-default disabled:opacity-40" />
             </div>
           </Carousel>
         </section>
