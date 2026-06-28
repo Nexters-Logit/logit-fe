@@ -34,6 +34,7 @@ export function AccountLogitPlanCard({
 }: Props) {
   const showFreeDefault = isFree && !hasActivePaidPlan;
   const isCancelPending = isActive && !isAutoRenew;
+  const canResubscribe = isCancelPending && (!expiresAt || new Date(expiresAt) <= new Date());
 
   return (
     <div
@@ -80,13 +81,19 @@ export function AccountLogitPlanCard({
             무료로 이용 중
           </div>
         ) : isCancelPending ? (
-          <button
-            type="button"
-            onClick={onSubscribe}
-            className="h-10 w-full rounded-xl border border-primary-100 text-body-7-2 text-primary-200 transition-colors hover:bg-primary-20"
-          >
-            재구독
-          </button>
+          canResubscribe ? (
+            <button
+              type="button"
+              onClick={onSubscribe}
+              className="h-10 w-full rounded-xl border border-primary-100 text-body-7-2 text-primary-200 transition-colors hover:bg-primary-20"
+            >
+              재구독
+            </button>
+          ) : (
+            <div className="flex h-10 items-center justify-center rounded-xl bg-gray-50 text-body-8-3 text-gray-200">
+              {formatDateKorean(expiresAt!)} 종료 후 재구독 가능
+            </div>
+          )
         ) : isActive ? (
           <button
             type="button"
