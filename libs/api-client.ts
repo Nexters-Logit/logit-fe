@@ -170,6 +170,9 @@ export const API_ENDPOINTS = {
   // Banners
   banners: "/api/v1/banners/",
 
+  // Referral
+  referralMe: "/api/v1/users/referral",
+
   // Chats
   chats: "/api/v1/projects/chats",
   chatHistory: (
