@@ -207,6 +207,7 @@ export interface PlanData {
   is_recommended: boolean;
   is_free: boolean;
   display_order: number;
+  show_on_mobile: boolean;
 }
 
 // ============================================================================
