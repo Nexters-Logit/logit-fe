@@ -47,7 +47,9 @@ function AuthCallbackContent() {
           queryKey: ["currentUser"],
           queryFn: () => apiFetch<UserPublic>(API_ENDPOINTS.usersMe),
         });
-        router.replace("/");
+        const redirectTo = sessionStorage.getItem("auth_redirect") ?? "/";
+        sessionStorage.removeItem("auth_redirect");
+        router.replace(redirectTo);
       } catch (e) {
         setError(
           e instanceof Error

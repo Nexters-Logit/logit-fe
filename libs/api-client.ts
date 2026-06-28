@@ -1,11 +1,7 @@
 import { getAccessToken, ACCESS_TOKEN_COOKIE, refreshAuthTokens } from "./auth";
+import { API_BASE_URL } from "./api-config";
 
-const DEFAULT_API_BASE_URL = "https://api-dev.logit.ai.kr";
-
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ||
-  process.env.API_BASE_URL ||
-  DEFAULT_API_BASE_URL;
+export { API_BASE_URL } from "./api-config";
 
 // ============================================================================
 // Query String Utility
@@ -77,8 +73,7 @@ export async function apiFetch<T>(
     headers["Content-Type"] = "application/json";
   }
 
-  const baseUrl = API_BASE_URL?.trim() || DEFAULT_API_BASE_URL;
-  const response = await fetch(`${baseUrl}${endpoint}`, {
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     headers,
   });
@@ -161,7 +156,19 @@ export const API_ENDPOINTS = {
   usersMe: "/api/v1/users/me",
 
   // Subscriptions
+  subscriptionStatus: "/api/v1/subscriptions/me/status",
   mcpToken: "/api/v1/subscriptions/me/mcp-token",
+
+  // Payments
+  paymentInitiate: "/api/v1/payments/initiate",
+  paymentHistory: "/api/v1/payments/history",
+  paymentCancel: (subType: string) => `/api/v1/payments/cancel/${subType}`,
+
+  // Plans
+  plans: "/api/v1/plans/",
+
+  // Banners
+  banners: "/api/v1/banners/",
 
   // Chats
   chats: "/api/v1/projects/chats",

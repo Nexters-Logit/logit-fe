@@ -10,6 +10,13 @@
 - AI SDK + AI Elements (채팅 UI)
 - shadcn/ui (기본 UI 컴포넌트)
 
+## Local Development
+
+- 패키지 매니저: Bun
+- 개발 서버: `bun run dev`
+- 프론트엔드: `http://localhost:3000`
+- 로컬 API: `http://localhost:8000`
+
 ## Code Principles
 
 ### 하나의 파일에 하나의 컴포넌트
@@ -127,6 +134,23 @@ PATCH /api/v1/projects/chats/{chat_id}/answer # 답변 업데이트
 ```
 
 ## Tailwind CSS v4 Convention
+
+### className 작성 규칙
+
+- 정적 Tailwind 클래스는 `className=""` 안에 하나의 문자열로 작성
+- `cn()`은 조건부 클래스나 외부 `className`을 병합할 때만 사용
+- `cn("flex", "items-center", "gap-2")`처럼 정적 클래스를 인자별로 나누지 않음
+
+```tsx
+// Bad
+<div className={cn("flex", "items-center", "gap-2")} />
+
+// Good
+<div className="flex items-center gap-2" />
+
+// Good - 조건부 클래스가 필요한 경우
+<div className={cn("flex items-center gap-2", isActive && "bg-primary-50")} />
+```
 
 ### Canonical Classes 사용 (Arbitrary Values 대신)
 
