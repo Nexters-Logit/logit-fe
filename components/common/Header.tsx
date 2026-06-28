@@ -6,7 +6,7 @@ import { NavLink } from "./NavLink";
 
 export function Header() {
   return (
-    <header className="mx-auto flex w-full max-w-360 items-center justify-between px-7.5 py-3.75">
+    <header className="flex w-full items-center justify-between px-7.5 py-3.75">
       <Link href="/" className="flex items-center gap-2">
         <Image src="/logos/logo-symbol-2d.svg" alt="Logit" width={24} height={24} />
         <Image src="/logos/logo-wordmark.svg" alt="Logit" width={52} height={26} />
