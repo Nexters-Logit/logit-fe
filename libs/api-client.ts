@@ -172,6 +172,7 @@ export const API_ENDPOINTS = {
 
   // Referral
   referralMe: "/api/v1/users/referral",
+  referralApply: "/api/v1/users/referral/apply",
 
   // Chats
   chats: "/api/v1/projects/chats",
