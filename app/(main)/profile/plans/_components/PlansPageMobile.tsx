@@ -19,7 +19,8 @@ function discountPercent(original: number, price: number) {
 
 export function PlansPageMobile() {
   const { data: subscriptionStatus } = useSubscriptionStatus();
-  const { data: plans = [], isError: plansError } = usePlans();
+  const { data: allPlans = [], isError: plansError } = usePlans();
+  const plans = allPlans.filter((p) => p.show_on_mobile);
   const queryClient = useQueryClient();
   const [cancelTarget, setCancelTarget] = useState<SubscriptionType | null>(null);
   const [isCanceling, setIsCanceling] = useState(false);
