@@ -15,11 +15,12 @@
 ## Getting Started
 
 ```bash
-pnpm install
-pnpm dev
+bun install
+bun run dev
 ```
 
-http://localhost:3000 에서 확인할 수 있습니다.
+프론트엔드는 http://localhost:3000 에서 실행되며, 개발 환경의 API 요청은
+기본적으로 http://localhost:8000 으로 전송됩니다.
 
 ## Folder Architecture
 
