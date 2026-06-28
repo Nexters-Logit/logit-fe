@@ -38,14 +38,14 @@ export function HomeBanner() {
                   <img
                     src={banner.image_url}
                     alt="배너"
-                    className="w-full object-cover"
+                    className="w-full h-auto"
                   />
                 </a>
               ) : (
                 <img
                   src={banner.image_url}
                   alt="배너"
-                  className="w-full object-cover"
+                  className="w-full h-auto"
                 />
               )}
             </CarouselItem>
