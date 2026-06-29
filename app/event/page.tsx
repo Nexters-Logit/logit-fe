@@ -35,6 +35,8 @@ const PARTICLES = [
   { x: 72, y: 22, s: 20, d: 1.7, t: 3.4, coin: true  },
 ] as const;
 
+const CALENDAR_INDICES = Array.from({ length: 35 }, (_, i) => i);
+
 const SECTIONS = [
   { id: "intro",    label: "시작",  kind: "home"  as const },
   { id: "event-01", label: "신규" },
@@ -48,6 +50,7 @@ export default function OpenEventPage() {
   const [activeId, setActiveId] = useState("intro");
   const [entered, setEntered] = useState<Set<string>>(new Set(["intro"]));
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+  const tiltRafRef = useRef<number | null>(null);
 
   // EVENT 01: 단계별 애니메이션
   const [signupPhase, setSignupPhase] = useState(0);
@@ -186,10 +189,16 @@ export default function OpenEventPage() {
     if (!e04) return;
     const el = ev.currentTarget;
     const { left, top, width, height } = el.getBoundingClientRect();
-    const x = (ev.clientX - left) / width - 0.5;
-    const y = (ev.clientY - top) / height - 0.5;
-    el.style.transition = "opacity 0.6s, background 0.3s";
-    el.style.transform = `perspective(700px) rotateY(${x * 13}deg) rotateX(${-y * 10}deg) scale(1.04)`;
+    const clientX = ev.clientX;
+    const clientY = ev.clientY;
+    if (tiltRafRef.current !== null) cancelAnimationFrame(tiltRafRef.current);
+    tiltRafRef.current = requestAnimationFrame(() => {
+      const x = (clientX - left) / width - 0.5;
+      const y = (clientY - top) / height - 0.5;
+      el.style.transition = "opacity 0.6s, background 0.3s";
+      el.style.transform = `perspective(700px) rotateY(${x * 13}deg) rotateX(${-y * 10}deg) scale(1.04)`;
+      tiltRafRef.current = null;
+    });
   }, [e04]);
 
   const onTiltLeave = useCallback((ev: React.MouseEvent<HTMLDivElement>) => {
@@ -490,7 +499,7 @@ export default function OpenEventPage() {
               className="w-full grid grid-cols-7 gap-1.5 transition-all duration-700 delay-200"
               style={{ opacity: e02 ? 1 : 0 }}
             >
-              {Array.from({ length: 35 }).map((_, i) => {
+              {CALENDAR_INDICES.map((i) => {
                 const isValidDay = i < 30;
                 const isChecked = checkedDays.has(i);
                 const isClickable = isValidDay && !isChecked && !calendarAnimating;
