@@ -1,7 +1,6 @@
 import type {
   ProjectCreate,
   ExperienceCreate,
-  ExperienceCategory,
 } from "@/types/api";
 import { EXPERIENCE_CATEGORY, FORMAT_TYPE } from "@/types/api";
 

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { QueryProvider } from "@/libs/query-provider";
 import { ToastProvider } from "@/libs/toast";
-import { MobileAppBanner } from "@/components/common/MobileAppBanner";
 import "./globals.css";
 
 const pretendard = localFont({

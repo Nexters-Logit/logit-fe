@@ -18,7 +18,7 @@ interface ScrollTrackerProps {
 
 export function ScrollTracker({ sections, activeId, onNavigate }: ScrollTrackerProps) {
   return (
-    <div className="hidden sm:flex fixed top-5 left-1/2 -translate-x-1/2 z-50 items-center gap-0.5 bg-white rounded-full px-2 py-2 shadow-[0_4px_24px_rgba(0,0,0,0.18)]">
+    <div className="hidden sm:flex fixed top-5 left-1/2 -translate-x-1/2 z-50 items-center gap-0.5 bg-white rounded-full px-2 py-2 shadow-nav">
       {sections.map(({ id, label, kind = "text" }) => {
         const isActive = activeId === id;
         const isIcon = kind !== "text";

@@ -37,14 +37,17 @@ export function HomeBanner() {
               {banner.link_url ? (
                 banner.link_url.startsWith("/") ? (
                   <Link href={banner.link_url}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={banner.image_url} alt="배너" className="w-full h-auto" />
                   </Link>
                 ) : (
                   <a href={banner.link_url} target="_blank" rel="noopener noreferrer">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={banner.image_url} alt="배너" className="w-full h-auto" />
                   </a>
                 )
               ) : (
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={banner.image_url}
                   alt="배너"

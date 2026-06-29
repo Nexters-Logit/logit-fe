@@ -276,7 +276,7 @@ export default function OpenEventPage() {
             <Image src="/logos/logo-wordmark.svg" alt="Logit" width={64} height={32} />
           </div>
           <div className="flex flex-col gap-4">
-            <p className="text-body-7-2 text-primary-200 tracking-[0.2em] uppercase">Open Event</p>
+            <p className="text-body-7-2 text-primary-200 tracking-badge uppercase">Open Event</p>
             <h1 className="text-title-1 sm:text-headline-1 text-gray-500">
               로짓 오픈을 기념해<br />특별한 이벤트를 준비했어요
             </h1>
@@ -332,7 +332,7 @@ export default function OpenEventPage() {
 
           <div className={`w-full max-w-96 flex flex-col items-center text-center gap-5 relative ${EVENT_STATUS.signup ? "opacity-25 pointer-events-none select-none" : ""}`}>
             <span
-              className="text-body-8-1 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-primary-200/30 text-primary-200 transition-all duration-700"
+              className="text-body-8-1 tracking-badge uppercase px-4 py-1.5 rounded-full border border-primary-200/30 text-primary-200 transition-all duration-700"
               style={{ opacity: e01 ? 1 : 0 }}
             >
               EVENT 01 · 신규 가입
@@ -453,7 +453,7 @@ export default function OpenEventPage() {
           <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-black/10 to-transparent pointer-events-none" />
 
           <div className={`w-full max-w-96 flex flex-col items-center text-center gap-5 relative ${EVENT_STATUS.attendance ? "opacity-25 pointer-events-none select-none" : ""}`}>
-            <span className="text-body-8-1 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-white/20 text-white/60">
+            <span className="text-body-8-1 tracking-badge uppercase px-4 py-1.5 rounded-full border border-white/20 text-white/60">
               EVENT 02 · 출석
             </span>
 
@@ -588,10 +588,10 @@ export default function OpenEventPage() {
           ref={ref("event-03")}
           className="snap-start h-screen relative overflow-hidden bg-gray-500 flex items-center justify-center px-6"
         >
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(64,165,255,0.08)_0%,transparent_70%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-radial-blue-center pointer-events-none" />
 
           <div className={`w-full max-w-120 flex flex-col items-center text-center gap-8 relative ${EVENT_STATUS.referral ? "opacity-25 pointer-events-none select-none" : ""}`}>
-            <span className="text-body-8-1 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-white/20 text-white/60">
+            <span className="text-body-8-1 tracking-badge uppercase px-4 py-1.5 rounded-full border border-white/20 text-white/60">
               EVENT 03 · 친구 초대
             </span>
 
@@ -709,7 +709,7 @@ export default function OpenEventPage() {
             </div>
 
             <div
-              className="w-full max-w-96 transition-all duration-700 delay-[900ms]"
+              className="w-full max-w-96 transition-all duration-700 delay-900"
               style={{ opacity: e03 ? 1 : 0, transform: e03 ? "none" : "translateY(12px)" }}
             >
               <Link
@@ -729,10 +729,10 @@ export default function OpenEventPage() {
           ref={ref("event-04")}
           className="snap-start h-screen relative overflow-hidden bg-primary-600 flex items-center justify-center px-6"
         >
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(37,113,235,0.25)_0%,transparent_60%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-radial-blue-top pointer-events-none" />
 
           <div className={`w-full max-w-160 flex flex-col items-center text-center gap-6 relative ${EVENT_STATUS.discount ? "opacity-25 pointer-events-none select-none" : ""}`}>
-            <span className="text-body-8-1 tracking-[0.2em] uppercase px-4 py-1.5 rounded-full border border-white/20 text-white/60">
+            <span className="text-body-8-1 tracking-badge uppercase px-4 py-1.5 rounded-full border border-white/20 text-white/60">
               EVENT 04 · 요금제 할인
             </span>
             <div
@@ -878,7 +878,7 @@ export default function OpenEventPage() {
         >
           <div className="w-full max-w-120 flex flex-col gap-8">
             <div className="flex flex-col gap-2">
-              <span className="text-body-8-1 tracking-[0.2em] uppercase text-white/30">Notice</span>
+              <span className="text-body-8-1 tracking-badge uppercase text-white/30">Notice</span>
               <h2 className="text-title-2-2 text-white/80">유의사항</h2>
             </div>
 

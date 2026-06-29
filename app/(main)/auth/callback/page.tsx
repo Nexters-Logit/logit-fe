@@ -60,7 +60,7 @@ function AuthCallbackContent() {
     };
 
     exchangeToken();
-  }, [router, searchParams]);
+  }, [router, searchParams, queryClient]);
 
   if (error) {
     return (

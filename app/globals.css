@@ -68,6 +68,13 @@
   --shadow-toast: 4px 10px 20px rgba(0, 0, 0, 0.08);
   --shadow-card: 0 8px 30px rgba(38, 38, 38, 0.04);
   --shadow-sheet: 0 -12px 40px rgba(23, 24, 30, 0.14);
+  --shadow-nav: 0 4px 24px rgba(0, 0, 0, 0.18);
+
+  /* Letter Spacing */
+  --tracking-badge: 0.2em;
+
+  /* Transition Delay */
+  --delay-900: 900ms;
 
   /* Font Sizes (Tailwind v4 @theme 방식) */
   --text-headline-1: 32px;
@@ -457,6 +464,13 @@ body {
   font-weight: 800;
   line-height: 1;
   letter-spacing: -1px;
+}
+
+.bg-radial-blue-center {
+  background: radial-gradient(ellipse at center, rgba(64, 165, 255, 0.08) 0%, transparent 70%);
+}
+.bg-radial-blue-top {
+  background: radial-gradient(ellipse at top, rgba(37, 113, 235, 0.25) 0%, transparent 60%);
 }
 
 @keyframes float-up {
