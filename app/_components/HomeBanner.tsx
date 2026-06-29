@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useBanners } from "@/app/_hooks/useBanners";
 import {
   type CarouselApi,
@@ -34,13 +35,15 @@ export function HomeBanner() {
           {banners.map((banner) => (
             <CarouselItem key={banner.id}>
               {banner.link_url ? (
-                <a href={banner.link_url} target="_blank" rel="noopener noreferrer">
-                  <img
-                    src={banner.image_url}
-                    alt="배너"
-                    className="w-full h-auto"
-                  />
-                </a>
+                banner.link_url.startsWith("/") ? (
+                  <Link href={banner.link_url}>
+                    <img src={banner.image_url} alt="배너" className="w-full h-auto" />
+                  </Link>
+                ) : (
+                  <a href={banner.link_url} target="_blank" rel="noopener noreferrer">
+                    <img src={banner.image_url} alt="배너" className="w-full h-auto" />
+                  </a>
+                )
               ) : (
                 <img
                   src={banner.image_url}
