@@ -19,15 +19,6 @@ const POOL_REMAINING = 24_750;
 
 const EVENT_END = new Date("2026-08-13T23:59:59");
 
-const SECTION_BG: Record<string, string> = {
-  intro:      "#e5f0ff",
-  "event-01": "#e5f0ff",
-  "event-02": "#2571eb",
-  "event-03": "#17181e",
-  "event-04": "#333d4b",
-  notice:     "#17181e",
-};
-
 // INTRO 배경 파티클 — 위치/크기/딜레이 고정값
 const PARTICLES = [
   { x: 7,  y: 14, s: 22, d: 0,   t: 3.5, coin: true  },
@@ -88,7 +79,8 @@ export default function OpenEventPage() {
       const color = colors[Math.floor(Math.random() * colors.length)];
       el.style.cssText = `position:fixed;pointer-events:none;z-index:9999;border-radius:${Math.random() > 0.5 ? "50%" : "2px"};width:${size}px;height:${size}px;background:${color};left:${cx}px;top:${cy}px;transform:translate(-50%,-50%);transition:none;`;
       document.body.appendChild(el);
-      let x = 0, y = 0, vy = -speed * 0.6, vx = Math.cos(angle) * speed * 0.5;
+      const vx = Math.cos(angle) * speed * 0.5;
+      let x = 0, y = 0, vy = -speed * 0.6;
       const gravity = 380;
       let opacity = 1;
       let t = 0;
