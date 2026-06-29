@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Settings } from "lucide-react";
 import { UserMenu } from "./UserMenu";
 import { NavLink } from "./NavLink";
+import { TokenDisplay } from "./TokenDisplay";
 
 export function Header() {
   return (
@@ -27,6 +28,7 @@ export function Header() {
           icon={<Settings className="size-6.5 text-primary-400" strokeWidth={1.5} aria-hidden="true" />}
           label="계정관리"
         />
+        <TokenDisplay />
         <UserMenu />
       </nav>
     </header>

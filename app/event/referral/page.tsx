@@ -1,12 +1,10 @@
+import type { Metadata } from "next";
 import Script from "next/script";
 import { ReferralContent } from "./_components/ReferralContent";
-import type { ReferralInfo } from "./_apis/referral";
 
-// TODO: 백엔드 API 완성 후 실제 데이터로 교체
-const MOCK_REFERRAL: ReferralInfo = {
-  code: "LOGIT-ABC123",
-  referral_url: "https://app.logit.ai.kr/?ref=LOGIT-ABC123",
-  invited_count: 2,
+export const metadata: Metadata = {
+  title: "친구 초대 이벤트",
+  description: "친구를 초대하고 함께 토큰을 받아요.",
 };
 
 export default function ReferralEventPage() {
@@ -18,7 +16,7 @@ export default function ReferralEventPage() {
         crossOrigin="anonymous"
         strategy="afterInteractive"
       />
-      <ReferralContent referral={MOCK_REFERRAL} />
+      <ReferralContent />
     </>
   );
 }
