@@ -89,8 +89,8 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
   return (
     <main className="w-full mx-auto flex-1 overflow-y-auto scrollbar-hide outline-none">
       <HomeBanner />
-      <div className="w-full px-42 pt-23.5 pb-25">
-        <h1 className="text-headline-1 text-gray-400 mb-16">
+      <div className="w-full max-w-360 mx-auto px-6 sm:px-10 lg:px-20 xl:px-42 pt-10 sm:pt-14 xl:pt-23.5 pb-14 xl:pb-25">
+        <h1 className="text-title-1 xl:text-headline-1 text-gray-400 mb-8 xl:mb-16">
           오늘 지원할 공고에 딱 맞는 경험, 로짓과 함께 골라 볼까요?
         </h1>
 
