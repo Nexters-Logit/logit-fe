@@ -307,6 +307,13 @@
   line-height: 1.4;
 }
 
+.text-body-1-2 {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.4px;
+}
+
 .text-body-2 {
   font-size: 19px;
   font-weight: 400;
@@ -419,6 +426,12 @@
   font-weight: 400;
   line-height: 1.2;
   letter-spacing: -0.26px;
+}
+
+.text-body-8-3 {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
 }
 
 .text-body-9-1 {
