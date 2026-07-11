@@ -108,7 +108,7 @@ export async function POST(req: Request) {
             if (started) writer.write({ type: 'text-end', id: textId });
             writer.write({
               type: 'data-chat-metadata',
-              data: { chat_id: event.chat_id, is_draft: event.is_draft },
+              data: { chat_id: event.chat_id, is_draft: event.is_draft, tokens_used: event.tokens_used },
             });
           } else if (event.type === 'error') {
             throw new Error(event.message);
