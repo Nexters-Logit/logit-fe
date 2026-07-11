@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 
 import { getAccessToken } from "@/libs/auth";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
+import { showToast } from "@/libs/toast";
 
 declare global {
   interface Window {
@@ -69,12 +70,18 @@ function useReferralStats() {
 }
 
 function useApplyReferral() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (code: string) =>
       apiFetch<{ message: string }>(API_ENDPOINTS.referralApply, {
         method: "POST",
         body: JSON.stringify({ code }),
       }),
+    onSuccess: () => {
+      showToast.success(`초대 코드가 적용됐어요! ${TOKENS_PER_REFERRAL}토큰이 지급되었습니다.`);
+      queryClient.invalidateQueries({ queryKey: ["referralStats"] });
+      queryClient.invalidateQueries({ queryKey: ["tokenBalance"] });
+    },
   });
 }
 
