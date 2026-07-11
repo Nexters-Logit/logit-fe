@@ -201,6 +201,7 @@ export interface PlanData {
   name: string;
   original_price: number;
   price: number;
+  monthly_tokens: number;
   description: string | null;
   badge: string | null;
   features: string[] | null;
