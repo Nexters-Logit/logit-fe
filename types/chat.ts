@@ -11,6 +11,7 @@ import type { UIMessage } from 'ai';
 export interface ChatMessageMetadata {
   chat_id?: string;
   is_draft?: boolean;
+  tokens_used?: number;
 }
 
 /**
@@ -33,6 +34,7 @@ export interface SSEDoneEvent {
   type: 'done';
   chat_id: string;
   is_draft: boolean;
+  tokens_used?: number;
 }
 
 export interface SSEErrorEvent {

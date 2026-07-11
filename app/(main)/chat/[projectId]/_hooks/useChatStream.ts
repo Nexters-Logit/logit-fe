@@ -10,7 +10,7 @@ interface UseChatStreamOptions {
   questionId: string;
   experienceIds: string[];
   initialMessages?: UIMessage[];
-  onFinish?: (message: UIMessage) => void;
+  onFinish?: (message: UIMessage, metadata?: ChatMessageMetadata) => void;
 }
 
 export function useChatStream({
@@ -20,6 +20,14 @@ export function useChatStream({
   onFinish,
 }: UseChatStreamOptions) {
   const lastMessageRef = useRef<string | null>(null);
+
+  const getMessageMetadata = (message: UIMessage): ChatMessageMetadata | undefined => {
+    const dataPart = message.parts.find((p) => p.type === 'data-chat-metadata');
+    if (dataPart && 'data' in dataPart) {
+      return dataPart.data as ChatMessageMetadata;
+    }
+    return undefined;
+  };
 
   const { messages, setMessages, sendMessage, status, error, stop } = useChat({
     id: `chat-${questionId}`,
@@ -37,7 +45,7 @@ export function useChatStream({
         return response;
       },
     }),
-    onFinish: ({ message }) => onFinish?.(message),
+    onFinish: ({ message }) => onFinish?.(message, getMessageMetadata(message)),
   });
 
   const send = (text: string) => {
@@ -65,14 +73,6 @@ export function useChatStream({
         }
       );
     }
-  };
-
-  const getMessageMetadata = (message: UIMessage): ChatMessageMetadata | undefined => {
-    const dataPart = message.parts.find((p) => p.type === 'data-chat-metadata');
-    if (dataPart && 'data' in dataPart) {
-      return dataPart.data as ChatMessageMetadata;
-    }
-    return undefined;
   };
 
   return {
