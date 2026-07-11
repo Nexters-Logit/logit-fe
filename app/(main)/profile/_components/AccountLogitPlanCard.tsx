@@ -7,8 +7,7 @@ type Props = {
   name: string;
   price: number;
   originalPrice?: number;
-  draftLimit: string;
-  chatLimit: string;
+  tokenAllowance: string;
   isActive: boolean;
   isAutoRenew: boolean;
   expiresAt: string | null;
@@ -22,8 +21,7 @@ export function AccountLogitPlanCard({
   name,
   price,
   originalPrice,
-  draftLimit,
-  chatLimit,
+  tokenAllowance,
   isActive,
   isAutoRenew,
   expiresAt,
@@ -39,33 +37,31 @@ export function AccountLogitPlanCard({
   return (
     <div
       className={cn(
-        "flex flex-col rounded-2xl border p-6",
-        isActive ? "border-primary-100 bg-primary-20" : "border-gray-70 bg-white",
+        "flex flex-col rounded-5 border-2 bg-white p-4",
+        isActive ? "border-primary-100" : "border-gray-70",
       )}
     >
-      <h3 className="mb-5 text-title-3 text-gray-500">{name}</h3>
+      <h3 className="mb-1 text-title-1 text-gray-500">{name}</h3>
 
-      <div className="flex flex-col gap-3 text-body-7-3">
-        <div className="flex items-baseline justify-between">
-          <span className="text-gray-200">총 결제 금액</span>
-          <span>
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-end justify-between">
+          <span className="text-body-3-2 text-gray-500">월별 결제 금액</span>
+          <span className="flex items-end gap-1">
             {originalPrice !== undefined && originalPrice > price && (
-              <span className="mr-1.5 text-body-8-3 text-gray-100 line-through">
+              <span className="text-body-4 text-gray-100 line-through">
                 {formatPrice(originalPrice)}
               </span>
             )}
-            <strong className="text-body-5-2 text-gray-500">
-              {formatPrice(price)}원
+            <strong className="text-title-2-2 text-gray-500">
+              {formatPrice(price)}
             </strong>
+            <span className="text-body-3-1 text-gray-500">원</span>
           </span>
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-gray-200">초안 생성</span>
-          <span className="text-gray-400">{draftLimit}</span>
-        </div>
-        <div className="flex items-center justify-between">
-          <span className="text-gray-200">채팅</span>
-          <span className="text-gray-400">{chatLimit}</span>
+        <div className="h-px w-full bg-gray-70" />
+        <div className="flex items-center justify-between text-body-5-3 text-gray-300">
+          <span>토큰 제공량</span>
+          <span>{tokenAllowance}</span>
         </div>
       </div>
 
@@ -75,9 +71,9 @@ export function AccountLogitPlanCard({
         </p>
       )}
 
-      <div className="mt-6">
+      <div className="mt-5">
         {showFreeDefault ? (
-          <div className="flex h-10 items-center justify-center rounded-xl bg-gray-50 text-body-7-2 text-gray-200">
+          <div className="flex h-16 items-center justify-center rounded-3.5 bg-gray-50 text-body-3-2 text-gray-200">
             무료로 이용 중
           </div>
         ) : isCancelPending ? (
@@ -85,12 +81,12 @@ export function AccountLogitPlanCard({
             <button
               type="button"
               onClick={onSubscribe}
-              className="h-10 w-full rounded-xl border border-primary-100 text-body-7-2 text-primary-200 transition-colors hover:bg-primary-20"
+              className="h-16 w-full rounded-3.5 bg-primary-20 text-body-3-2 text-primary-200 transition-colors hover:bg-primary-50"
             >
               재구독
             </button>
           ) : (
-            <div className="flex h-10 items-center justify-center rounded-xl bg-gray-50 text-body-8-3 text-gray-200">
+            <div className="flex h-16 items-center justify-center rounded-3.5 bg-gray-50 text-body-8-1 text-gray-200">
               {formatDateKorean(expiresAt!)} 종료 후 재구독 가능
             </div>
           )
@@ -98,7 +94,7 @@ export function AccountLogitPlanCard({
           <button
             type="button"
             onClick={onCancel}
-            className="h-10 w-full rounded-xl bg-primary-100 text-body-7-2 text-white transition-colors hover:bg-primary-200"
+            className="h-16 w-full rounded-3.5 bg-primary-50 text-body-3-2 text-gray-300 transition-colors hover:bg-gray-50"
           >
             구독 취소 하기
           </button>
@@ -106,7 +102,7 @@ export function AccountLogitPlanCard({
           <button
             type="button"
             onClick={onSubscribe}
-            className="h-10 w-full rounded-xl border border-primary-100 text-body-7-2 text-primary-200 transition-colors hover:bg-primary-20"
+            className="h-16 w-full rounded-3.5 bg-primary-20 text-body-3-2 text-primary-200 transition-colors hover:bg-primary-50"
           >
             구독 하기
           </button>

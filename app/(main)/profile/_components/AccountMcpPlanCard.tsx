@@ -25,20 +25,21 @@ type Props = {
   onCancel: () => void;
 };
 
+const SUPPORTED_ENVIRONMENTS = ["Gemini", "Claude"];
+
 export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onSubscribe, onCancel }: Props) {
   const isCancelPending = isActive && !isAutoRenew;
   const canResubscribe = isCancelPending && (!expiresAt || new Date(expiresAt) <= new Date());
-  const environments = plan.features ?? [];
 
   return (
     <div
       className={cn(
-        "flex flex-col rounded-2xl border p-6",
-        isActive ? "border-primary-100 bg-primary-20" : "border-gray-70 bg-white",
+        "flex flex-col rounded-5 border-2 bg-white p-4",
+        isActive ? "border-primary-100" : "border-gray-70",
       )}
     >
-      <div className="mb-2 flex items-start justify-between gap-2">
-        <h3 className="text-title-3 text-gray-500">{plan.name}</h3>
+      <div className="mb-1 flex items-start justify-between gap-2">
+        <h3 className="text-title-1 text-gray-500">{plan.name}</h3>
         {plan.badge && (
           <span className="shrink-0 rounded-full bg-primary-100 px-2.5 py-1 text-body-9-2 text-white">
             {plan.badge}
@@ -47,31 +48,32 @@ export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onS
       </div>
 
       {plan.description && (
-        <p className="mb-5 text-body-8-3 text-gray-200">{plan.description}</p>
+        <p className="mb-4 text-body-8-3 text-gray-200">{plan.description}</p>
       )}
 
-      <div className="flex items-baseline gap-1.5">
-        {plan.original_price > 0 && plan.original_price > plan.price && (
-          <span className="text-body-8-3 text-gray-100 line-through">
-            {formatPrice(plan.original_price)}원
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-end justify-between">
+          <span className="text-body-3-2 text-gray-500">총 결제 금액</span>
+          <span className="flex items-end gap-1">
+            {plan.original_price > 0 && plan.original_price > plan.price && (
+              <span className="text-body-4 text-gray-100 line-through">
+                {formatPrice(plan.original_price)}
+              </span>
+            )}
+            <strong className="text-title-2-2 text-gray-500">{formatPrice(plan.price)}</strong>
+            <span className="text-body-3-1 text-gray-500">원</span>
           </span>
-        )}
-        <strong className="text-title-2 text-gray-500">{formatPrice(plan.price)}원</strong>
-        <span className="text-body-8-3 text-gray-200">/ 월</span>
-      </div>
-
-      {environments.length > 0 && (
-        <div className="mt-4 flex flex-col gap-1.5">
-          <p className="text-body-8-3 text-gray-300">지원 환경</p>
-          <ul className="flex flex-col gap-1">
-            {environments.map((env) => (
-              <li key={env} className="text-body-8-3 text-gray-400">
-                · {env}
-              </li>
-            ))}
-          </ul>
         </div>
-      )}
+        <div className="h-px w-full bg-gray-70" />
+        <div className="flex items-start justify-between text-body-5-3 text-gray-300">
+          <span>지원 환경</span>
+          <span className="flex flex-col items-end">
+            {SUPPORTED_ENVIRONMENTS.map((env) => (
+              <span key={env}>{env}</span>
+            ))}
+          </span>
+        </div>
+      </div>
 
       {isCancelPending && expiresAt && (
         <p className="mt-4 text-body-9-3 text-red-400">
@@ -79,13 +81,13 @@ export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onS
         </p>
       )}
 
-      <div className="mt-auto flex flex-col gap-2 pt-6">
+      <div className="mt-5 flex flex-col gap-2">
         {isActive && !isCancelPending ? (
           <>
             <button
               type="button"
               onClick={() => copyMcpToken()}
-              className="h-12 w-full rounded-xl bg-primary-100 text-body-7-2 text-white transition-colors hover:bg-primary-200"
+              className="h-16 w-full rounded-3.5 bg-primary-100 text-body-3-2 text-white transition-colors hover:bg-primary-200"
             >
               MCP 토큰 복사하기
             </button>
@@ -102,12 +104,12 @@ export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onS
             <button
               type="button"
               onClick={onSubscribe}
-              className="h-12 w-full rounded-xl border border-primary-100 text-body-7-2 text-primary-200 transition-colors hover:bg-primary-20"
+              className="h-16 w-full rounded-3.5 bg-primary-20 text-body-3-2 text-primary-200 transition-colors hover:bg-primary-50"
             >
               재구독
             </button>
           ) : (
-            <div className="flex h-12 items-center justify-center rounded-xl bg-gray-50 text-body-8-3 text-gray-200">
+            <div className="flex h-16 items-center justify-center rounded-3.5 bg-gray-50 text-body-8-1 text-gray-200">
               {formatDateKorean(expiresAt!)} 종료 후 재구독 가능
             </div>
           )
@@ -115,7 +117,7 @@ export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onS
           <button
             type="button"
             onClick={onSubscribe}
-            className="h-12 w-full rounded-xl border border-primary-100 text-body-7-2 text-primary-200 transition-colors hover:bg-primary-20"
+            className="h-16 w-full rounded-3.5 bg-primary-20 text-body-3-2 text-primary-200 transition-colors hover:bg-primary-50"
           >
             구독 하기
           </button>
@@ -124,7 +126,7 @@ export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onS
           href="https://docs.logit.ai.kr/mcp"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-center text-body-8-3 text-gray-200 transition-colors hover:text-primary-200"
+          className="text-center text-body-8-3 text-gray-200 underline transition-colors hover:text-primary-200"
         >
           MCP 사용방법 보러가기 &gt;
         </a>
