@@ -41,6 +41,7 @@ export function NewProjectModal({ open, onOpenChange }: NewProjectModalProps) {
       onSuccess: (result) => {
         showToast.success("프로젝트가 생성되었습니다.");
         handleClose();
+        router.refresh();
 
         const { project, questions } = result;
         if (questions.length > 0) {
