@@ -24,11 +24,6 @@ import type { PlanData, SubscriptionType } from "@/types/api";
 
 type BillingTab = "monthly" | "mcp";
 
-const PLAN_TOKEN_ALLOWANCE: Record<string, string> = {
-  lite: "400토큰",
-  pro: "2,000토큰",
-};
-
 export function AccountPageWeb() {
   const { setLoginModalOpen } = useLoginModal();
   const hasToken = !!getAccessToken();
@@ -210,7 +205,7 @@ export function AccountPageWeb() {
                         ? plan.original_price
                         : undefined
                     }
-                    tokenAllowance={PLAN_TOKEN_ALLOWANCE[plan.plan_key] ?? "-"}
+                    tokenAllowance={`${plan.monthly_tokens.toLocaleString()}토큰`}
                     isActive={isActive}
                     isAutoRenew={isActive ? (logitStatus?.is_auto_renew ?? true) : true}
                     expiresAt={isActive ? (logitStatus?.expires_at ?? null) : null}
