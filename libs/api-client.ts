@@ -172,7 +172,6 @@ export const API_ENDPOINTS = {
 
   // Tokens
   tokensBalance: "/api/v1/tokens/balance",
-  tokensAttendance: "/api/v1/tokens/attendance",
 
   // Referral
   referralMe: "/api/v1/users/referral",
