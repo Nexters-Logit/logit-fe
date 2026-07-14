@@ -11,26 +11,6 @@ import { ExperienceAnalysisSkeleton } from "./ExperienceAnalysisSkeleton";
 import { useExperienceSummary } from "@/app/_hooks/useExperienceSummary";
 import { EXPERIENCE_CATEGORY, EXPERIENCE_TYPE } from "@/types/api";
 
-/** 해쉬태그 별 지정 멘트: 최다 역량 키워드(category) 기반 */
-const CATEGORY_DESCRIPTIONS: Record<string, string> = {
-  [EXPERIENCE_CATEGORY.CUSTOMER_VALUE]:
-    "고객 가치 지향 역량을 기반으로 고객의 마음을 사로잡고 성과를 만들어내는 마케터입니다.",
-  [EXPERIENCE_CATEGORY.TECHNICAL_EXPERTISE]:
-    "기술적 전문성을 바탕으로 복잡한 문제를 해결하는 기술 전문가입니다.",
-  [EXPERIENCE_CATEGORY.COLLABORATIVE_COMMUNICATION]:
-    "업무의 기초가 되는 협력적 소통 역량이 탄탄하게 갖춰져 있습니다.",
-  [EXPERIENCE_CATEGORY.PROACTIVE_EXECUTION]:
-    "업무의 기초가 되는 주도적 실행력이 탄탄하게 갖춰져 있습니다.",
-  [EXPERIENCE_CATEGORY.LOGICAL_ANALYSIS]:
-    "논리적 분석력을 발휘하여 비즈니스 모델과 서비스의 방향을 결정하는 기획자입니다.",
-  [EXPERIENCE_CATEGORY.CREATIVE_PROBLEM_SOLVING]:
-    "창의적 문제해결을 통해 사용자 중심의 가치를 시각적으로 구현하는 디자이너입니다.",
-  [EXPERIENCE_CATEGORY.FLEXIBLE_ADAPTABILITY]:
-    "유연한 적응력을 통해 서비스 안정성을 높이고 조직의 성장을 돕는 조율자입니다.",
-  [EXPERIENCE_CATEGORY.PERSISTENT_RESPONSIBILITY]:
-    "업무의 기초가 되는 끈기있는 책임감이 탄탄하게 갖춰져 있습니다.",
-};
-
 /** 카테고리 별 지정 멘트: 최다 경험 유형(type) 기반 */
 const TYPE_DESCRIPTIONS: Record<string, string> = {
   [EXPERIENCE_TYPE.PART_TIME]:
@@ -242,11 +222,6 @@ export function ExperienceAnalysisSection() {
     totalCategoryCount > 3
       ? `현재 ${bottomCategoryItem?.category} 관련 경험이 적은 편이에요. 이 부분을 보완하면 더 입체적인 자소서가 될 거예요!`
       : `현재 경험 유형이 ${topCategoryItem?.category} 중심으로 구성되어 있어요. 경험 유형을 다양화하면 더 입체적인 자소서가 될 거예요!`;
-
-  const typeDescription =
-    typeCounts.length > 3
-      ? `현재 ${bottomTypeLabel} 관련 경험이 적은 편이에요. 이 부분을 보완하면 더 입체적인 자소서가 될 거예요!`
-      : `현재 경험 유형이 ${topTypeLabel} 중심으로 구성되어 있어요. 경험 유형을 다양화하면 더 입체적인 자소서가 될 거예요!`;
 
   // 해쉬태그 별 지정 멘트 계산
   const tagGroupStats = TAG_GROUPS.map((group) => {

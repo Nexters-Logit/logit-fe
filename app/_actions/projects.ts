@@ -3,7 +3,6 @@
 import { revalidatePath } from "next/cache";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import type {
-  Project,
   ProjectCreate,
   ProjectCreateResponse,
   ProjectListItem,

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { Header } from "@/components/common/Header";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, RefreshCw } from "lucide-react";
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { QueryProvider } from "@/libs/query-provider";
 import { ToastProvider } from "@/libs/toast";
-import { MobileAppBanner } from "@/components/common/MobileAppBanner";
+import { TokenGrantWatcher } from "@/components/common/TokenGrantWatcher";
 import "./globals.css";
 
 const pretendard = localFont({
@@ -69,8 +69,9 @@ export default function RootLayout({
       <body className={`${pretendard.variable} antialiased`}>
         <QueryProvider>
           {children}
-          <MobileAppBanner />
+          {/* <MobileAppBanner /> */}
           <ToastProvider />
+          <TokenGrantWatcher />
         </QueryProvider>
       </body>
     </html>

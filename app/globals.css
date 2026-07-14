@@ -66,6 +66,15 @@
   /* Box Shadow */
   --shadow-chat: 0 4px 20px rgba(0, 0, 0, 0.05);
   --shadow-toast: 4px 10px 20px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 8px 30px rgba(38, 38, 38, 0.04);
+  --shadow-sheet: 0 -12px 40px rgba(23, 24, 30, 0.14);
+  --shadow-nav: 0 4px 24px rgba(0, 0, 0, 0.18);
+
+  /* Letter Spacing */
+  --tracking-badge: 0.2em;
+
+  /* Transition Delay */
+  --delay-900: 900ms;
 
   /* Font Sizes (Tailwind v4 @theme 방식) */
   --text-headline-1: 32px;
@@ -298,6 +307,13 @@
   line-height: 1.4;
 }
 
+.text-body-1-2 {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.4px;
+}
+
 .text-body-2 {
   font-size: 19px;
   font-weight: 400;
@@ -412,6 +428,12 @@
   letter-spacing: -0.26px;
 }
 
+.text-body-8-3 {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
 .text-body-9-1 {
   font-size: 12px;
   font-weight: 700;
@@ -440,6 +462,76 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-pretendard), system-ui, sans-serif;
+}
+
+/* Display Typography (이벤트 페이지 hero 숫자 등) */
+.text-display-1 {
+  font-size: 80px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.text-display-2 {
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -1px;
+}
+
+.bg-radial-blue-center {
+  background: radial-gradient(ellipse at center, rgba(64, 165, 255, 0.08) 0%, transparent 70%);
+}
+.bg-radial-blue-top {
+  background: radial-gradient(ellipse at top, rgba(37, 113, 235, 0.25) 0%, transparent 60%);
+}
+
+@keyframes float-up {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes arrow-right {
+  0%, 100% { transform: translateX(0); opacity: 0.5; }
+  50% { transform: translateX(6px); opacity: 1; }
+}
+@keyframes arrow-left {
+  0%, 100% { transform: translateX(0); opacity: 0.5; }
+  50% { transform: translateX(-6px); opacity: 1; }
+}
+.animate-float { animation: float-up 3s ease-in-out infinite; }
+
+@keyframes gradient-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+.animate-gradient-flow {
+  background: linear-gradient(-45deg, #e5f0ff, #c3dcff, #dbeafe, #eff6ff, #c3dcff, #e5f0ff);
+  background-size: 400% 400%;
+  animation: gradient-flow 10s ease infinite;
+}
+.animate-arrow-right { animation: arrow-right 1.4s ease-in-out infinite; }
+.animate-arrow-left { animation: arrow-left 1.4s ease-in-out infinite; }
+
+@keyframes blue-glow {
+  0%, 100% { text-shadow: 0 0 8px rgba(141,201,255,0.3); }
+  50%       { text-shadow: 0 0 22px rgba(141,201,255,0.85), 0 0 44px rgba(195,220,255,0.35); }
+}
+.animate-blue-glow { animation: blue-glow 2.8s ease-in-out infinite; }
+
+@keyframes white-glow {
+  0%, 100% { text-shadow: 0 0 8px rgba(195,220,255,0.25); }
+  50%       { text-shadow: 0 0 22px rgba(195,220,255,0.75), 0 0 44px rgba(141,201,255,0.25); }
+}
+.animate-white-glow { animation: white-glow 2.8s ease-in-out infinite; }
+
+@keyframes coin-drop {
+  0%   { transform: translateY(-220%) scale(0.9) rotate(-20deg); }
+  60%  { transform: translateY(6%) scale(1.06) rotate(4deg); }
+  80%  { transform: translateY(-3%) scale(0.97) rotate(-1deg); }
+  100% { transform: translateY(0) scale(1) rotate(0deg); }
+}
+.animate-coin-drop {
+  animation: coin-drop 0.42s cubic-bezier(0.2, 0, 0.4, 1) both;
 }
 
 /* Chart Bar Animation */
@@ -475,6 +567,68 @@ body {
   animation: shimmer 2.5s ease-in-out infinite;
 }
 
+/* EVENT-03 Token Beam — 4s 순환: 나→친구(0-2s) 그다음 친구→나(2-4s) */
+/* beam width = 100% → travels from -100% to +100% (total 200%) */
+/* tip hits destination at midpoint of travel → ~23.5% for phase1, ~73.5% for phase2 */
+@keyframes seq-beam-right {
+  0%    { left: -100%; opacity: 0; }
+  3%    { opacity: 1; }
+  44%   { opacity: 1; left: 100%; }
+  47%   { opacity: 0; left: 100%; }
+  100%  { opacity: 0; left: 100%; }
+}
+@keyframes seq-beam-left {
+  0%    { left: 100%; opacity: 0; }
+  50%   { left: 100%; opacity: 0; }
+  53%   { opacity: 1; }
+  94%   { opacity: 1; left: -100%; }
+  97%   { opacity: 0; left: -100%; }
+  100%  { opacity: 0; left: -100%; }
+}
+@keyframes seq-token-right {
+  0%, 20%  { opacity: 0; transform: scale(0.7) translateY(5px); }
+  27%      { opacity: 1; transform: scale(1.15) translateY(-2px); }
+  40%      { opacity: 1; transform: scale(1) translateY(0); }
+  50%      { opacity: 0; }
+  100%     { opacity: 0; }
+}
+@keyframes seq-token-left {
+  0%, 70%  { opacity: 0; transform: scale(0.7) translateY(5px); }
+  77%      { opacity: 1; transform: scale(1.15) translateY(-2px); }
+  90%      { opacity: 1; transform: scale(1) translateY(0); }
+  100%     { opacity: 0; }
+}
+/* 화살표 글로우 — 빔 팁 도착 시점에 맞춤 */
+@keyframes arrow-glow-right {
+  0%, 20%  { border-left-color: rgba(255,255,255,0.28); filter: none; }
+  25%      { border-left-color: rgba(255,255,255,1);    filter: drop-shadow(0 0 6px rgba(64,165,255,1)) drop-shadow(0 0 12px rgba(64,165,255,0.5)); }
+  40%      { border-left-color: rgba(255,255,255,0.55); filter: drop-shadow(0 0 2px rgba(64,165,255,0.2)); }
+  52%      { border-left-color: rgba(255,255,255,0.28); filter: none; }
+  100%     { border-left-color: rgba(255,255,255,0.28); filter: none; }
+}
+@keyframes arrow-glow-left {
+  0%, 70%  { border-right-color: rgba(255,255,255,0.28); filter: none; }
+  75%      { border-right-color: rgba(255,255,255,1);    filter: drop-shadow(0 0 6px rgba(64,165,255,1)) drop-shadow(0 0 12px rgba(64,165,255,0.5)); }
+  90%      { border-right-color: rgba(255,255,255,0.55); filter: drop-shadow(0 0 2px rgba(64,165,255,0.2)); }
+  100%     { border-right-color: rgba(255,255,255,0.28); filter: none; }
+}
+
+/* Phase 1(0~2s): 빔 팁이 친구에 도착(~23%) → 친구가 빛나고 자연스럽게 소멸 */
+@keyframes seq-glow-phase1 {
+  0%, 20%  { box-shadow: none; }
+  26%      { box-shadow: 0 0 30px 12px rgba(64,165,255,0.7), 0 0 8px 3px rgba(64,165,255,1); }
+  42%      { box-shadow: 0 0 10px 3px rgba(64,165,255,0.2); }
+  53%      { box-shadow: none; }
+  100%     { box-shadow: none; }
+}
+/* Phase 2(2~4s): 빔 팁이 나에 도착(~73%) → 나가 빛나고 자연스럽게 소멸 */
+@keyframes seq-glow-phase2 {
+  0%, 70%  { box-shadow: none; }
+  76%      { box-shadow: 0 0 30px 12px rgba(64,165,255,0.7), 0 0 8px 3px rgba(64,165,255,1); }
+  92%      { box-shadow: 0 0 10px 3px rgba(64,165,255,0.2); }
+  100%     { box-shadow: none; }
+}
+
 /* Toast Typography */
 .text-toast {
   font-size: 20px;
@@ -485,21 +639,27 @@ body {
 
 /* react-toastify overrides */
 .Toastify__toast-container {
-  width: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
 }
 
-.Toastify__toast {
-  background: transparent;
-  box-shadow: none;
-  padding: 0;
-  min-height: auto;
-  width: auto;
+.Toastify__toast,
+.Toastify__toast--default,
+.Toastify__toast--info,
+.Toastify__toast--success,
+.Toastify__toast--warning,
+.Toastify__toast--error {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  min-height: auto !important;
+  width: auto !important;
+  border-radius: 0 !important;
 }
 
 .Toastify__toast-body {
-  padding: 0;
-  margin: 0;
+  padding: 0 !important;
+  margin: 0 !important;
 }

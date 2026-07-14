@@ -16,6 +16,7 @@ import { getAccessToken } from "@/libs/auth";
 import { useLoginModal } from "./LoginModalContext";
 import { getProjects } from "@/app/_actions/projects";
 import { EXPERIENCE_CATEGORY } from "@/types/api";
+import { HomeBanner } from "./HomeBanner";
 
 const EXPERIENCE_CARDS = [
   {
@@ -86,9 +87,10 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
   };
 
   return (
-    <main className="w-full mx-auto p-10 pb-25 flex-1 overflow-y-auto scrollbar-hide outline-none">
-      <div className="w-276 mx-auto">
-        <h1 className="text-headline-1 text-gray-400 mb-16">
+    <main className="w-full mx-auto flex-1 overflow-y-auto scrollbar-hide outline-none">
+      <HomeBanner />
+      <div className="w-full max-w-360 mx-auto px-6 sm:px-10 lg:px-20 xl:px-42 pt-10 sm:pt-14 xl:pt-23.5 pb-14 xl:pb-25">
+        <h1 className="text-title-1 xl:text-headline-1 text-gray-400 mb-8 xl:mb-16">
           오늘 지원할 공고에 딱 맞는 경험, 로짓과 함께 골라 볼까요?
         </h1>
 
@@ -99,19 +101,31 @@ export function HomeClient({ projectListSlot }: HomeClientProps) {
             buttonText="경험 등록"
             onClick={handleExperienceButtonClick}
           />
-          <Carousel opts={{ align: "start", slidesToScroll: 4 }} className="mt-5 w-311 -ml-17.5">
-            <div className="flex items-center gap-7.5 ">
+          <Carousel
+            opts={{
+              align: "start",
+              slidesToScroll: 2,
+              breakpoints: {
+                "(min-width: 640px)": { slidesToScroll: 3 },
+                "(min-width: 1024px)": { slidesToScroll: 4 },
+              },
+            }}
+            className="mt-5"
+          >
+            <div className="flex items-center gap-5">
               <CarouselPrevious className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200 cursor-pointer disabled:bg-gray-20 disabled:text-gray-100 disabled:cursor-default disabled:opacity-40" />
-              <CarouselContent className="-ml-5 ">
-                {EXPERIENCE_CARDS.map((card) => (
-                  <CarouselItem key={card.id} className="pl-5 basis-auto">
-                    <ExperienceCard
-                      title={card.category}
-                      illustration={card.illustration}
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
+              <div className="flex-1 min-w-0">
+                <CarouselContent className="-ml-5">
+                  {EXPERIENCE_CARDS.map((card) => (
+                    <CarouselItem key={card.id} className="pl-5 basis-auto">
+                      <ExperienceCard
+                        title={card.category}
+                        illustration={card.illustration}
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </div>
               <CarouselNext className="static translate-y-0 w-10 h-10 bg-gray-20 border-0 hover:bg-gray-70 text-gray-200 cursor-pointer disabled:bg-gray-20 disabled:text-gray-100 disabled:cursor-default disabled:opacity-40" />
             </div>
           </Carousel>

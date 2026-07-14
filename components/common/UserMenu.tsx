@@ -8,11 +8,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { logout } from "@/libs/auth";
-import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
-import { showToast } from "@/libs/toast";
 import { useLoginModal } from "@/app/_components/LoginModalContext";
 import { useCurrentUser } from "@/app/_hooks/useCurrentUser";
-import { Link2, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 
 function AvatarButton({
   profileImageUrl,
@@ -57,30 +55,19 @@ function AvatarButton({
   );
 }
 
-async function handleCopyMcpToken() {
-  try {
-    const data = await apiFetch<{ token: string }>(API_ENDPOINTS.mcpToken);
-    await navigator.clipboard.writeText(data.token);
-    showToast.success("MCP 토큰이 복사되었습니다");
-  } catch {
-    showToast.error("MCP 토큰 복사에 실패했습니다");
-  }
-}
-
 export function UserMenu() {
   const { setLoginModalOpen } = useLoginModal();
   const { data: user, isLoading } = useCurrentUser();
 
-  if (isLoading) {
-    return <AvatarButton label="로그인" />;
-  }
-
-  if (!user) {
+  if (isLoading || !user) {
     return (
-      <AvatarButton
-        label="로그인"
+      <button
+        type="button"
         onClick={() => setLoginModalOpen(true)}
-      />
+        className="px-4 py-2 rounded-3.5 bg-primary-300 text-white text-body-5-3 cursor-pointer hover:bg-primary-200 transition-colors"
+      >
+        로그인
+      </button>
     );
   }
 
@@ -96,13 +83,6 @@ export function UserMenu() {
         align="end"
         className="min-w-0 rounded-3.5 p-0 border-0 shadow-[0px_4px_20px_0px_rgba(0,0,0,0.1)] bg-white"
       >
-        <DropdownMenuItem
-          onClick={() => handleCopyMcpToken()}
-          className="px-5 py-3.75 gap-3 cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
-        >
-          <Link2 className="size-4.5 text-primary-600" />
-          <span className="text-body-5-3 text-primary-600">MCP 토큰 복사</span>
-        </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => logout()}
           className="px-5 py-3.75 gap-3 cursor-pointer hover:bg-gray-50 focus:bg-gray-50"

@@ -13,6 +13,7 @@ import {
   useChatHistoryPagination,
 } from "../../_hooks";
 import { convertToUIMessages, getMessageContent } from "../../_utils";
+import { showToast } from "@/libs/toast";
 import type { ChatHistoryItem } from "@/types/api";
 
 // ============================================================================
@@ -59,6 +60,14 @@ export function ChatAreaClient({
     questionId,
     experienceIds: selectedExperienceIds,
     initialMessages: convertToUIMessages(chatHistory.chats),
+    onFinish: (_message, metadata) => {
+      if (!metadata?.tokens_used) return;
+      showToast.success(
+        metadata.is_draft
+          ? `${metadata.tokens_used.toLocaleString()}토큰을 사용해 초안을 생성했어요`
+          : `${metadata.tokens_used.toLocaleString()}토큰을 사용했어요`,
+      );
+    },
   });
 
   // 채팅 히스토리 페이지네이션

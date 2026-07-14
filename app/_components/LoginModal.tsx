@@ -22,6 +22,10 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
     window.location.href = `${API_BASE_URL}/api/v1/auth/google${redirectUri ? `?redirect_uri=${redirectUri}` : ""}`;
   };
 
+  const handleAppleLogin = () => {
+    window.location.href = `${API_BASE_URL}/api/v1/auth/apple`;
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -86,6 +90,7 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
           </button>
           <button
             type="button"
+            onClick={handleAppleLogin}
             className="relative flex items-center justify-center w-full rounded-3.5 border border-gray-100 bg-white py-2.5 px-5.5 regular_19 text-black cursor-pointer hover:bg-accent transition-colors"
           >
             <Image

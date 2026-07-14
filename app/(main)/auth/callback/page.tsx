@@ -14,6 +14,12 @@ function AuthCallbackContent() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const errorParam = searchParams.get("error");
+    if (errorParam) {
+      setError("로그인 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
+      return;
+    }
+
     const code = searchParams.get("code");
 
     if (!code) {
@@ -40,14 +46,34 @@ function AuthCallbackContent() {
           throw new Error(err.detail || `API Error: ${res.status}`);
         }
 
-        const data: { access_token: string } = await res.json();
+        const data: {
+          access_token: string;
+          is_new_user?: boolean;
+          signup_bonus_amount?: number;
+          monthly_grant_amount?: number;
+          attendance_amount?: number;
+        } = await res.json();
 
         setAuthTokens(data.access_token);
+
+        if (data.signup_bonus_amount || data.monthly_grant_amount || data.attendance_amount) {
+          sessionStorage.setItem(
+            "pending_token_grants",
+            JSON.stringify({
+              signup_bonus: data.signup_bonus_amount ?? 0,
+              monthly: data.monthly_grant_amount ?? 0,
+              attendance: data.attendance_amount ?? 0,
+            }),
+          );
+        }
+
         await queryClient.prefetchQuery({
           queryKey: ["currentUser"],
           queryFn: () => apiFetch<UserPublic>(API_ENDPOINTS.usersMe),
         });
-        router.replace("/");
+        const redirectTo = sessionStorage.getItem("auth_redirect") ?? "/";
+        sessionStorage.removeItem("auth_redirect");
+        router.replace(redirectTo);
       } catch (e) {
         setError(
           e instanceof Error
@@ -58,7 +84,7 @@ function AuthCallbackContent() {
     };
 
     exchangeToken();
-  }, [router, searchParams]);
+  }, [router, searchParams, queryClient]);
 
   if (error) {
     return (
