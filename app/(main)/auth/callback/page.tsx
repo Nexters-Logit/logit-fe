@@ -49,23 +49,9 @@ function AuthCallbackContent() {
         const data: {
           access_token: string;
           is_new_user?: boolean;
-          signup_bonus_amount?: number;
-          monthly_grant_amount?: number;
-          attendance_amount?: number;
         } = await res.json();
 
         setAuthTokens(data.access_token);
-
-        if (data.signup_bonus_amount || data.monthly_grant_amount || data.attendance_amount) {
-          sessionStorage.setItem(
-            "pending_token_grants",
-            JSON.stringify({
-              signup_bonus: data.signup_bonus_amount ?? 0,
-              monthly: data.monthly_grant_amount ?? 0,
-              attendance: data.attendance_amount ?? 0,
-            }),
-          );
-        }
 
         await queryClient.prefetchQuery({
           queryKey: ["currentUser"],
