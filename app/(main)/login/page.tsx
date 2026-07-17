@@ -1,15 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { API_BASE_URL } from "@/libs/api-client";
+import { startOAuthLogin } from "@/libs/auth";
 
 export default function LoginPage() {
   const handleGoogleLogin = () => {
-    window.location.href = `${API_BASE_URL}/api/v1/auth/google`;
+    // /login 자체로는 돌아올 필요가 없으므로 홈으로 리다이렉트
+    startOAuthLogin("google", "/");
   };
 
   const handleAppleLogin = () => {
-    window.location.href = `${API_BASE_URL}/api/v1/auth/apple`;
+    startOAuthLogin("apple", "/");
   };
 
   return (

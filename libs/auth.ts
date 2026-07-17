@@ -108,3 +108,23 @@ export async function logout(): Promise<void> {
   setCookie(JUST_LOGGED_OUT_COOKIE, "1");
   window.location.href = "/";
 }
+
+const AUTH_REDIRECT_KEY = "auth_redirect";
+
+/**
+ * OAuth 로그인을 시작합니다 (Google/Apple 공통).
+ * 로그인 완료 후 돌아올 경로를 sessionStorage에 저장해두고 provider 인증
+ * 페이지로 이동합니다 — 모든 로그인 진입점(모달/로그인 페이지/모바일
+ * 프로필 화면)이 이 함수 하나만 사용해 리다이렉트 동작이 갈라지지 않도록 한다.
+ */
+export function startOAuthLogin(
+  provider: "google" | "apple",
+  redirectTo?: string,
+): void {
+  if (typeof window === "undefined") return;
+  sessionStorage.setItem(
+    AUTH_REDIRECT_KEY,
+    redirectTo ?? window.location.pathname,
+  );
+  window.location.href = `${API_BASE_URL}/api/v1/auth/${provider}`;
+}

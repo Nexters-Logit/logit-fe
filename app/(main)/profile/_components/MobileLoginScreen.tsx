@@ -1,17 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { API_BASE_URL } from "@/libs/api-client";
+import { startOAuthLogin } from "@/libs/auth";
 
 export function MobileLoginScreen() {
   const handleGoogleLogin = () => {
-    sessionStorage.setItem("auth_redirect", "/profile");
-    window.location.href = `${API_BASE_URL}/api/v1/auth/google`;
+    startOAuthLogin("google", "/profile");
   };
 
   const handleAppleLogin = () => {
-    sessionStorage.setItem("auth_redirect", "/profile");
-    window.location.href = `${API_BASE_URL}/api/v1/auth/apple`;
+    startOAuthLogin("apple", "/profile");
   };
 
   return (

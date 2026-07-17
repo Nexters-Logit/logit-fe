@@ -1,7 +1,7 @@
 "use client";
 
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { API_BASE_URL } from "@/libs/api-client";
+import { startOAuthLogin } from "@/libs/auth";
 import Image from "next/image";
 
 interface LoginModalProps {
@@ -15,15 +15,11 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
   };
 
   const handleGoogleLogin = () => {
-    const redirectUri =
-      typeof window !== "undefined"
-        ? encodeURIComponent(window.location.origin + "/auth/callback")
-        : "";
-    window.location.href = `${API_BASE_URL}/api/v1/auth/google${redirectUri ? `?redirect_uri=${redirectUri}` : ""}`;
+    startOAuthLogin("google");
   };
 
   const handleAppleLogin = () => {
-    window.location.href = `${API_BASE_URL}/api/v1/auth/apple`;
+    startOAuthLogin("apple");
   };
 
   return (
