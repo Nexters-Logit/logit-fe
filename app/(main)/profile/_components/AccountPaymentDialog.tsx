@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import { showToast } from "@/libs/toast";
-import { useUserMe } from "@/app/_hooks/useUserMe";
+import { useCurrentUser } from "@/app/_hooks/useCurrentUser";
 import { TermsCheckbox } from "@/components/common/TermsCheckbox";
 import type { PlanData } from "@/types/api";
 
@@ -37,7 +37,7 @@ type Props = {
 };
 
 export function AccountPaymentDialog({ plan, onClose }: Props) {
-  const { data: user } = useUserMe();
+  const { data: user } = useCurrentUser();
   const [phone, setPhone] = useState("");
   const [checkedTerms, setCheckedTerms] = useState<Set<TermId>>(new Set());
   const [isPending, setIsPending] = useState(false);

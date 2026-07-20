@@ -6,7 +6,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Input } from "@/components/ui/input";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import { showToast } from "@/libs/toast";
-import { useUserMe } from "@/app/_hooks/useUserMe";
+import { useCurrentUser } from "@/app/_hooks/useCurrentUser";
 import { TermsCheckbox } from "@/components/common/TermsCheckbox";
 
 export type MobilePlanInfo = {
@@ -39,7 +39,7 @@ export function MobilePaymentSheet({
   plan: MobilePlanInfo | null;
   onClose: () => void;
 }) {
-  const { data: user } = useUserMe();
+  const { data: user } = useCurrentUser();
   const [phone, setPhone] = useState("");
   const [checkedTerms, setCheckedTerms] = useState<Set<TermId>>(new Set());
   const [isPending, setIsPending] = useState(false);

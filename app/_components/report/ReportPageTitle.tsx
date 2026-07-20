@@ -1,10 +1,9 @@
 "use client";
 
-import { useUserMe } from "@/app/_hooks/useUserMe";
+import { useCurrentUser } from "@/app/_hooks/useCurrentUser";
 
 export function ReportPageTitle() {
-  const { data: user } = useUserMe();
-  console.log(user);
+  const { data: user } = useCurrentUser();
   const displayName = user?.full_name ? `${user.full_name}님의` : "사용자님의";
 
   return (
