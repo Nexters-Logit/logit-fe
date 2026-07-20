@@ -102,18 +102,18 @@ export function ReportExperienceRow({
         }}
         className="flex items-center justify-between py-3.5 border-b border-gray-70 w-full cursor-pointer hover:bg-gray-20 transition-colors"
       >
-        <div className="flex items-center gap-16 flex-1 min-w-[866px]">
+        <div className="flex items-center gap-16 flex-1 min-w-216.5">
           {/* 파란색 바 */}
           <div className="flex items-center gap-5">
             <span
               className="w-0.5 h-6 rounded-xl shrink-0"
               style={{ backgroundColor: "#40A5FF" }}
             />
-            <span className="text-body-5-5 text-primary-600 truncate shrink min-w-0 w-[260px]">
+            <span className="text-body-5-5 text-primary-600 truncate shrink min-w-0 w-65">
               {experience.title || "제목 없음"}
             </span>
           </div>
-          <div className="flex gap-2 w-[310px]">
+          <div className="flex gap-2 w-77.5">
             {(() => {
               // 첫 번째는 category, 두 번째/세 번째는 tags를 순서대로 사용
               const displayTags = [experience.category, ...tags].slice(0, 3);

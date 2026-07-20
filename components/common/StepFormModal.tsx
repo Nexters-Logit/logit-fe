@@ -39,7 +39,7 @@ export function StepFormModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className={cn("flex max-h-[90vh] flex-col overflow-hidden rounded-5 border-0 p-0 shadow-chat sm:max-w-207", contentClassName)}
+        className={cn("flex max-h-modal flex-col overflow-hidden rounded-5 border-0 p-0 shadow-chat sm:max-w-207", contentClassName)}
         showCloseButton={false}
         onPointerDownOutside={(e) => {
           e.preventDefault();

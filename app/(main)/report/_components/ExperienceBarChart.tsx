@@ -33,7 +33,7 @@ export function ExperienceBarChart({ data }: ExperienceBarChartProps) {
   const max = sorted[0]?.count || 1;
 
   return (
-    <div className="flex flex-col gap-2.5 w-61.25 min-h-[180px]">
+    <div className="flex flex-col gap-2.5 w-61.25 min-h-45">
       {sorted.map((item, index) => {
         const progress = (item.count / max) * 100;
         const color = TYPE_COUNT_COLORS[index % TYPE_COUNT_COLORS.length];

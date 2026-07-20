@@ -60,7 +60,7 @@ export function ProjectRow({ project, onClick }: ProjectRowProps) {
               height={34}
             />
             <span
-              className={`text-base font-normal leading-140 tabular-nums text-right min-w-8 ${isAllComplete ? "text-[#00D173]" : "text-primary-600"}`}
+              className={`text-base font-normal leading-140 tabular-nums text-right min-w-8 ${isAllComplete ? "text-success" : "text-primary-600"}`}
             >
               {project.completed_questions} / {project.total_questions}
             </span>
