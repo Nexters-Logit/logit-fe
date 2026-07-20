@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { DateInput } from "@/components/common/DateInput";
-import { QuestionFieldItem } from "./QuestionFieldItem";
+import { QuestionFieldItem } from "@/components/common/QuestionFieldItem";
 
 const projectFormSchema = z.object({
   company: z.string().min(1, "회사명을 입력해주세요"),

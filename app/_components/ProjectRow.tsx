@@ -6,7 +6,7 @@ import Image from "next/image";
 import type { ProjectListItem } from "@/types/api";
 import { deleteProject } from "@/app/_actions/projects";
 import { showToast } from "@/libs/toast";
-import { DueBadge } from "./DueBadge";
+import { DueBadge } from "@/components/common/DueBadge";
 import { ProjectOptionsMenu } from "./ProjectOptionsMenu";
 import { DeleteProjectDialog } from "./DeleteProjectDialog";
 

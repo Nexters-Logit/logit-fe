@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { logout } from "@/libs/auth";
-import { useLoginModal } from "@/app/_components/LoginModalContext";
+import { useLoginModal } from "@/components/common/LoginModalContext";
 import { useCurrentUser } from "@/app/_hooks/useCurrentUser";
 import { LogOut } from "lucide-react";
 
@@ -81,7 +81,7 @@ export function UserMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="min-w-0 rounded-3.5 p-0 border-0 shadow-[0px_4px_20px_0px_rgba(0,0,0,0.1)] bg-white"
+        className="min-w-0 rounded-3.5 p-0 border-0 shadow-dropdown bg-white"
       >
         <DropdownMenuItem
           onClick={() => logout()}

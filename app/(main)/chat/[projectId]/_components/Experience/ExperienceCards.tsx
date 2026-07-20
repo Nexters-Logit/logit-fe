@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ExperienceCard } from "./ExperienceCard";
 import { ExperienceDetailModal } from "./ExperienceDetailModal";
 import { DeleteExperienceDialog } from "./DeleteExperienceDialog";
-import { ExperienceModal } from "@/app/_components/ExperienceModal";
+import { ExperienceModal } from "@/components/common/ExperienceModal";
 import { useChatStore } from "../../_store/useChatStore";
 import { useDeleteExperience } from "@/app/_hooks/useDeleteExperience";
 import { showToast } from "@/libs/toast";

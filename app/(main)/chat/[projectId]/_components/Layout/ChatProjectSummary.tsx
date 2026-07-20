@@ -1,5 +1,5 @@
 import { ChatProjectSummaryKebab } from "./ChatProjectSummaryKebab";
-import { DueBadge } from "@/app/_components/DueBadge";
+import { DueBadge } from "@/components/common/DueBadge";
 
 interface ChatProjectSummaryProps {
   company: string;

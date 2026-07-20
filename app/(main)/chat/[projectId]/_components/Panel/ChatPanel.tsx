@@ -6,7 +6,7 @@ import { ChatPanelTabs } from './ChatPanelTabs';
 import { ExperienceListShell } from '../Experience/ExperienceListShell';
 import { DraftPanel } from './DraftPanel';
 import { useChatStore } from '../../_store/useChatStore';
-import { ExperienceModal } from '@/app/_components/ExperienceModal';
+import { ExperienceModal } from '@/components/common/ExperienceModal';
 
 interface ChatPanelProps {
   maxLength?: number;

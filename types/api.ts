@@ -10,6 +10,7 @@ export interface UserPublic {
   profile_image_url: string | null;
   created_at: string;
   is_active: boolean;
+  phone: string | null;
 }
 
 // ============================================================================
@@ -124,21 +125,6 @@ export interface ExperienceSummaryResponse {
   category_counts: ExperienceCategoryCount[];
   tag_counts: ExperienceTagCount[];
   total: number;
-}
-
-// ============================================================================
-// User (GET /api/v1/users/me)
-// ============================================================================
-
-export interface UserMe {
-  id: string;
-  email: string;
-  full_name: string;
-  profile_image_url: string | null;
-  is_active: boolean;
-  oauth_provider: string;
-  created_at: string;
-  phone: string | null;
 }
 
 // ============================================================================

@@ -3,7 +3,7 @@
 import { useIsMobile } from "@/app/_hooks/useIsMobile";
 import { usePathname } from "next/navigation";
 import { Header } from "@/components/common/Header";
-import { LoginModalProvider } from "../_components/LoginModalContext";
+import { LoginModalProvider } from "@/components/common/LoginModalContext";
 
 // mobile-accessible paths
 const MOBILE_PATHS = ["/profile", "/payment", "/login", "/auth"];

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useUserMe } from "@/app/_hooks/useUserMe";
+import { useCurrentUser } from "@/app/_hooks/useCurrentUser";
 import { getAccessToken, logout, clearAuthTokens } from "@/libs/auth";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import { showToast } from "@/libs/toast";
@@ -26,7 +26,7 @@ function formatKoreanDate(iso: string | null): string {
 
 export function ProfilePageMobile() {
   const hasToken = !!getAccessToken();
-  const { data: user } = useUserMe();
+  const { data: user } = useCurrentUser();
   const { data: subscriptionStatus } = useSubscriptionStatus();
   const { data: paymentHistory } = usePaymentHistory();
   const queryClient = useQueryClient();

@@ -35,7 +35,7 @@ export function ExperienceOptionsMenu({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="min-w-0 rounded-3.5 p-0 border-0 shadow-[0px_4px_20px_0px_rgba(0,0,0,0.1)] bg-white"
+        className="min-w-0 rounded-3.5 p-0 border-0 shadow-dropdown bg-white"
       >
         <DropdownMenuItem
           onClick={(e) => {
