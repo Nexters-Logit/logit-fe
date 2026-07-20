@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { QuestionFieldItem } from "@/app/_components/QuestionFieldItem";
+import { QuestionFieldItem } from "@/components/common/QuestionFieldItem";
 import {
   createQuestion,
   updateQuestion,

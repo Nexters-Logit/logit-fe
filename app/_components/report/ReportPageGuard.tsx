@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { getAccessToken } from "@/libs/auth";
-import { useLoginModal } from "@/app/_components/LoginModalContext";
+import { useLoginModal } from "@/components/common/LoginModalContext";
 import { GuestReportPreview } from "./GuestReportPreview";
 import { GUEST_REPORT_DATASETS } from "@/app/_data/guestReportData";
 

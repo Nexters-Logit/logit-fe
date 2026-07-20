@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAccessToken } from "@/libs/auth";
-import { useLoginModal } from "../LoginModalContext";
-import { ExperienceModal } from "../ExperienceModal";
+import { useLoginModal } from "@/components/common/LoginModalContext";
+import { ExperienceModal } from "@/components/common/ExperienceModal";
 import { Button } from "@/components/ui/button";
 
 export function ReportExperienceButton() {

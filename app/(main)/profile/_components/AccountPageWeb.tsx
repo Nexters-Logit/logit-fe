@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "@/app/_hooks/useCurrentUser";
 import { useTokenBalance } from "@/app/_hooks/useTokenBalance";
 import { useSessionTokenGain } from "@/app/_hooks/useSessionTokenGain";
-import { useLoginModal } from "@/app/_components/LoginModalContext";
+import { useLoginModal } from "@/components/common/LoginModalContext";
 import { getAccessToken, clearAuthTokens } from "@/libs/auth";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import { showToast } from "@/libs/toast";
