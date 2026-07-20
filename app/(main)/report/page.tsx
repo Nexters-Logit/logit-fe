@@ -1,10 +1,10 @@
 import { Suspense } from "react";
-import { ReportExperienceListServer } from "../../_components/report/ReportExperienceListServer";
-import { ReportExperienceListSkeleton } from "../../_components/report/ReportExperienceListSkeleton";
-import { ExperienceAnalysisSection } from "../../_components/report/ExperienceAnalysisSection";
-import { ReportPageTitle } from "../../_components/report/ReportPageTitle";
-import { ReportExperienceButton } from "../../_components/report/ReportExperienceButton";
-import { ReportPageGuard } from "../../_components/report/ReportPageGuard";
+import { ReportExperienceListServer } from "./_components/ReportExperienceListServer";
+import { ReportExperienceListSkeleton } from "./_components/ReportExperienceListSkeleton";
+import { ExperienceAnalysisSection } from "./_components/ExperienceAnalysisSection";
+import { ReportPageTitle } from "./_components/ReportPageTitle";
+import { ReportExperienceButton } from "./_components/ReportExperienceButton";
+import { ReportPageGuard } from "./_components/ReportPageGuard";
 
 export default function ReportPage() {
   return (

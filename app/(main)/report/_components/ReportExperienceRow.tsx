@@ -9,7 +9,7 @@ import { showToast } from "@/libs/toast";
 import { useDeleteExperience } from "@/app/_hooks/useDeleteExperience";
 import { ExperienceOptionsMenu } from "./ExperienceOptionsMenu";
 import { ExperienceModal } from "@/components/common/ExperienceModal";
-import { DeleteExperienceDialog } from "../DeleteExperienceDialog";
+import { DeleteExperienceDialog } from "./DeleteExperienceDialog";
 import { ExperienceDetailModal } from "@/app/(main)/chat/[projectId]/_components/Experience/ExperienceDetailModal";
 
 const CATEGORY_ICON_MAP: Record<string, string> = {
