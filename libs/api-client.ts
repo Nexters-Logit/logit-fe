@@ -79,10 +79,8 @@ export async function apiFetch<T>(
   });
 
   if (response.status === 401 && !isRetry) {
-    console.log("401! ");
     if (typeof window !== "undefined") {
       const refreshed = await refreshAuthTokens();
-      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@refreshed");
       if (refreshed) return apiFetch<T>(endpoint, options, true);
     }
     throw new ApiError(401, "토큰 갱신에 실패했습니다. 다시 로그인해 주세요.");
