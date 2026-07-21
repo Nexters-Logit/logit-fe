@@ -189,7 +189,7 @@ export function ManageQuestionsModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="flex max-h-[90vh] h-168 flex-col overflow-hidden rounded-5 border-0 p-0 shadow-chat sm:max-w-207"
+        className="flex max-h-modal h-168 flex-col overflow-hidden rounded-5 border-0 p-0 shadow-chat sm:max-w-207"
         showCloseButton={false}
         onPointerDownOutside={(e) => {
           e.preventDefault();

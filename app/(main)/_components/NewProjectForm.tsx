@@ -233,7 +233,7 @@ export function NewProjectForm({ ref, onSubmit, isPending = false, onStepChange 
                       return !prev;
                     });
                   }}
-                  className={`flex items-center justify-center size-7 rounded-[7px] border transition-colors ${
+                  className={`flex items-center justify-center size-7 rounded-1.75 border transition-colors ${
                     isOngoing
                       ? "bg-primary-100 border-primary-100"
                       : "bg-white border-gray-100"

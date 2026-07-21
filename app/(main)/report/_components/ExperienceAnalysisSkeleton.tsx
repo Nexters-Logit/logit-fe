@@ -1,6 +1,6 @@
 function ChartCardSkeleton() {
   return (
-    <div className="flex flex-col shrink-0 w-[343px] h-[479px] rounded-7.5 bg-white p-5">
+    <div className="flex flex-col shrink-0 w-85.75 h-119.75 rounded-7.5 bg-white p-5">
       {/* 아이콘 */}
       <div className="w-8.5 h-8.5 bg-gray-50 rounded-lg animate-pulse mb-1.5" />
       {/* 제목 */}

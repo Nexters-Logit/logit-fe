@@ -69,7 +69,6 @@ export default function RootLayout({
       <body className={`${pretendard.variable} antialiased`}>
         <QueryProvider>
           {children}
-          {/* <MobileAppBanner /> */}
           <ToastProvider />
           <TokenGrantWatcher />
         </QueryProvider>

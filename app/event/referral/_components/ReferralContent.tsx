@@ -300,7 +300,7 @@ export function ReferralContent() {
           <button
             type="button"
             onClick={handleKakaoShare}
-            className="flex-1 flex items-center justify-center gap-2 py-3.75 rounded-3.5 bg-[#FEE500] text-[#191919] text-body-6-1 hover:brightness-95 transition-all"
+            className="flex-1 flex items-center justify-center gap-2 py-3.75 rounded-3.5 bg-kakao text-kakao-text text-body-6-1 hover:brightness-95 transition-all"
           >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
               <path fillRule="evenodd" clipRule="evenodd" d="M10 2C5.582 2 2 4.91 2 8.5c0 2.26 1.35 4.25 3.4 5.44l-.87 3.23a.3.3 0 0 0 .44.33L9.1 15.2c.29.04.59.06.9.06 4.418 0 8-2.91 8-6.5S14.418 2 10 2Z" fill="#191919" />

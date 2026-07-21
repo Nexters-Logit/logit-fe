@@ -25,7 +25,7 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="flex max-h-[90vh] w-125 flex-col overflow-hidden rounded-5 border-0 pt-10 px-12.5 pb-7.5 shadow-chat sm:max-w-2xl gap-9"
+        className="flex max-h-modal w-125 flex-col overflow-hidden rounded-5 border-0 pt-10 px-12.5 pb-7.5 shadow-chat sm:max-w-2xl gap-9"
         showCloseButton={false}
         onPointerDownOutside={(e) => {
           e.preventDefault();

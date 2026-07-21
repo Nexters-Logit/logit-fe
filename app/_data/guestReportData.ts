@@ -1,6 +1,6 @@
 import { EXPERIENCE_CATEGORY, EXPERIENCE_TYPE } from "@/types/api";
-import type { TypeCount } from "@/app/_components/report/TypeCountsBarChart";
-import type { TagCount } from "@/app/_components/report/CategoryCountsDonutChart";
+import type { TypeCount } from "@/app/(main)/report/_components/TypeCountsBarChart";
+import type { TagCount } from "@/app/(main)/report/_components/CategoryCountsDonutChart";
 
 // 리포트 미리보기에 사용할 카테고리/타입 순서 (ExperienceAnalysisSection과 동일)
 const CATEGORY_ORDER = [
