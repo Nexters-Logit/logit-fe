@@ -26,7 +26,7 @@ export function ReportChartCard({
     Array.isArray(data) && data.some((item) => item.count > 0);
 
   return (
-    <div className="flex flex-col shrink-0 w-85.75 h-119.75 rounded-7.5 bg-white p-5">
+    <div className="flex flex-col shrink-0 w-85.75 h-119.75 rounded-7.5 bg-white p-7.5">
       {hasNonZeroData ? (
         <div className="flex flex-col">
           <Image
