@@ -37,7 +37,7 @@ export default function MainLayout({
 
   return (
     <LoginModalProvider>
-      <div className="h-screen flex flex-col overflow-hidden bg-white">
+      <div className="flex min-h-dvh flex-col bg-white md:h-screen md:overflow-hidden">
         {/* Hide header on mobile */}
         {!isMobile && <Header />}
         {children}
