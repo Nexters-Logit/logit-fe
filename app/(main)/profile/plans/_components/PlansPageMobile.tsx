@@ -49,7 +49,7 @@ export function PlansPageMobile() {
     setIsCanceling(true);
     try {
       await apiFetch(API_ENDPOINTS.paymentCancel(cancelTarget), {
-        method: "POST",
+        method: "DELETE",
       });
       showToast.success("구독이 취소되었어요.");
       await queryClient.invalidateQueries({ queryKey: ["subscriptionStatus"] });
