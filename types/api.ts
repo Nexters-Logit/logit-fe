@@ -332,6 +332,7 @@ export interface QuestionUpdate {
   question?: string;
   max_length?: number | null;
   answer?: string;
+  is_completed?: boolean;
 }
 
 // ============================================================================
