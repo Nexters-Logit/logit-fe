@@ -160,18 +160,17 @@ export function PlansPageMobile() {
                   <span className="shrink-0 rounded-full bg-primary-100 px-2.5 py-1 text-body-9-2 text-white">
                     이용중
                   </span>
-                ) : !plan.is_free ? (
-                  <span
-                    className={cn(
-                      "shrink-0 rounded-full border px-3 py-1 text-body-9-2",
-                      recommended
-                        ? "border-primary-100 text-primary-200"
-                        : "border-gray-100 text-gray-300",
-                    )}
-                  >
-                    {recommended ? "추천" : hasActiveSubscription ? "변경" : "선택"}
+                ) : (
+                  <span className="shrink-0 flex items-center justify-center gap-2.5 rounded-full border border-gray-300 bg-white px-2.5 py-1 text-body-9-2 text-gray-300">
+                    {plan.is_free
+                      ? "변경"
+                      : recommended
+                        ? "추천"
+                        : hasActiveSubscription
+                          ? "변경"
+                          : "선택"}
                   </span>
-                ) : null}
+                )}
               </div>
 
               {plan.is_free ? (
