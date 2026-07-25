@@ -138,7 +138,7 @@ export const API_ENDPOINTS = {
   experienceSearch: (q: string) =>
     `/api/v1/experiences/search?q=${encodeURIComponent(q)}`,
   matchQuestion: (questionId: string) =>
-    `/api/v1/experiences/match-question/${questionId}`,
+    `/api/v1/experiences/matches?question_id=${questionId}`,
   // Projects & Questions
   projects: "/api/v1/projects/",
   projectsList: (params?: { skip?: number; limit?: number }) =>
