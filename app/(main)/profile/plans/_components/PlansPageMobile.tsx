@@ -17,16 +17,39 @@ function discountPercent(original: number, price: number) {
   return Math.round(((original - price) / original) * 100);
 }
 
+const FREE_PLAN: PlanData = {
+  id: "logit:free",
+  subscription_type: "logit",
+  plan_key: "free",
+  name: "Free",
+  original_price: 0,
+  price: 0,
+  monthly_tokens: 50,
+  description: null,
+  badge: null,
+  features: null,
+  is_recommended: false,
+  is_free: true,
+  display_order: 0,
+  show_on_mobile: true,
+};
+
 export function PlansPageMobile() {
   const { data: subscriptionStatus } = useSubscriptionStatus();
   const { data: allPlans = [], isError: plansError } = usePlans();
-  const plans = allPlans.filter((p) => p.show_on_mobile ?? p.subscription_type === "logit");
+  const plans = [
+    FREE_PLAN,
+    ...allPlans.filter((p) => p.show_on_mobile ?? p.subscription_type === "logit"),
+  ];
   const queryClient = useQueryClient();
   const [cancelTarget, setCancelTarget] = useState<SubscriptionType | null>(null);
   const [isCanceling, setIsCanceling] = useState(false);
   const [paymentPlan, setPaymentPlan] = useState<MobilePlanInfo | null>(null);
 
   function isActivePlan(plan: PlanData) {
+    if (plan.is_free) {
+      return !subscriptionStatus?.logit.is_active;
+    }
     const status =
       plan.subscription_type === "logit"
         ? subscriptionStatus?.logit
@@ -96,7 +119,7 @@ export function PlansPageMobile() {
           const highlighted = active || recommended;
           const discount = discountPercent(plan.original_price, plan.price);
 
-          const handleCardClick = active
+          const handleCardClick = (active || plan.is_free)
             ? undefined
             : () =>
                 setPaymentPlan({
@@ -137,7 +160,7 @@ export function PlansPageMobile() {
                   <span className="shrink-0 rounded-full bg-primary-100 px-2.5 py-1 text-body-9-2 text-white">
                     이용중
                   </span>
-                ) : (
+                ) : !plan.is_free ? (
                   <span
                     className={cn(
                       "shrink-0 rounded-full border px-3 py-1 text-body-9-2",
@@ -148,39 +171,52 @@ export function PlansPageMobile() {
                   >
                     {recommended ? "추천" : hasActiveSubscription ? "변경" : "선택"}
                   </span>
-                )}
+                ) : null}
               </div>
 
-              <div className="mt-2 flex items-baseline gap-1.5">
-                <span
+              {plan.is_free ? (
+                <p
                   className={cn(
-                    "text-body-8-3 line-through",
-                    highlighted ? "text-gray-200" : "text-gray-100",
-                  )}
-                >
-                  {formatPrice(plan.original_price)}원
-                </span>
-                <span
-                  className={cn(
-                    "text-body-5-2",
+                    "mt-2 text-body-5-2",
                     highlighted ? "text-gray-500" : "text-gray-300",
                   )}
                 >
-                  {formatPrice(plan.price)}원
-                </span>
-              </div>
+                  무료
+                </p>
+              ) : (
+                <>
+                  <div className="mt-2 flex items-baseline gap-1.5">
+                    <span
+                      className={cn(
+                        "text-body-8-3 line-through",
+                        highlighted ? "text-gray-200" : "text-gray-100",
+                      )}
+                    >
+                      {formatPrice(plan.original_price)}원
+                    </span>
+                    <span
+                      className={cn(
+                        "text-body-5-2",
+                        highlighted ? "text-gray-500" : "text-gray-300",
+                      )}
+                    >
+                      {formatPrice(plan.price)}원
+                    </span>
+                  </div>
 
-              <p
-                className={cn(
-                  "mt-1.5 flex items-center gap-1 text-body-9-3",
-                  active ? "text-primary-200" : "text-gray-200",
-                )}
-              >
-                <Info className="size-3.5 shrink-0" aria-hidden="true" />
-                {active
-                  ? `최대 ${discount}% 혜택을 이용 중입니다!`
-                  : `최대 ${discount}% 혜택을 받아보세요!`}
-              </p>
+                  <p
+                    className={cn(
+                      "mt-1.5 flex items-center gap-1 text-body-9-3",
+                      active ? "text-primary-200" : "text-gray-200",
+                    )}
+                  >
+                    <Info className="size-3.5 shrink-0" aria-hidden="true" />
+                    {active
+                      ? `최대 ${discount}% 혜택을 이용 중입니다!`
+                      : `최대 ${discount}% 혜택을 받아보세요!`}
+                  </p>
+                </>
+              )}
             </div>
           );
         })}
