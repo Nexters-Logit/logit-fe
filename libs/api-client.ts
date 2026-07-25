@@ -160,7 +160,7 @@ export const API_ENDPOINTS = {
   // Payments
   paymentInitiate: "/api/v1/payments/initiate",
   paymentHistory: "/api/v1/payments/history",
-  paymentCancel: (subType: string) => `/api/v1/payments/cancel/${subType}`,
+  paymentCancel: (subType: string) => `/api/v1/subscriptions/${subType}`,
 
   // Plans
   plans: "/api/v1/plans/",
