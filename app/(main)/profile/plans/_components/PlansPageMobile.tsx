@@ -157,7 +157,7 @@ export function PlansPageMobile() {
                 </h2>
 
                 {active ? (
-                  <span className="shrink-0 rounded-full bg-primary-100 px-2.5 py-1 medium_10 text-white">
+                  <span className="shrink-0 flex items-center justify-center gap-2.5 rounded-full bg-primary-100 px-2.5 py-1 medium_10 text-white">
                     이용중
                   </span>
                 ) : (
