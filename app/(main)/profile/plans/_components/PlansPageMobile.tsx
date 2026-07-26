@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronRight } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/libs/utils";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
@@ -185,17 +184,19 @@ const handleCardClick = (active || plan.is_free)
       </div>
 
       {hasActiveSubscription && (
-        <p className="mt-10 text-center text-body-8-3 text-gray-200">
-          이용 중인 요금제 해지를 원하시나요?{" "}
-          <button
-            type="button"
-            onClick={() => primaryActiveType && setCancelTarget(primaryActiveType)}
-            className="inline-flex items-center gap-0.5 font-semibold text-gray-300 underline underline-offset-2 hover:text-primary-200"
-          >
-            구독 취소 하러 가기
-            <ChevronRight className="size-3.5" aria-hidden="true" />
-          </button>
-        </p>
+        <div className="mt-12 text-center">
+          <p className="regular_13 text-gray-300">이용 중인 요금제 해지를 원하시나요?</p>
+          <p className="mt-0.5 regular_13 text-gray-300">
+            <button
+              type="button"
+              onClick={() => primaryActiveType && setCancelTarget(primaryActiveType)}
+              className="medium_13 text-gray-300 underline underline-offset-2"
+            >
+              구독 취소
+            </button>
+            {" "}하러 가기 &gt;
+          </p>
+        </div>
       )}
 
 
