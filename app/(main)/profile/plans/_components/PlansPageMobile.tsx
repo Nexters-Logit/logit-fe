@@ -11,6 +11,7 @@ import { usePlans } from "../_hooks/usePlans";
 import { formatPrice } from "../_utils/formatPayment";
 import { MobileCancelDialog } from "@/components/common/MobileCancelDialog";
 import { MobilePaymentSheet, type MobilePlanInfo } from "./MobilePaymentSheet";
+import { MobileNavHeader } from "./MobileNavHeader";
 
 
 const FREE_PLAN: PlanData = {
@@ -99,7 +100,9 @@ export function PlansPageMobile() {
   }
 
   return (
-    <main className="flex-1 overflow-y-auto bg-white px-5 py-8 scrollbar-hide">
+    <>
+      <MobileNavHeader backHref="/profile" />
+      <main className="flex-1 overflow-y-auto bg-white px-5 py-8 scrollbar-hide">
       <h1 className="mb-2 self-stretch bold_18 text-gray-400">Logit 요금제</h1>
 
       <div className="mb-9 self-stretch medium_14 text-gray-500">
@@ -212,5 +215,6 @@ const handleCardClick = (active || plan.is_free)
         onClose={() => setPaymentPlan(null)}
       />
     </main>
+    </>
   );
 }
