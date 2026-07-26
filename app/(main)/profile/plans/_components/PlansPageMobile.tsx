@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronRight, Info } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/libs/utils";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
@@ -13,9 +13,6 @@ import { formatPrice } from "../_utils/formatPayment";
 import { MobileCancelDialog } from "@/components/common/MobileCancelDialog";
 import { MobilePaymentSheet, type MobilePlanInfo } from "./MobilePaymentSheet";
 
-function discountPercent(original: number, price: number) {
-  return Math.round(((original - price) / original) * 100);
-}
 
 const FREE_PLAN: PlanData = {
   id: "logit:free",
@@ -117,9 +114,7 @@ export function PlansPageMobile() {
           const active = isActivePlan(plan);
           const recommended = isRecommended(plan);
           const highlighted = active || recommended;
-          const discount = discountPercent(plan.original_price, plan.price);
-
-          const handleCardClick = (active || plan.is_free)
+const handleCardClick = (active || plan.is_free)
             ? undefined
             : () =>
                 setPaymentPlan({
@@ -187,17 +182,6 @@ export function PlansPageMobile() {
                         </span>
                       </div>
 
-                      <p
-                        className={cn(
-                          "mt-1.5 flex items-center gap-1 text-body-9-3",
-                          active ? "text-primary-200" : "text-gray-200",
-                        )}
-                      >
-                        <Info className="size-3.5 shrink-0" aria-hidden="true" />
-                        {active
-                          ? `최대 ${discount}% 혜택을 이용 중입니다!`
-                          : `최대 ${discount}% 혜택을 받아보세요!`}
-                      </p>
                     </>
                   )}
                 </div>
