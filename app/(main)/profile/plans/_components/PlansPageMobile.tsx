@@ -146,15 +146,61 @@ export function PlansPageMobile() {
                 !active && "cursor-pointer active:opacity-70",
               )}
             >
-              <div className="flex items-start justify-between gap-3">
-                <h2
-                  className={cn(
-                    "text-body-5-2",
-                    highlighted ? "text-gray-500" : "text-gray-300",
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <h2
+                    className={cn(
+                      "text-body-5-2",
+                      highlighted ? "text-gray-500" : "text-gray-300",
+                    )}
+                  >
+                    {plan.name}
+                  </h2>
+
+                  {plan.is_free ? (
+                    <p
+                      className={cn(
+                        "mt-2 text-body-5-2",
+                        highlighted ? "text-gray-500" : "text-gray-300",
+                      )}
+                    >
+                      무료
+                    </p>
+                  ) : (
+                    <>
+                      <div className="mt-2 flex items-baseline gap-1.5">
+                        <span
+                          className={cn(
+                            "text-body-8-3 line-through",
+                            highlighted ? "text-gray-200" : "text-gray-100",
+                          )}
+                        >
+                          {formatPrice(plan.original_price)}원
+                        </span>
+                        <span
+                          className={cn(
+                            "text-body-5-2",
+                            highlighted ? "text-gray-500" : "text-gray-300",
+                          )}
+                        >
+                          {formatPrice(plan.price)}원
+                        </span>
+                      </div>
+
+                      <p
+                        className={cn(
+                          "mt-1.5 flex items-center gap-1 text-body-9-3",
+                          active ? "text-primary-200" : "text-gray-200",
+                        )}
+                      >
+                        <Info className="size-3.5 shrink-0" aria-hidden="true" />
+                        {active
+                          ? `최대 ${discount}% 혜택을 이용 중입니다!`
+                          : `최대 ${discount}% 혜택을 받아보세요!`}
+                      </p>
+                    </>
                   )}
-                >
-                  {plan.name}
-                </h2>
+                </div>
 
                 {active ? (
                   <span className="shrink-0 flex items-center justify-center gap-2.5 rounded-full bg-primary-100 px-2.5 py-1 medium_10 text-white">
@@ -172,50 +218,6 @@ export function PlansPageMobile() {
                   </span>
                 )}
               </div>
-
-              {plan.is_free ? (
-                <p
-                  className={cn(
-                    "mt-2 text-body-5-2",
-                    highlighted ? "text-gray-500" : "text-gray-300",
-                  )}
-                >
-                  무료
-                </p>
-              ) : (
-                <>
-                  <div className="mt-2 flex items-baseline gap-1.5">
-                    <span
-                      className={cn(
-                        "text-body-8-3 line-through",
-                        highlighted ? "text-gray-200" : "text-gray-100",
-                      )}
-                    >
-                      {formatPrice(plan.original_price)}원
-                    </span>
-                    <span
-                      className={cn(
-                        "text-body-5-2",
-                        highlighted ? "text-gray-500" : "text-gray-300",
-                      )}
-                    >
-                      {formatPrice(plan.price)}원
-                    </span>
-                  </div>
-
-                  <p
-                    className={cn(
-                      "mt-1.5 flex items-center gap-1 text-body-9-3",
-                      active ? "text-primary-200" : "text-gray-200",
-                    )}
-                  >
-                    <Info className="size-3.5 shrink-0" aria-hidden="true" />
-                    {active
-                      ? `최대 ${discount}% 혜택을 이용 중입니다!`
-                      : `최대 ${discount}% 혜택을 받아보세요!`}
-                  </p>
-                </>
-              )}
             </div>
           );
         })}
