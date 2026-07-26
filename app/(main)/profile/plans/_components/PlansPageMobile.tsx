@@ -45,7 +45,7 @@ export function PlansPageMobile() {
 
   function isActivePlan(plan: PlanData) {
     if (plan.is_free) {
-      return !subscriptionStatus?.logit.is_active;
+      return !!subscriptionStatus && !subscriptionStatus.logit.is_active;
     }
     const status =
       plan.subscription_type === "logit"
@@ -83,7 +83,7 @@ export function PlansPageMobile() {
   };
 
   function isRecommended(plan: PlanData) {
-    return !hasActiveSubscription && plan.is_recommended;
+    return !subscriptionStatus && plan.is_recommended;
   }
 
   if (plansError) {
@@ -136,18 +136,18 @@ const handleCardClick = (active || plan.is_free)
               }
               className={cn(
                 "rounded-5 border px-6 pb-5 pt-6 transition-all",
-                highlighted ? "border-primary-100 bg-white" : "border-gray-70 bg-gray-20",
+                highlighted ? "border-primary-100 bg-white" : !subscriptionStatus ? "border-gray-60 bg-white" : "border-gray-70 bg-gray-20",
                 !active && "cursor-pointer active:opacity-70",
               )}
             >
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <h2 className="medium_20 text-gray-400">
+                  <h2 className={cn("medium_20", highlighted ? "text-gray-400" : !subscriptionStatus ? "text-gray-300" : "text-gray-200")}>
                     {plan.name}
                   </h2>
 
                   {plan.is_free ? (
-                    <p className="mt-1 medium_14 text-gray-400">
+                    <p className={cn("mt-1 medium_14", highlighted ? "text-gray-400" : "text-gray-300")}>
                       0원
                     </p>
                   ) : (
@@ -155,7 +155,7 @@ const handleCardClick = (active || plan.is_free)
                       <span className="medium_10 line-through text-gray-300">
                         {formatPrice(plan.original_price)}
                       </span>
-                      <span className="medium_14 text-gray-300">
+                      <span className={cn("medium_14", highlighted ? "text-gray-400" : "text-gray-300")}>
                         {formatPrice(plan.price)}원
                       </span>
                     </div>
@@ -169,17 +169,15 @@ const handleCardClick = (active || plan.is_free)
                   <span className="shrink-0 flex items-center justify-center gap-2.5 rounded-full bg-primary-100 px-2.5 py-1 medium_10 text-white">
                     이용중
                   </span>
-                ) : (
-                  <span className="shrink-0 flex items-center justify-center gap-2.5 rounded-full border border-gray-300 bg-white px-2.5 py-1 medium_10 text-gray-300">
-                    {plan.is_free
-                      ? "변경"
-                      : recommended
-                        ? "추천"
-                        : hasActiveSubscription
-                          ? "변경"
-                          : "선택"}
+                ) : recommended ? (
+                  <span className="shrink-0 flex items-center justify-center gap-2.5 rounded-full border border-primary-200 bg-primary-20 px-2.5 py-1 medium_10 text-primary-200">
+                    추천
                   </span>
-                )}
+                ) : subscriptionStatus ? (
+                  <span className="shrink-0 flex items-center justify-center gap-2.5 rounded-full border border-gray-300 bg-white px-2.5 py-1 medium_10 text-gray-300">
+                    변경
+                  </span>
+                ) : null}
               </div>
             </div>
           );
