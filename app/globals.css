@@ -29,7 +29,7 @@
   --color-gray-70: #e1e4ed;
   --color-gray-80: #edeef0;
   --color-gray-100: #bec2d1;
-  --color-gray-200: #828699;
+  --color-gray-200: #989cb2;
   --color-gray-300: #6b6f84;
   --color-gray-400: #262626;
   --color-gray-500: #17181e;
@@ -192,6 +192,19 @@
   font-size: 14px;
   font-weight: 600;
   line-height: 1.4;
+}
+
+.semibold_12 {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.medium_20 {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.4px;
 }
 
 .medium_16 {

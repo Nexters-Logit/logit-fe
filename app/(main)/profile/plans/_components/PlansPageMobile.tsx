@@ -103,12 +103,12 @@ export function PlansPageMobile() {
     <main className="flex-1 overflow-y-auto bg-white px-5 py-8 scrollbar-hide">
       <h1 className="mb-2 self-stretch bold_18 text-gray-400">Logit 요금제</h1>
 
-      <div className="mb-6 self-stretch medium_14 text-gray-500">
+      <div className="mb-9 self-stretch medium_14 text-gray-500">
         <p>정기결제 이용 동의 시 요금은 매월 자동으로 결제됩니다.</p>
         <p>구독은 언제든지 해지 할 수 있습니다.</p>
       </div>
 
-      <div className={cn("flex flex-col gap-4", hasActiveSubscription && "mt-6")}>
+      <div className={cn("flex flex-col gap-3.5", hasActiveSubscription && "mt-6")}>
         {plans.map((plan) => {
           const active = isActivePlan(plan);
           const recommended = isRecommended(plan);
@@ -135,19 +135,14 @@ const handleCardClick = (active || plan.is_free)
                   : (e) => e.key === "Enter" && handleCardClick?.()
               }
               className={cn(
-                "rounded-2xl border p-5 transition-all",
+                "rounded-5 border p-5 transition-all",
                 highlighted ? "border-primary-100 bg-white" : "border-gray-70 bg-gray-20",
                 !active && "cursor-pointer active:opacity-70",
               )}
             >
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <h2
-                    className={cn(
-                      "text-body-5-2",
-                      highlighted ? "text-gray-500" : "text-gray-300",
-                    )}
-                  >
+                  <h2 className="medium_20 text-gray-400">
                     {plan.name}
                   </h2>
 
@@ -158,7 +153,7 @@ const handleCardClick = (active || plan.is_free)
                         highlighted ? "text-gray-500" : "text-gray-300",
                       )}
                     >
-                      무료
+                      0원
                     </p>
                   ) : (
                     <div className="mt-2 flex items-baseline gap-1.5">
@@ -180,12 +175,7 @@ const handleCardClick = (active || plan.is_free)
                       </span>
                     </div>
                   )}
-                  <p
-                    className={cn(
-                      "mt-1.5 text-body-9-3",
-                      highlighted ? "text-gray-300" : "text-gray-200",
-                    )}
-                  >
+                  <p className="mt-1.5 semibold_12 text-gray-200">
                     월 {plan.monthly_tokens.toLocaleString()}토큰 제공
                   </p>
                 </div>
