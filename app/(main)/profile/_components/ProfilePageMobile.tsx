@@ -114,7 +114,7 @@ export function ProfilePageMobile() {
           </div>
           <Link
             href="/profile/plans"
-            className="flex items-center justify-center gap-1 border-t border-gray-70 py-3 text-body-7-2 text-gray-300 transition-colors bg-gray-20"
+            className="flex items-center justify-center gap-1 border-t border-gray-70 py-3 regular_14 text-gray-300 transition-colors bg-gray-20"
           >
             요금제 더보기
             <ChevronRight className="size-4" aria-hidden="true" />
@@ -138,10 +138,10 @@ export function ProfilePageMobile() {
               return (
                 <div key={item.id} className="py-4">
                   <div className="flex items-baseline justify-between">
-                    <span className="text-body-7-2 text-gray-400">
+                    <span className="regular_14 text-gray-400">
                       {formatDate(item.paid_at)}.
                     </span>
-                    <span className="text-body-7-2 text-gray-400">
+                    <span className="regular_14 text-gray-400">
                       {formatPrice(item.amount)}원
                     </span>
                   </div>
@@ -176,14 +176,14 @@ export function ProfilePageMobile() {
         <div className="flex flex-col">
           <Link
             href="#"
-            className="flex w-full items-center justify-between py-4 text-body-7-2 text-gray-400 transition-colors hover:text-primary-200"
+            className="flex w-full items-center justify-between py-4 regular_14 text-gray-400 transition-colors hover:text-primary-200"
           >
             가이드 페이지
             <ChevronRight className="size-4 text-gray-200" aria-hidden="true" />
           </Link>
           <Link
             href="#"
-            className="flex w-full items-center justify-between py-4 text-body-7-2 text-gray-400 transition-colors hover:text-primary-200"
+            className="flex w-full items-center justify-between py-4 regular_14 text-gray-400 transition-colors hover:text-primary-200"
           >
             문의하기
             <ChevronRight className="size-4 text-gray-200" aria-hidden="true" />
@@ -192,7 +192,7 @@ export function ProfilePageMobile() {
             type="button"
             disabled={isLoggingOut}
             onClick={handleLogout}
-            className="flex w-full items-center justify-between py-4 text-body-7-2 text-gray-400 transition-colors hover:text-primary-200 disabled:opacity-50"
+            className="flex w-full items-center justify-between py-4 regular_14 text-gray-400 transition-colors hover:text-primary-200 disabled:opacity-50"
           >
             {isLoggingOut ? "로그아웃 중..." : "로그아웃"}
             <ChevronRight className="size-4 text-gray-200" aria-hidden="true" />
@@ -200,7 +200,7 @@ export function ProfilePageMobile() {
           <button
             type="button"
             onClick={() => setShowDeleteConfirm(true)}
-            className="flex w-full items-center justify-between py-4 text-body-7-2 text-gray-300 transition-colors hover:text-red-400"
+            className="flex w-full items-center justify-between py-4 regular_14 text-gray-400 transition-colors hover:text-red-400"
           >
             회원탈퇴
             <ChevronRight className="size-4 text-gray-200" aria-hidden="true" />
