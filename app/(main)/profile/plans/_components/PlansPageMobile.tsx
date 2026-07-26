@@ -162,28 +162,33 @@ const handleCardClick = (active || plan.is_free)
                       무료
                     </p>
                   ) : (
-                    <>
-                      <div className="mt-2 flex items-baseline gap-1.5">
-                        <span
-                          className={cn(
-                            "text-body-8-3 line-through",
-                            highlighted ? "text-gray-200" : "text-gray-100",
-                          )}
-                        >
-                          {formatPrice(plan.original_price)}원
-                        </span>
-                        <span
-                          className={cn(
-                            "text-body-5-2",
-                            highlighted ? "text-gray-500" : "text-gray-300",
-                          )}
-                        >
-                          {formatPrice(plan.price)}원
-                        </span>
-                      </div>
-
-                    </>
+                    <div className="mt-2 flex items-baseline gap-1.5">
+                      <span
+                        className={cn(
+                          "text-body-8-3 line-through",
+                          highlighted ? "text-gray-200" : "text-gray-100",
+                        )}
+                      >
+                        {formatPrice(plan.original_price)}원
+                      </span>
+                      <span
+                        className={cn(
+                          "text-body-5-2",
+                          highlighted ? "text-gray-500" : "text-gray-300",
+                        )}
+                      >
+                        {formatPrice(plan.price)}원
+                      </span>
+                    </div>
                   )}
+                  <p
+                    className={cn(
+                      "mt-1.5 text-body-9-3",
+                      highlighted ? "text-gray-300" : "text-gray-200",
+                    )}
+                  >
+                    월 {plan.monthly_tokens.toLocaleString()}토큰 제공
+                  </p>
                 </div>
 
                 {active ? (
