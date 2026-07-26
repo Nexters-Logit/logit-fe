@@ -114,7 +114,7 @@ export function ProfilePageMobile() {
           </div>
           <Link
             href="/profile/plans"
-            className="flex items-center justify-center gap-1 border-t border-gray-70 py-3 text-body-7-2 text-gray-300 transition-colors hover:bg-gray-20"
+            className="flex items-center justify-center gap-1 border-t border-gray-70 py-3 text-body-7-2 text-gray-300 transition-colors bg-gray-20"
           >
             요금제 더보기
             <ChevronRight className="size-4" aria-hidden="true" />
