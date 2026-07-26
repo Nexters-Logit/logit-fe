@@ -89,7 +89,7 @@ export function PlansPageMobile() {
   if (plansError) {
     return (
       <main className="flex-1 overflow-y-auto bg-white px-5 py-8 scrollbar-hide">
-        <h1 className="mb-6 text-title-1 font-bold text-gray-500">Logit 요금제</h1>
+        <h1 className="mb-6 self-stretch bold_18 text-gray-400">Logit 요금제</h1>
         <p className="text-center text-body-7-3 text-gray-300">
           요금제 정보를 불러오지 못했어요.
           <br />
@@ -101,13 +101,12 @@ export function PlansPageMobile() {
 
   return (
     <main className="flex-1 overflow-y-auto bg-white px-5 py-8 scrollbar-hide">
-      <h1 className="mb-2 text-title-1 font-bold text-gray-500">Logit 요금제</h1>
+      <h1 className="mb-2 self-stretch bold_18 text-gray-400">Logit 요금제</h1>
 
-      {!hasActiveSubscription && (
-        <p className="mb-6 text-body-7-3 text-gray-200">
-          결제 정보를 등록 하려면 약관 동의가 필요해요.
-        </p>
-      )}
+      <div className="mb-6 self-stretch medium_14 text-gray-500">
+        <p>정기결제 이용 동의 시 요금은 매월 자동으로 결제됩니다.</p>
+        <p>구독은 언제든지 해지 할 수 있습니다.</p>
+      </div>
 
       <div className={cn("flex flex-col gap-4", hasActiveSubscription && "mt-6")}>
         {plans.map((plan) => {
@@ -225,6 +224,7 @@ const handleCardClick = (active || plan.is_free)
           </button>
         </p>
       )}
+
 
       <MobileCancelDialog
         open={cancelTarget !== null}
