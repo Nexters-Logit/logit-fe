@@ -173,7 +173,21 @@ export function ProfilePageMobile() {
             <span className="text-body-9-3 text-gray-200">{user.email}</span>
           )}
         </div>
-        <div className="divide-y divide-gray-70">
+        <div className="flex flex-col">
+          <Link
+            href="#"
+            className="flex w-full items-center justify-between py-4 text-body-7-2 text-gray-400 transition-colors hover:text-primary-200"
+          >
+            가이드 페이지
+            <ChevronRight className="size-4 text-gray-200" aria-hidden="true" />
+          </Link>
+          <Link
+            href="#"
+            className="flex w-full items-center justify-between py-4 text-body-7-2 text-gray-400 transition-colors hover:text-primary-200"
+          >
+            문의하기
+            <ChevronRight className="size-4 text-gray-200" aria-hidden="true" />
+          </Link>
           <button
             type="button"
             disabled={isLoggingOut}
