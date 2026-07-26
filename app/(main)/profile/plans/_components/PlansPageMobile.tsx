@@ -135,7 +135,7 @@ const handleCardClick = (active || plan.is_free)
                   : (e) => e.key === "Enter" && handleCardClick?.()
               }
               className={cn(
-                "rounded-5 border p-5 transition-all",
+                "rounded-5 border px-6 pb-5 pt-6 transition-all",
                 highlighted ? "border-primary-100 bg-white" : "border-gray-70 bg-gray-20",
                 !active && "cursor-pointer active:opacity-70",
               )}
@@ -147,12 +147,7 @@ const handleCardClick = (active || plan.is_free)
                   </h2>
 
                   {plan.is_free ? (
-                    <p
-                      className={cn(
-                        "mt-1 text-body-5-2",
-                        highlighted ? "text-gray-500" : "text-gray-300",
-                      )}
-                    >
+                    <p className="mt-1 medium_14 text-gray-400">
                       0원
                     </p>
                   ) : (
