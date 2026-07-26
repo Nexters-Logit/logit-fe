@@ -149,33 +149,23 @@ const handleCardClick = (active || plan.is_free)
                   {plan.is_free ? (
                     <p
                       className={cn(
-                        "mt-2 text-body-5-2",
+                        "mt-1 text-body-5-2",
                         highlighted ? "text-gray-500" : "text-gray-300",
                       )}
                     >
                       0원
                     </p>
                   ) : (
-                    <div className="mt-2 flex items-baseline gap-1.5">
-                      <span
-                        className={cn(
-                          "text-body-8-3 line-through",
-                          highlighted ? "text-gray-200" : "text-gray-100",
-                        )}
-                      >
-                        {formatPrice(plan.original_price)}원
+                    <div className="mt-1 flex items-baseline gap-1">
+                      <span className="medium_10 line-through text-gray-300">
+                        {formatPrice(plan.original_price)}
                       </span>
-                      <span
-                        className={cn(
-                          "text-body-5-2",
-                          highlighted ? "text-gray-500" : "text-gray-300",
-                        )}
-                      >
+                      <span className="medium_14 text-gray-300">
                         {formatPrice(plan.price)}원
                       </span>
                     </div>
                   )}
-                  <p className="mt-1.5 semibold_12 text-gray-200">
+                  <p className="mt-1 semibold_12 text-gray-200">
                     월 {plan.monthly_tokens.toLocaleString()}토큰 제공
                   </p>
                 </div>
