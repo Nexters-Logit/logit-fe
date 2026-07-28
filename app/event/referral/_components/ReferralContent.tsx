@@ -10,6 +10,7 @@ import { getAccessToken } from "@/libs/auth";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import { showToast } from "@/libs/toast";
 import { burstConfetti } from "@/libs/confetti";
+import { useLoginModal } from "@/components/common/LoginModalContext";
 
 declare global {
   interface Window {
@@ -22,6 +23,11 @@ declare global {
 }
 
 const TOKENS_PER_REFERRAL = 10;
+
+// 비로그인 방문자에게 "로그인하면 이렇게 보인다"를 보여주기 위한 예시 데이터.
+const SAMPLE_CODE = "LOGIT-7F3K9QXZ";
+const SAMPLE_INVITED_COUNT = 3;
+const SAMPLE_EARNED_TOKENS = SAMPLE_INVITED_COUNT * TOKENS_PER_REFERRAL;
 
 interface ReferralStats {
   code: string;
@@ -53,8 +59,8 @@ function useApplyReferral() {
 }
 
 export function ReferralContent() {
+  const { setLoginModalOpen } = useLoginModal();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
   const [inviteCode, setInviteCode] = useState("");
@@ -76,7 +82,7 @@ export function ReferralContent() {
 
   const requireAuth = (action: () => void) => {
     if (!isLoggedIn) {
-      setShowLoginModal(true);
+      setLoginModalOpen(true);
       return;
     }
     action();
@@ -208,7 +214,7 @@ export function ReferralContent() {
               type="text"
               value={inviteCode}
               onChange={(e) => setInviteCode(e.target.value)}
-              onFocus={() => !isLoggedIn && setShowLoginModal(true)}
+              onFocus={() => !isLoggedIn && setLoginModalOpen(true)}
               placeholder="초대 코드를 입력하세요"
               className="flex-1 bg-gray-50 rounded-3.5 px-4 py-3.75 text-body-6-3 text-gray-400 placeholder:text-gray-100 outline-none focus:ring-1 focus:ring-primary-100"
             />
@@ -233,114 +239,104 @@ export function ReferralContent() {
         )}
       </section>
 
-      {/* 내 초대 링크 + 코드 */}
-      <section>
-        <h2 className="text-title-2-2 text-gray-500 mb-4">내 초대 링크</h2>
+      {/* 내 초대 링크·현황 (비로그인 시 예시 데이터 미리보기 + 로그인 유도) */}
+      <div className="relative">
+        <div className={isLoggedIn ? "flex flex-col gap-12" : "flex flex-col gap-12 pointer-events-none select-none"}>
+          {/* 내 초대 링크 + 코드 */}
+          <section>
+            <h2 className="text-title-2-2 text-gray-500 mb-4">내 초대 링크</h2>
 
-        <div className="flex gap-3 mb-3">
-          <div className="flex-1 bg-gray-50 rounded-3.5 px-4 py-3.75 flex items-center">
-            <span className="text-body-5-1 text-gray-400 tracking-widest">
-              {isLoggedIn && referral ? referral.code : "••••••••••••"}
-            </span>
-          </div>
-          <button
-            type="button"
-            onClick={handleCopyCode}
-            className="shrink-0 px-5 py-3.75 rounded-3.5 border border-gray-70 text-gray-400 text-body-6-1 hover:bg-gray-50 transition-colors"
-          >
-            {copiedCode ? "복사됨!" : "코드 복사"}
-          </button>
-        </div>
-
-        <div className="flex gap-3 mb-4">
-          <div className="flex-1 bg-gray-50 rounded-3.5 px-4 py-3.75 text-body-6-3 text-gray-300 truncate select-all">
-            {isLoggedIn && referralUrl ? referralUrl : "로그인 후 확인할 수 있어요"}
-          </div>
-          <button
-            type="button"
-            onClick={handleCopyUrl}
-            className="shrink-0 px-5 py-3.75 rounded-3.5 bg-primary-100 text-white text-body-6-1 hover:bg-primary-200 transition-colors"
-          >
-            {copiedUrl ? "복사됨!" : "링크 복사"}
-          </button>
-        </div>
-
-        <div className="flex gap-3">
-          <button
-            type="button"
-            onClick={handleKakaoShare}
-            className="flex-1 flex items-center justify-center gap-2 py-3.75 rounded-3.5 bg-kakao text-kakao-text text-body-6-1 hover:brightness-95 transition-all"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path fillRule="evenodd" clipRule="evenodd" d="M10 2C5.582 2 2 4.91 2 8.5c0 2.26 1.35 4.25 3.4 5.44l-.87 3.23a.3.3 0 0 0 .44.33L9.1 15.2c.29.04.59.06.9.06 4.418 0 8-2.91 8-6.5S14.418 2 10 2Z" fill="#191919" />
-            </svg>
-            카카오톡 공유
-          </button>
-          <button
-            type="button"
-            onClick={handleWebShare}
-            className="flex-1 flex items-center justify-center gap-2 py-3.75 rounded-3.5 border border-gray-70 text-gray-400 text-body-6-1 hover:bg-gray-50 transition-colors"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <path d="M7 10a3 3 0 1 0 6 0 3 3 0 0 0-6 0ZM13.5 5.5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0ZM3.5 10a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0ZM13.5 14.5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0Z" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M6.5 8.75 13 6.25M6.5 11.25l6.5 2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-            다른 방법으로 공유
-          </button>
-        </div>
-      </section>
-
-      {/* 초대 현황 */}
-      <section className="bg-gray-20 rounded-5 px-8 py-6">
-        <h2 className="text-title-2-2 text-gray-500 mb-5">초대 현황</h2>
-        <div className="flex items-center justify-between py-4 border-b border-gray-70">
-          <span className="text-body-5-3 text-gray-300">초대한 친구</span>
-          <span className="text-body-5-1 text-gray-400">
-            {isLoggedIn && referral ? `${referral.invited_count}명` : "—"}
-          </span>
-        </div>
-        <div className="flex items-center justify-between py-4">
-          <span className="text-body-5-3 text-gray-300">획득한 토큰</span>
-          <span className="text-body-5-1 text-primary-100 font-bold tabular-nums animate-blue-glow">
-            {isLoggedIn && referral ? `+${totalTokensEarned}토큰` : "—"}
-          </span>
-        </div>
-      </section>
-
-      {/* 로그인 모달 */}
-      {showLoginModal && (
-        <div
-          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
-          onClick={() => setShowLoginModal(false)}
-        >
-          <div
-            className="bg-white rounded-5 p-8 max-w-xs w-full mx-4 flex flex-col gap-6"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="text-center flex flex-col gap-2">
-              <p className="text-title-2-2 text-gray-500">로그인이 필요해요</p>
-              <p className="text-body-6-3 text-gray-200">
-                초대 혜택을 받으려면 먼저 로그인하세요.
-              </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <a
-                href="/login"
-                className="w-full py-3.75 rounded-3.5 bg-primary-100 text-white text-body-6-1 text-center hover:bg-primary-200 transition-colors"
-              >
-                로그인하러 가기
-              </a>
+            <div className="flex gap-3 mb-3">
+              <div className="flex-1 bg-gray-50 rounded-3.5 px-4 py-3.75 flex items-center">
+                <span className="text-body-5-1 text-gray-400 tracking-widest">
+                  {isLoggedIn && referral ? referral.code : SAMPLE_CODE}
+                </span>
+              </div>
               <button
                 type="button"
-                onClick={() => setShowLoginModal(false)}
-                className="w-full py-3.75 rounded-3.5 border border-gray-70 text-gray-400 text-body-6-1 hover:bg-gray-50 transition-colors"
+                onClick={handleCopyCode}
+                tabIndex={isLoggedIn ? 0 : -1}
+                className="shrink-0 px-5 py-3.75 rounded-3.5 border border-gray-70 text-gray-400 text-body-6-1 hover:bg-gray-50 transition-colors"
               >
-                닫기
+                {copiedCode ? "복사됨!" : "코드 복사"}
+              </button>
+            </div>
+
+            <div className="flex gap-3 mb-4">
+              <div className="flex-1 bg-gray-50 rounded-3.5 px-4 py-3.75 text-body-6-3 text-gray-300 truncate select-all">
+                {isLoggedIn && referralUrl ? referralUrl : `https://app.logit.ai.kr/?ref=${SAMPLE_CODE}`}
+              </div>
+              <button
+                type="button"
+                onClick={handleCopyUrl}
+                tabIndex={isLoggedIn ? 0 : -1}
+                className="shrink-0 px-5 py-3.75 rounded-3.5 bg-primary-100 text-white text-body-6-1 hover:bg-primary-200 transition-colors"
+              >
+                {copiedUrl ? "복사됨!" : "링크 복사"}
+              </button>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={handleKakaoShare}
+                tabIndex={isLoggedIn ? 0 : -1}
+                className="flex-1 flex items-center justify-center gap-2 py-3.75 rounded-3.5 bg-kakao text-kakao-text text-body-6-1 hover:brightness-95 transition-all"
+              >
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M10 2C5.582 2 2 4.91 2 8.5c0 2.26 1.35 4.25 3.4 5.44l-.87 3.23a.3.3 0 0 0 .44.33L9.1 15.2c.29.04.59.06.9.06 4.418 0 8-2.91 8-6.5S14.418 2 10 2Z" fill="#191919" />
+                </svg>
+                카카오톡 공유
+              </button>
+              <button
+                type="button"
+                onClick={handleWebShare}
+                tabIndex={isLoggedIn ? 0 : -1}
+                className="flex-1 flex items-center justify-center gap-2 py-3.75 rounded-3.5 border border-gray-70 text-gray-400 text-body-6-1 hover:bg-gray-50 transition-colors"
+              >
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <path d="M7 10a3 3 0 1 0 6 0 3 3 0 0 0-6 0ZM13.5 5.5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0ZM3.5 10a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0ZM13.5 14.5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0Z" stroke="currentColor" strokeWidth="1.5" />
+                  <path d="M6.5 8.75 13 6.25M6.5 11.25l6.5 2.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+                다른 방법으로 공유
+              </button>
+            </div>
+          </section>
+
+          {/* 초대 현황 */}
+          <section className="bg-gray-20 rounded-5 px-8 py-6">
+            <h2 className="text-title-2-2 text-gray-500 mb-5">초대 현황</h2>
+            <div className="flex items-center justify-between py-4 border-b border-gray-70">
+              <span className="text-body-5-3 text-gray-300">초대한 친구</span>
+              <span className="text-body-5-1 text-gray-400">
+                {isLoggedIn && referral ? `${referral.invited_count}명` : `${SAMPLE_INVITED_COUNT}명`}
+              </span>
+            </div>
+            <div className="flex items-center justify-between py-4">
+              <span className="text-body-5-3 text-gray-300">획득한 토큰</span>
+              <span className="text-body-5-1 text-primary-100 font-bold tabular-nums animate-blue-glow">
+                {isLoggedIn && referral ? `+${totalTokensEarned}토큰` : `+${SAMPLE_EARNED_TOKENS}토큰`}
+              </span>
+            </div>
+          </section>
+        </div>
+
+        {/* 로그인 유도 오버레이 (비로그인일 때만) */}
+        {!isLoggedIn && (
+          <div className="absolute inset-x-0 bottom-0 top-16 flex flex-col items-center justify-end pb-6 bg-gradient-to-b from-transparent via-white/70 to-white">
+            <div className="flex flex-col items-center gap-3">
+              <p className="text-body-5-1 text-gray-400">로그인하고 내 초대 링크와 현황을 확인해요</p>
+              <button
+                type="button"
+                onClick={() => setLoginModalOpen(true)}
+                className="px-8 py-3.75 rounded-3.5 bg-primary-100 text-white text-body-6-1 hover:bg-primary-200 transition-colors"
+              >
+                로그인하기
               </button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </main>
     </div>
   );

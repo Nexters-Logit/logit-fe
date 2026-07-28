@@ -1,3 +1,9 @@
+import { LoginModalProvider } from "@/components/common/LoginModalContext";
+
 export default function EventLayout({ children }: { children: React.ReactNode }) {
-  return <div className="bg-white">{children}</div>;
+  return (
+    <LoginModalProvider>
+      <div className="bg-white">{children}</div>
+    </LoginModalProvider>
+  );
 }
