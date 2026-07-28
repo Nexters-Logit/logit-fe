@@ -247,7 +247,7 @@ export function ExperienceAnalysisSection() {
     <section className="mb-16">
       <h2 className="text-title-2-2 text-gray-400 mb-5">경험 분석</h2>
       {/* 1104px 패널 (고정 폭) */}
-      <div className="flex gap-4 p-5 rounded-7.5 bg-gray-20 border border-gray-70 mx-auto">
+      <div className="flex gap-4.5 p-5 rounded-7.5 bg-gray-20 border border-gray-70 mx-auto">
         {/* 카테고리 */}
         <ReportChartCard
           iconSrc="/icons/report-experience.svg"

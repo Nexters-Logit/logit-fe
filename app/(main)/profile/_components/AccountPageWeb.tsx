@@ -92,7 +92,7 @@ export function AccountPageWeb() {
   const mcpPlansFromDB = plansData.filter((p) => p.subscription_type === "mcp");
 
   const monthlyTokens = tokenBalance?.monthly_tokens ?? 0;
-  const usedTokens = Math.max(0, monthlyTokens - (tokenBalance?.balance ?? 0));
+  const usedTokens = tokenBalance?.monthly_used ?? 0;
   const tokenUsagePercent =
     monthlyTokens > 0 ? Math.min(100, Math.round((usedTokens / monthlyTokens) * 100)) : 0;
 

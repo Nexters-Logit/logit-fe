@@ -85,18 +85,14 @@ export async function updateQuestion(
 }
 
 /**
- * 문항 작성완료 토글
+ * 문항 작성완료 상태 변경 (명시적 값 지정)
  */
-export async function toggleQuestionComplete(
+export async function setQuestionCompleted(
   projectId: string,
   questionId: string,
+  isCompleted: boolean,
 ): Promise<Question> {
-  const result = await apiFetch<Question>(
-    API_ENDPOINTS.questionComplete(projectId, questionId),
-    { method: "PATCH" },
-  );
-  revalidatePath(`/chat/${projectId}`);
-  return result;
+  return updateQuestion(projectId, questionId, { is_completed: isCompleted });
 }
 
 /**
