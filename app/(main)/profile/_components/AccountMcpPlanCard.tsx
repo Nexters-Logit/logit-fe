@@ -131,6 +131,7 @@ export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onS
           MCP 사용방법 보러가기 &gt;
         </a>
       </div>
+
     </div>
   );
 }

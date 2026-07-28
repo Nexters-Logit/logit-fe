@@ -136,16 +136,20 @@ export function AccountPageWeb() {
     <main className="flex-1 overflow-y-auto px-10 py-10 scrollbar-hide">
       <div className="mx-auto max-w-230">
         {/* Title + tab switcher */}
-        <div className="mb-6 flex items-start justify-between">
+        <div className="mb-5 flex items-start justify-between">
           <div>
             <h1 className="text-headline-1 text-gray-500">
               {tab === "monthly" ? "Logit 요금제" : "MCP 요금제"}
             </h1>
-            {periodDisplay && (
-              <p className="mt-1.5 flex items-center gap-1 text-gray-300">
-                <span className="text-body-3-2">이용 가능 기간 |</span>
-                <span className="text-body-1-2">{periodDisplay}</span>
-              </p>
+            {tab === "mcp" && (
+              <div className="mt-2.375 flex items-center gap-2">
+                <span className="semibold_18 text-gray-300">이용 가능 기간 |</span>
+                <span className="medium_20 text-gray-300">
+                  {mcpStatus?.started_at && mcpStatus.expires_at
+                    ? `${formatDate(mcpStatus.started_at)}. ~ ${formatDate(mcpStatus.expires_at)}.`
+                    : "2025.01.01. ~ 2025.12.31."}
+                </span>
+              </div>
             )}
           </div>
           <div className="flex rounded-7.5 bg-gray-50 p-1">
