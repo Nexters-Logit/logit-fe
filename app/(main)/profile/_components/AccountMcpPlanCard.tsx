@@ -60,7 +60,7 @@ export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onS
                 {formatPrice(plan.original_price)}
               </span>
             )}
-            <strong className="text-title-2-2 text-gray-500">{formatPrice(plan.price)}</strong>
+            <strong className="text-title-2-2 text-gray-500" style={{ lineHeight: "1.2" }}>{formatPrice(plan.price)}</strong>
             <span className="text-body-3-1 text-gray-500">원</span>
           </span>
         </div>
