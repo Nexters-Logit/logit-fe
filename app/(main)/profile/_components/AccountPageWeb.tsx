@@ -31,53 +31,6 @@ export function AccountPageWeb() {
 
   const { data: subscriptionStatus } = useSubscriptionStatus();
   const { data: paymentHistory = [] } = usePaymentHistory();
-  const mockPaymentHistory = [
-    {
-      id: "mock-1",
-      subscription_type: "logit",
-      plan: "pro",
-      amount: 19900,
-      pay_state: 1,
-      pay_state_label: "결제완료",
-      paid_at: "2025-07-01T09:00:00.000Z",
-      created_at: "2025-07-01T09:00:00.000Z",
-      card_name: "신한카드",
-      card_number: "1234",
-      receipt_url: null,
-      subscription_started_at: "2025-07-01T00:00:00.000Z",
-      subscription_expires_at: "2025-07-31T23:59:59.000Z",
-    },
-    {
-      id: "mock-2",
-      subscription_type: "mcp",
-      plan: "basic",
-      amount: 9900,
-      pay_state: 1,
-      pay_state_label: "결제완료",
-      paid_at: "2025-06-01T09:00:00.000Z",
-      created_at: "2025-06-01T09:00:00.000Z",
-      card_name: "카카오뱅크",
-      card_number: "5678",
-      receipt_url: null,
-      subscription_started_at: "2025-06-01T00:00:00.000Z",
-      subscription_expires_at: "2025-06-30T23:59:59.000Z",
-    },
-    {
-      id: "mock-3",
-      subscription_type: "logit",
-      plan: "lite",
-      amount: 9900,
-      pay_state: 1,
-      pay_state_label: "결제완료",
-      paid_at: "2025-05-01T09:00:00.000Z",
-      created_at: "2025-05-01T09:00:00.000Z",
-      card_name: null,
-      card_number: null,
-      receipt_url: null,
-      subscription_started_at: "2025-05-01T00:00:00.000Z",
-      subscription_expires_at: "2025-05-31T23:59:59.000Z",
-    },
-  ];
   const { data: plansData = [] } = usePlans();
   const { data: tokenBalance } = useTokenBalance();
   const { data: sessionTokenGain = 0 } = useSessionTokenGain();
@@ -323,8 +276,8 @@ export function AccountPageWeb() {
         <section className="mt-14">
           <h2 className="mb-4 text-headline-1 text-gray-500">결제 내역</h2>
           <div className="divide-y divide-gray-70 border-b border-gray-70">
-            {mockPaymentHistory.length > 0 ? (
-              mockPaymentHistory.map((item) => (
+            {paymentHistory.length > 0 ? (
+              paymentHistory.map((item) => (
                 <AccountPaymentRow key={item.id} item={item} />
               ))
             ) : (
