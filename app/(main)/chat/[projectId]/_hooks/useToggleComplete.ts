@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { toggleQuestionComplete } from "@/app/_actions/projects";
+import { setQuestionCompleted } from "@/app/_actions/projects";
 import { showToast } from "@/libs/toast";
 
 interface UseToggleCompleteOptions {
@@ -23,15 +23,17 @@ export function useToggleComplete({
   }, [initialCompleted]);
 
   const mutation = useMutation({
-    mutationFn: () => toggleQuestionComplete(projectId, questionId),
+    mutationFn: (nextCompleted: boolean) =>
+      setQuestionCompleted(projectId, questionId, nextCompleted),
   });
 
   const toggle = () => {
-    setIsCompleted((prev) => !prev);
-    mutation.mutate(undefined, {
+    const nextCompleted = !isCompleted;
+    setIsCompleted(nextCompleted);
+    mutation.mutate(nextCompleted, {
       onSuccess: () => {
         showToast.success(
-          !isCompleted
+          nextCompleted
             ? "작성완료 처리되었습니다."
             : "작성완료가 해제되었습니다.",
         );

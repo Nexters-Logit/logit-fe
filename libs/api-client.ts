@@ -138,7 +138,7 @@ export const API_ENDPOINTS = {
   experienceSearch: (q: string) =>
     `/api/v1/experiences/search?q=${encodeURIComponent(q)}`,
   matchQuestion: (questionId: string) =>
-    `/api/v1/experiences/match-question/${questionId}`,
+    `/api/v1/experiences/matches?question_id=${questionId}`,
   // Projects & Questions
   projects: "/api/v1/projects/",
   projectsList: (params?: { skip?: number; limit?: number }) =>
@@ -147,8 +147,6 @@ export const API_ENDPOINTS = {
   questions: (projectId: string) => `/api/v1/projects/${projectId}/questions/`,
   question: (projectId: string, questionId: string) =>
     `/api/v1/projects/${projectId}/questions/${questionId}`,
-  questionComplete: (projectId: string, questionId: string) =>
-    `/api/v1/projects/${projectId}/questions/${questionId}/complete`,
 
   // Users
   usersMe: "/api/v1/users/me",
@@ -160,7 +158,7 @@ export const API_ENDPOINTS = {
   // Payments
   paymentInitiate: "/api/v1/payments/initiate",
   paymentHistory: "/api/v1/payments/history",
-  paymentCancel: (subType: string) => `/api/v1/payments/cancel/${subType}`,
+  paymentCancel: (subType: string) => `/api/v1/subscriptions/${subType}`,
 
   // Plans
   plans: "/api/v1/plans/",
@@ -173,7 +171,7 @@ export const API_ENDPOINTS = {
 
   // Referral
   referralMe: "/api/v1/users/referral",
-  referralApply: "/api/v1/users/referral/apply",
+  referralApply: "/api/v1/users/me/referral-code",
 
   // Chats
   chats: "/api/v1/projects/chats",
