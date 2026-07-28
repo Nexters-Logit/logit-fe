@@ -109,7 +109,31 @@ export function ProfilePageMobile() {
 
   if (!hasToken) return <MobileLoginScreen />;
 
-  const logitStatus = subscriptionStatus?.logit;
+  const mockSubscriptionStatus = {
+    logit: {
+      subscription_type: "logit" as const,
+      plan: "pro" as const,
+      is_active: true,
+      is_auto_renew: true,
+      started_at: "2025-07-01T00:00:00.000Z",
+      expires_at: "2025-07-31T23:59:59.000Z",
+      amount: 19900,
+      next_payment_date: "2025-08-01T00:00:00.000Z",
+    },
+    mcp: {
+      subscription_type: "mcp" as const,
+      plan: null,
+      is_active: false,
+      is_auto_renew: false,
+      started_at: null,
+      expires_at: null,
+      amount: null,
+      next_payment_date: null,
+    },
+    remaining: { chat: null, draft: null },
+  };
+
+  const logitStatus = mockSubscriptionStatus.logit;
   const activePlan = logitStatus?.is_active ? logitStatus : null;
   const latestPayment = mockPaymentHistory?.[0];
 
@@ -134,23 +158,23 @@ export function ProfilePageMobile() {
         <div className="overflow-hidden rounded-2xl border border-gray-70">
           <div className="px-5 py-5">
             {activePlan ? (
-              <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-body-5-2 text-gray-500">
+                  <p className="medium_20 text-gray-500">
                     {PLAN_DISPLAY_NAME[activePlan.plan ?? ""] ?? activePlan.plan}
                     {activePlan.amount != null && (
-                      <span className="ml-1 font-normal text-gray-300">
+                      <span className="ml-1 medium_14 text-gray-500">
                         / {formatPrice(activePlan.amount)}원
                       </span>
                     )}
                   </p>
                   {activePlan.next_payment_date && (
-                    <p className="mt-1.5 text-body-8-3 text-gray-300">
+                    <p className="mt-1.5 text-body-8-3 text-gray-400">
                       다음 결제일 : {formatKoreanDate(activePlan.next_payment_date)}
                     </p>
                   )}
                   {cardInfo && (
-                    <p className="mt-0.5 text-body-8-3 text-gray-300">
+                    <p className="mt-0.5 text-body-8-3 text-gray-400">
                       결제 카드 : {cardInfo}
                     </p>
                   )}
