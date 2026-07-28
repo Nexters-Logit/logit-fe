@@ -31,53 +31,6 @@ export function ProfilePageMobile() {
   const { data: subscriptionStatus } = useSubscriptionStatus();
   const { data: paymentHistory } = usePaymentHistory();
   const { data: tokenBalance } = useTokenBalance();
-  const mockPaymentHistory = [
-    {
-      id: "mock-1",
-      subscription_type: "logit",
-      plan: "pro",
-      amount: 19900,
-      pay_state: 1,
-      pay_state_label: "결제완료",
-      paid_at: "2025-07-01T09:00:00.000Z",
-      created_at: "2025-07-01T09:00:00.000Z",
-      card_name: "신한카드",
-      card_number: "1234",
-      receipt_url: null,
-      subscription_started_at: "2025-07-01T00:00:00.000Z",
-      subscription_expires_at: "2025-07-31T23:59:59.000Z",
-    },
-    {
-      id: "mock-2",
-      subscription_type: "mcp",
-      plan: "basic",
-      amount: 9900,
-      pay_state: 1,
-      pay_state_label: "결제완료",
-      paid_at: "2025-06-01T09:00:00.000Z",
-      created_at: "2025-06-01T09:00:00.000Z",
-      card_name: "카카오뱅크",
-      card_number: "5678",
-      receipt_url: null,
-      subscription_started_at: "2025-06-01T00:00:00.000Z",
-      subscription_expires_at: "2025-06-30T23:59:59.000Z",
-    },
-    {
-      id: "mock-3",
-      subscription_type: "logit",
-      plan: "lite",
-      amount: 9900,
-      pay_state: 1,
-      pay_state_label: "결제완료",
-      paid_at: "2025-05-01T09:00:00.000Z",
-      created_at: "2025-05-01T09:00:00.000Z",
-      card_name: null,
-      card_number: null,
-      receipt_url: null,
-      subscription_started_at: "2025-05-01T00:00:00.000Z",
-      subscription_expires_at: "2025-05-31T23:59:59.000Z",
-    },
-  ];
   const queryClient = useQueryClient();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -111,7 +64,7 @@ export function ProfilePageMobile() {
 
   const logitStatus = subscriptionStatus?.logit;
   const activePlan = logitStatus?.is_active ? logitStatus : null;
-  const latestPayment = mockPaymentHistory?.[0];
+  const latestPayment = paymentHistory?.[0];
 
   const cardInfo =
     latestPayment?.card_name
@@ -193,9 +146,9 @@ export function ProfilePageMobile() {
 
       <section className="mb-8">
         <h2 className="mb-3 text-body-5-2 text-gray-400">결제 내역</h2>
-        {mockPaymentHistory.length > 0 ? (
+        {(paymentHistory?.length ?? 0) > 0 ? (
           <div className="divide-y divide-gray-50">
-            {mockPaymentHistory.map((item) => {
+            {paymentHistory!.map((item) => {
               const itemCardInfo = item.card_name
                 ? `${item.card_name}${item.card_number ? ` ${item.card_number}` : ""}`
                 : null;
