@@ -109,31 +109,7 @@ export function ProfilePageMobile() {
 
   if (!hasToken) return <MobileLoginScreen />;
 
-  const mockSubscriptionStatus = {
-    logit: {
-      subscription_type: "logit" as const,
-      plan: "pro" as const,
-      is_active: true,
-      is_auto_renew: true,
-      started_at: "2025-07-01T00:00:00.000Z",
-      expires_at: "2025-07-31T23:59:59.000Z",
-      amount: 19900,
-      next_payment_date: "2025-08-01T00:00:00.000Z",
-    },
-    mcp: {
-      subscription_type: "mcp" as const,
-      plan: null,
-      is_active: false,
-      is_auto_renew: false,
-      started_at: null,
-      expires_at: null,
-      amount: null,
-      next_payment_date: null,
-    },
-    remaining: { chat: null, draft: null },
-  };
-
-  const logitStatus = mockSubscriptionStatus.logit;
+  const logitStatus = subscriptionStatus?.logit;
   const activePlan = logitStatus?.is_active ? logitStatus : null;
   const latestPayment = mockPaymentHistory?.[0];
 
