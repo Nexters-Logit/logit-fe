@@ -303,7 +303,7 @@ export function AccountPageWeb() {
               rel="noopener noreferrer"
               className="flex items-center py-5 text-body-1-2 text-gray-300 transition-colors hover:text-primary-200"
             >
-              가이드 페이지
+              가이드 페이지로 이동
             </a>
             <a
               href="https://pf.kakao.com/_Jxgxbxn"
@@ -311,7 +311,7 @@ export function AccountPageWeb() {
               rel="noopener noreferrer"
               className="flex items-center py-5 text-body-1-2 text-gray-300 transition-colors hover:text-primary-200"
             >
-              문의하기
+              문의하기로 이동
             </a>
             <button
               type="button"
