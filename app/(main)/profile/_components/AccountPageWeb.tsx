@@ -265,7 +265,7 @@ export function AccountPageWeb() {
               className="h-full rounded-full bg-gradient-to-r from-primary-10 to-primary-60 transition-all"
               style={{ width: `${tokenUsagePercent}%` }}
             />
-            <span className="absolute right-4 top-1/2 flex -translate-y-1/2 items-end gap-0.5 text-title-2 text-gray-200 tabular-nums">
+            <span className="absolute right-4 top-1/2 flex -translate-y-1/2 items-baseline gap-0.5 text-title-2 text-gray-200 tabular-nums">
               {tokenUsagePercent}
               <span className="text-body-5-1">%</span>
             </span>
