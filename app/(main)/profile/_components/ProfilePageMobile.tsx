@@ -178,6 +178,11 @@ export function ProfilePageMobile() {
                       결제 카드 : {cardInfo}
                     </p>
                   )}
+                  {!activePlan.is_auto_renew && activePlan.expires_at && (
+                    <p className="mt-1.5 text-body-9-3 text-alert">
+                      ⓘ {formatKoreanDate(activePlan.expires_at)}에 이용 종료 예정입니다.
+                    </p>
+                  )}
                 </div>
                 <span className="shrink-0 rounded-full bg-primary-100 px-2.5 py-1 text-body-9-2 text-white">
                   이용중
