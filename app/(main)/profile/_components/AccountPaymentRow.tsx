@@ -16,7 +16,7 @@ export function AccountPaymentRow({ item }: { item: PaymentHistoryItem }) {
     <>
       <div>
         <p className="text-body-5-3 text-primary-500">결제일 : {formatDate(item.paid_at)}</p>
-        <p className="mt-1 flex items-end gap-1">
+        <p className="mt-1 flex items-baseline gap-1">
           <span className="text-title-3 text-primary-600">{formatPrice(item.amount)}</span>
           <span className="text-body-5-3 text-primary-500">원</span>
         </p>

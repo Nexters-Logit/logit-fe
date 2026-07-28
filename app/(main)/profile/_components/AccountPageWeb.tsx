@@ -136,16 +136,20 @@ export function AccountPageWeb() {
     <main className="flex-1 overflow-y-auto px-10 py-10 scrollbar-hide">
       <div className="mx-auto max-w-230">
         {/* Title + tab switcher */}
-        <div className="mb-6 flex items-start justify-between">
+        <div className="mb-5 flex items-start justify-between">
           <div>
             <h1 className="text-headline-1 text-gray-500">
               {tab === "monthly" ? "Logit 요금제" : "MCP 요금제"}
             </h1>
-            {periodDisplay && (
-              <p className="mt-1.5 flex items-center gap-1 text-gray-300">
-                <span className="text-body-3-2">이용 가능 기간 |</span>
-                <span className="text-body-1-2">{periodDisplay}</span>
-              </p>
+            {tab === "mcp" && (
+              <div className="mt-2.375 flex items-center gap-2">
+                <span className="semibold_18 text-gray-300">이용 가능 기간 |</span>
+                <span className="medium_20 text-gray-300">
+                  {mcpStatus?.started_at && mcpStatus.expires_at
+                    ? `${formatDate(mcpStatus.started_at)}. ~ ${formatDate(mcpStatus.expires_at)}.`
+                    : "2025.01.01. ~ 2025.12.31."}
+                </span>
+              </div>
             )}
           </div>
           <div className="flex rounded-7.5 bg-gray-50 p-1">
@@ -261,7 +265,7 @@ export function AccountPageWeb() {
               className="h-full rounded-full bg-gradient-to-r from-primary-10 to-primary-60 transition-all"
               style={{ width: `${tokenUsagePercent}%` }}
             />
-            <span className="absolute right-4 top-1/2 flex -translate-y-1/2 items-end gap-0.5 text-title-2 text-gray-200 tabular-nums">
+            <span className="absolute right-4 top-1/2 flex -translate-y-1/2 items-baseline gap-0.5 text-title-2 text-gray-200 tabular-nums">
               {tokenUsagePercent}
               <span className="text-body-5-1">%</span>
             </span>
@@ -271,7 +275,7 @@ export function AccountPageWeb() {
         {/* Payment history */}
         <section className="mt-14">
           <h2 className="mb-4 text-headline-1 text-gray-500">결제 내역</h2>
-          <div className="divide-y divide-gray-70 border-t border-gray-70">
+          <div className="divide-y divide-gray-70 border-b border-gray-70">
             {paymentHistory.length > 0 ? (
               paymentHistory.map((item) => (
                 <AccountPaymentRow key={item.id} item={item} />
@@ -292,14 +296,14 @@ export function AccountPageWeb() {
               <span className="text-body-2 text-gray-400">{user.email}</span>
             )}
           </div>
-          <div className="divide-y divide-gray-70 border-t border-gray-70">
+          <div className="divide-y divide-gray-70 border-b border-gray-70">
             <a
               href="https://docs.logit.ai.kr"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center py-5 text-body-1-2 text-gray-300 transition-colors hover:text-primary-200"
             >
-              가이드 페이지
+              가이드 페이지로 이동
             </a>
             <a
               href="https://pf.kakao.com/_Jxgxbxn"
@@ -307,7 +311,7 @@ export function AccountPageWeb() {
               rel="noopener noreferrer"
               className="flex items-center py-5 text-body-1-2 text-gray-300 transition-colors hover:text-primary-200"
             >
-              문의하기
+              문의하기로 이동
             </a>
             <button
               type="button"
