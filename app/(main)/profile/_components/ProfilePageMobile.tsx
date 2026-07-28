@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "@/app/_hooks/useCurrentUser";
+import { useTokenBalance } from "@/app/_hooks/useTokenBalance";
 import { getAccessToken, logout, clearAuthTokens } from "@/libs/auth";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import { showToast } from "@/libs/toast";
@@ -29,6 +30,7 @@ export function ProfilePageMobile() {
   const { data: user } = useCurrentUser();
   const { data: subscriptionStatus } = useSubscriptionStatus();
   const { data: paymentHistory } = usePaymentHistory();
+  const { data: tokenBalance } = useTokenBalance();
   const mockPaymentHistory = [
     {
       id: "mock-1",
@@ -121,7 +123,14 @@ export function ProfilePageMobile() {
       <h1 className="mb-6 text-title-2 text-gray-500">계정</h1>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-body-5-2 text-gray-400">요금제 정보</h2>
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="text-body-5-2 text-gray-400">요금제 정보</h2>
+          {tokenBalance?.monthly_tokens != null && (
+            <p className="medium_14 text-gray-300">
+              월 {tokenBalance.monthly_tokens.toLocaleString()}토큰 제공
+            </p>
+          )}
+        </div>
         <div className="overflow-hidden rounded-2xl border border-gray-70">
           <div className="px-5 py-5">
             {activePlan ? (
