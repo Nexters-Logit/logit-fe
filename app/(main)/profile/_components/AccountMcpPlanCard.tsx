@@ -50,7 +50,7 @@ export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onS
 
       <div className="flex items-end justify-between">
         <span className="text-body-3-2 text-gray-500">총 결제 금액</span>
-        <span className="flex items-end gap-1">
+        <span className="flex items-baseline gap-1">
           {plan.original_price > 0 && plan.original_price > plan.price && (
             <span className="text-body-4 text-gray-100 line-through">
               {formatPrice(plan.original_price)}

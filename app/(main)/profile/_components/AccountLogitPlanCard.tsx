@@ -46,7 +46,7 @@ export function AccountLogitPlanCard({
       <div className="flex flex-col gap-1.5">
         <div className="flex items-end justify-between">
           <span className="text-body-3-2 text-gray-500">월별 결제 금액</span>
-          <span className="flex items-end gap-1">
+          <span className="flex items-baseline gap-1">
             {originalPrice !== undefined && originalPrice > price && (
               <span className="text-body-4 text-gray-100 line-through">
                 {formatPrice(originalPrice)}
