@@ -343,7 +343,7 @@ export function AccountPageWeb() {
               <span className="text-body-2 text-gray-400">{user.email}</span>
             )}
           </div>
-          <div className="divide-y divide-gray-70 border-t border-gray-70">
+          <div className="divide-y divide-gray-70 border-b border-gray-70">
             <a
               href="https://docs.logit.ai.kr"
               target="_blank"
