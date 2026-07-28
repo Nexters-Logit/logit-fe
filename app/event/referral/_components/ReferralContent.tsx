@@ -9,6 +9,7 @@ import { ChevronLeft } from "lucide-react";
 import { getAccessToken } from "@/libs/auth";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import { showToast } from "@/libs/toast";
+import { burstConfetti } from "@/libs/confetti";
 
 declare global {
   interface Window {
@@ -21,40 +22,6 @@ declare global {
 }
 
 const TOKENS_PER_REFERRAL = 10;
-
-function burstConfetti() {
-  const colors = ["#40a5ff", "#2571eb", "#c3dcff", "#fcd34d", "#f59e0b", "#ffffff"];
-  const cx = window.innerWidth / 2;
-  const cy = window.innerHeight * 0.38;
-  Array.from({ length: 32 }).forEach(() => {
-    const el = document.createElement("span");
-    const size = Math.random() * 7 + 4;
-    const angle = Math.random() * Math.PI * 2;
-    const speed = Math.random() * 180 + 90;
-    const vx = Math.cos(angle) * speed;
-    const vy = Math.sin(angle) * speed - 230;
-    const duration = Math.random() * 500 + 450;
-    const rot = Math.random() * 720 - 360;
-    Object.assign(el.style, {
-      position: "fixed", pointerEvents: "none", zIndex: "9999",
-      width: `${size}px`, height: `${size}px`,
-      borderRadius: Math.random() > 0.5 ? "50%" : "2px",
-      background: colors[Math.floor(Math.random() * colors.length)],
-      left: `${cx}px`, top: `${cy}px`,
-    });
-    document.body.appendChild(el);
-    let t0 = 0;
-    const step = (ts: number) => {
-      if (!t0) t0 = ts;
-      const t = Math.min((ts - t0) / duration, 1);
-      el.style.transform = `translate(${vx * t}px, ${vy * t + 300 * t * t}px) rotate(${rot * t}deg)`;
-      el.style.opacity = String(1 - t * t);
-      if (t < 1) requestAnimationFrame(step);
-      else el.remove();
-    };
-    requestAnimationFrame(step);
-  });
-}
 
 interface ReferralStats {
   code: string;
@@ -173,7 +140,7 @@ export function ReferralContent() {
 
   return (
     <div className="min-h-screen bg-white">
-      <header className="sticky top-0 z-10 flex items-center justify-between px-10 py-5 border-b border-gray-70 bg-white">
+      <header className="sticky top-0 z-10 flex items-center justify-between px-10 py-5 bg-white shadow-nav">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logos/logo-symbol-2d.svg" alt="Logit" width={24} height={24} />
           <Image src="/logos/logo-wordmark.svg" alt="Logit" width={52} height={26} />
@@ -190,7 +157,7 @@ export function ReferralContent() {
 
       {/* 히어로 */}
       <section className="text-center">
-        <p className="text-body-5-1 text-primary-100 mb-3">친구 초대 이벤트</p>
+        <p className="text-body-7-2 text-primary-200 tracking-badge uppercase mb-3">친구 초대 이벤트</p>
         <h1 className="text-headline-1 text-gray-500 mb-4">
           친구를 초대하고
           <br />
@@ -207,18 +174,20 @@ export function ReferralContent() {
         <div className="flex gap-4">
           <div className="flex-1 bg-primary-20 rounded-5 p-6 flex flex-col gap-3">
             <p className="text-body-6-3 text-gray-200">내가 받는 혜택</p>
-            <p className="text-title-1 text-primary-100">+{TOKENS_PER_REFERRAL}토큰</p>
+            <p className="text-title-1 text-primary-100 font-bold tabular-nums animate-blue-glow">
+              +{TOKENS_PER_REFERRAL}토큰
+            </p>
             <p className="text-body-6-3 text-gray-300">친구 1명 초대마다</p>
           </div>
           <div className="flex-1 bg-gray-20 rounded-5 p-6 flex flex-col gap-3">
             <p className="text-body-6-3 text-gray-200">친구가 받는 혜택</p>
-            <p className="text-title-1 text-gray-400">+{TOKENS_PER_REFERRAL}토큰</p>
+            <p className="text-title-1 text-gray-400 font-bold tabular-nums">+{TOKENS_PER_REFERRAL}토큰</p>
             <p className="text-body-6-3 text-gray-300">가입 즉시 지급</p>
           </div>
         </div>
         <div className="bg-primary-50 rounded-3.5 px-5 py-4">
           <p className="text-body-6-3 text-primary-200 text-center">
-            💡 신규 가입자는 가입 보너스 100토큰도 함께 받아요
+            💡 신규 가입자는 가입 보너스 50토큰도 함께 받아요
           </p>
         </div>
       </section>
@@ -332,7 +301,7 @@ export function ReferralContent() {
         </div>
         <div className="flex items-center justify-between py-4">
           <span className="text-body-5-3 text-gray-300">획득한 토큰</span>
-          <span className="text-body-5-1 text-primary-100">
+          <span className="text-body-5-1 text-primary-100 font-bold tabular-nums animate-blue-glow">
             {isLoggedIn && referral ? `+${totalTokensEarned}토큰` : "—"}
           </span>
         </div>
