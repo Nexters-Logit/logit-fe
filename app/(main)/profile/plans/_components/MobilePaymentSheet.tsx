@@ -156,7 +156,7 @@ export function MobilePaymentSheet({
             <DialogPrimitive.Title className="text-title-3 text-gray-500">
               {step === 1 ? "결제하기" : "휴대폰 번호 입력"}
             </DialogPrimitive.Title>
-            <DialogPrimitive.Description className={step === 1 ? "mt-1 text-body-7-3 text-gray-200" : "mt-1 medium_14 text-gray-500 self-stretch"}>
+            <DialogPrimitive.Description className="mt-1 medium_14 text-gray-500 self-stretch">
               {step === 1
                 ? "결제 정보를 등록 하려면 약관 동의가 필요해요."
                 : "결제 알림을 받을 휴대폰 번호를 입력해주세요."}
