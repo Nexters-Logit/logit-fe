@@ -65,12 +65,13 @@ export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onS
         <div className="h-px w-full bg-gray-70" />
         <div className="flex items-start justify-between text-body-5-3 text-gray-300">
           <span>지원 환경</span>
-          <span className="flex flex-col items-end">
+          <span className="flex flex-col items-end gap-2">
             {SUPPORTED_ENVIRONMENTS.map((env) => (
-              <span key={env}>{env}</span>
+              <span key={env} className="underline">{env}</span>
             ))}
           </span>
         </div>
+        <div className="mt-3 h-px w-full bg-gray-70" />
       </div>
 
       {isCancelPending && expiresAt && (
