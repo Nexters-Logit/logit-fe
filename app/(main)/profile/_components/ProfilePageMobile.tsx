@@ -125,7 +125,7 @@ export function ProfilePageMobile() {
       <section className="mb-8">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-body-5-2 text-gray-400">요금제 정보</h2>
-          {tokenBalance?.monthly_tokens != null && (
+          {activePlan && tokenBalance?.monthly_tokens != null && (
             <p className="medium_14 text-gray-300">
               월 {tokenBalance.monthly_tokens.toLocaleString()}토큰 제공
             </p>
@@ -165,11 +165,19 @@ export function ProfilePageMobile() {
                 </span>
               </div>
             ) : (
-              <div className="flex items-start justify-between">
+              <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-body-5-2 text-gray-500">Free</p>
-                  <p className="mt-1 text-body-7-3 text-gray-200">무료 플랜</p>
+                  <p className="medium_20 text-gray-500">Free</p>
+                  <p className="mt-1 medium_14 text-gray-500">0원</p>
+                  {tokenBalance?.monthly_tokens != null && (
+                    <p className="mt-1 semibold_12 text-gray-200">
+                      월 {tokenBalance.monthly_tokens.toLocaleString()}토큰 제공
+                    </p>
+                  )}
                 </div>
+                <span className="shrink-0 flex items-center justify-center gap-2.5 rounded-full border border-primary-200 bg-primary-20 px-2.5 py-1 medium_10 text-primary-200">
+                  추천
+                </span>
               </div>
             )}
           </div>
