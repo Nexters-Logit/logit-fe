@@ -25,6 +25,7 @@ type Props = {
   onCancel: () => void;
 };
 
+
 const SUPPORTED_ENVIRONMENTS = ["Gemini", "Claude"];
 
 export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onSubscribe, onCancel }: Props) {
@@ -38,7 +39,7 @@ export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onS
         isActive ? "border-primary-100" : "border-gray-70",
       )}
     >
-      <div className="mb-1 flex items-start justify-between gap-2">
+      <div className="mb-2 flex items-start justify-between gap-2">
         <h3 className="text-title-1 text-gray-500">{plan.name}</h3>
         {plan.badge && (
           <span className="shrink-0 rounded-full bg-primary-100 px-2.5 py-1 text-body-9-2 text-white">
@@ -47,23 +48,20 @@ export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onS
         )}
       </div>
 
-      {plan.description && (
-        <p className="mb-4 text-body-8-3 text-gray-200">{plan.description}</p>
-      )}
+      <div className="flex items-end justify-between">
+        <span className="text-body-3-2 text-gray-500">총 결제 금액</span>
+        <span className="flex items-end gap-1">
+          {plan.original_price > 0 && plan.original_price > plan.price && (
+            <span className="text-body-4 text-gray-100 line-through">
+              {formatPrice(plan.original_price)}
+            </span>
+          )}
+          <strong className="text-title-2-2 text-gray-500" style={{ lineHeight: "1.2" }}>{formatPrice(plan.price)}</strong>
+          <span className="text-body-3-1 text-gray-500">원</span>
+        </span>
+      </div>
 
-      <div className="flex flex-col gap-1.5">
-        <div className="flex items-end justify-between">
-          <span className="text-body-3-2 text-gray-500">총 결제 금액</span>
-          <span className="flex items-end gap-1">
-            {plan.original_price > 0 && plan.original_price > plan.price && (
-              <span className="text-body-4 text-gray-100 line-through">
-                {formatPrice(plan.original_price)}
-              </span>
-            )}
-            <strong className="text-title-2-2 text-gray-500" style={{ lineHeight: "1.2" }}>{formatPrice(plan.price)}</strong>
-            <span className="text-body-3-1 text-gray-500">원</span>
-          </span>
-        </div>
+      <div className="mt-1.5 flex flex-col gap-5">
         <div className="h-px w-full bg-gray-70" />
         <div className="flex items-start justify-between text-body-5-3 text-gray-300">
           <span>지원 환경</span>
