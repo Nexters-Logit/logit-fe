@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "@/app/_hooks/useCurrentUser";
+import { useTokenBalance } from "@/app/_hooks/useTokenBalance";
 import { getAccessToken, logout, clearAuthTokens } from "@/libs/auth";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import { showToast } from "@/libs/toast";
@@ -29,6 +30,7 @@ export function ProfilePageMobile() {
   const { data: user } = useCurrentUser();
   const { data: subscriptionStatus } = useSubscriptionStatus();
   const { data: paymentHistory } = usePaymentHistory();
+  const { data: tokenBalance } = useTokenBalance();
   const queryClient = useQueryClient();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -74,28 +76,40 @@ export function ProfilePageMobile() {
       <h1 className="mb-6 text-title-2 text-gray-500">계정</h1>
 
       <section className="mb-8">
-        <h2 className="mb-3 text-body-5-2 text-gray-400">요금제 정보</h2>
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="text-body-5-2 text-gray-400">요금제 정보</h2>
+          {activePlan && tokenBalance?.monthly_tokens != null && (
+            <p className="medium_14 text-gray-300">
+              월 {tokenBalance.monthly_tokens.toLocaleString()}토큰 제공
+            </p>
+          )}
+        </div>
         <div className="overflow-hidden rounded-2xl border border-gray-70">
           <div className="px-5 py-5">
             {activePlan ? (
-              <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-body-5-2 text-gray-500">
+                  <p className="medium_20 text-gray-500">
                     {PLAN_DISPLAY_NAME[activePlan.plan ?? ""] ?? activePlan.plan}
                     {activePlan.amount != null && (
-                      <span className="ml-1 font-normal text-gray-300">
+                      <span className="ml-1 medium_14 text-gray-500">
                         / {formatPrice(activePlan.amount)}원
                       </span>
                     )}
                   </p>
                   {activePlan.next_payment_date && (
-                    <p className="mt-1.5 text-body-8-3 text-gray-300">
+                    <p className="mt-1.5 text-body-8-3 text-gray-400">
                       다음 결제일 : {formatKoreanDate(activePlan.next_payment_date)}
                     </p>
                   )}
                   {cardInfo && (
-                    <p className="mt-0.5 text-body-8-3 text-gray-300">
+                    <p className="mt-0.5 text-body-8-3 text-gray-400">
                       결제 카드 : {cardInfo}
+                    </p>
+                  )}
+                  {!activePlan.is_auto_renew && activePlan.expires_at && (
+                    <p className="mt-1.5 text-body-9-3 text-alert">
+                      ⓘ {formatKoreanDate(activePlan.expires_at)}에 이용 종료 예정입니다.
                     </p>
                   )}
                 </div>
@@ -104,11 +118,19 @@ export function ProfilePageMobile() {
                 </span>
               </div>
             ) : (
-              <div className="flex items-start justify-between">
+              <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-body-5-2 text-gray-500">Free</p>
-                  <p className="mt-1 text-body-7-3 text-gray-200">무료 플랜</p>
+                  <p className="medium_20 text-gray-500">Free</p>
+                  <p className="mt-1 medium_14 text-gray-500">0원</p>
+                  {tokenBalance?.monthly_tokens != null && (
+                    <p className="mt-1 semibold_12 text-gray-200">
+                      월 {tokenBalance.monthly_tokens.toLocaleString()}토큰 제공
+                    </p>
+                  )}
                 </div>
+                <span className="shrink-0 flex items-center justify-center gap-2.5 rounded-full border border-primary-200 bg-primary-20 px-2.5 py-1 medium_10 text-primary-200">
+                  추천
+                </span>
               </div>
             )}
           </div>
@@ -124,9 +146,9 @@ export function ProfilePageMobile() {
 
       <section className="mb-8">
         <h2 className="mb-3 text-body-5-2 text-gray-400">결제 내역</h2>
-        {paymentHistory && paymentHistory.length > 0 ? (
+        {(paymentHistory?.length ?? 0) > 0 ? (
           <div className="divide-y divide-gray-50">
-            {paymentHistory.map((item) => {
+            {paymentHistory!.map((item) => {
               const itemCardInfo = item.card_name
                 ? `${item.card_name}${item.card_number ? ` ${item.card_number}` : ""}`
                 : null;
@@ -141,17 +163,17 @@ export function ProfilePageMobile() {
                     <span className="regular_14 text-gray-400">
                       {formatDate(item.paid_at)}.
                     </span>
-                    <span className="regular_14 text-gray-400">
+                    <span className="regular_14 text-gray-300">
                       {formatPrice(item.amount)}원
                     </span>
                   </div>
                   {period && (
-                    <p className="mt-1 text-body-9-3 text-gray-200">
+                    <p className="mt-1 text-body-9-3 text-gray-300">
                       요금제 사용 기간 : {period}
                     </p>
                   )}
                   {itemCardInfo && (
-                    <p className="mt-0.5 text-body-9-3 text-gray-200">
+                    <p className="mt-0.5 text-body-9-3 text-gray-300">
                       결제 카드 : {itemCardInfo}
                     </p>
                   )}
