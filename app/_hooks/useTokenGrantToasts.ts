@@ -1,7 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { showToast } from "@/libs/toast";
-import { addSessionTokenGain } from "@/libs/sessionTokenGain";
 import { useTokenBalance } from "./useTokenBalance";
 
 export function useTokenGrantToasts() {
@@ -9,7 +7,6 @@ export function useTokenGrantToasts() {
   const monthlyToastShown = useRef(false);
   const attendanceToastShown = useRef(false);
   const referralToastShown = useRef(false);
-  const queryClient = useQueryClient();
   const { data } = useTokenBalance();
 
   useEffect(() => {
@@ -19,21 +16,18 @@ export function useTokenGrantToasts() {
     if (data.signup_bonus_amount > 0 && !signupBonusToastShown.current) {
       signupBonusToastShown.current = true;
       showToast.success(`신규 가입 보너스 ${data.signup_bonus_amount}토큰이 지급되었습니다!`);
-      addSessionTokenGain(data.signup_bonus_amount, queryClient);
     }
 
     // 월 지급 토스트 (이번 세션에서 최초 1회)
     if (data.monthly_grant_amount > 0 && !monthlyToastShown.current) {
       monthlyToastShown.current = true;
       showToast.success(`이번 달 토큰 ${data.monthly_grant_amount}개가 지급되었습니다.`);
-      addSessionTokenGain(data.monthly_grant_amount, queryClient);
     }
 
     // 출석 토스트 (당일 첫 조회 시 지급, 이번 세션에서 최초 1회 알림)
     if (data.attendance_amount > 0 && !attendanceToastShown.current) {
       attendanceToastShown.current = true;
       showToast.success(`출석 체크로 +${data.attendance_amount} 토큰이 추가되었어요`);
-      addSessionTokenGain(data.attendance_amount, queryClient);
     }
 
     // 친구 초대 보상 토스트 (초대자 — 친구가 코드를 입력하면 이 시점에 알림)
@@ -45,7 +39,6 @@ export function useTokenGrantToasts() {
           ? `친구 초대 보상으로 ${data.referral_reward_amount}토큰이 지급되었습니다! (${count}명 초대)`
           : `친구 초대 보상으로 ${data.referral_reward_amount}토큰이 지급되었습니다!`,
       );
-      addSessionTokenGain(data.referral_reward_amount, queryClient);
     }
-  }, [data, queryClient]);
+  }, [data]);
 }
