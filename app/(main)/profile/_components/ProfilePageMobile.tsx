@@ -196,20 +196,24 @@ export function ProfilePageMobile() {
           )}
         </div>
         <div className="flex flex-col">
-          <Link
-            href="#"
+          <a
+            href="https://docs.logit.ai.kr"
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex w-full items-center justify-between py-4 regular_14 text-gray-400 transition-colors hover:text-primary-200"
           >
             가이드 페이지
             <ChevronRight className="size-4 text-gray-200" aria-hidden="true" />
-          </Link>
-          <Link
-            href="#"
+          </a>
+          <a
+            href="https://pf.kakao.com/_Jxgxbxn"
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex w-full items-center justify-between py-4 regular_14 text-gray-400 transition-colors hover:text-primary-200"
           >
             문의하기
             <ChevronRight className="size-4 text-gray-200" aria-hidden="true" />
-          </Link>
+          </a>
           <button
             type="button"
             disabled={isLoggingOut}
