@@ -8,6 +8,7 @@ import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import { showToast } from "@/libs/toast";
 import { useCurrentUser } from "@/app/_hooks/useCurrentUser";
 import { TermsCheckbox } from "@/components/common/TermsCheckbox";
+import { TermsDetailModal } from "@/components/common/TermsDetailModal";
 import { PAYMENT_TERMS as MOBILE_TERMS, type PaymentTermId } from "../../_data/paymentTerms";
 
 export type MobilePlanInfo = {
@@ -36,6 +37,7 @@ export function MobilePaymentSheet({
   const [phone, setPhone] = useState("");
   const [checkedTerms, setCheckedTerms] = useState<Set<TermId>>(new Set());
   const [isPending, setIsPending] = useState(false);
+  const [termsModalSlug, setTermsModalSlug] = useState<string | null>(null);
   const hasPrefilledPhone = useRef(false);
 
   useEffect(() => {
@@ -201,15 +203,26 @@ export function MobilePaymentSheet({
                       </>
                     }
                   />
-                  <a
-                    href={term.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="shrink-0 p-1 text-gray-100 transition-colors hover:text-gray-300"
-                    aria-label={`${term.label} 자세히 보기`}
-                  >
-                    <ChevronRight className="size-4" />
-                  </a>
+                  {term.kind === "external" ? (
+                    <a
+                      href={term.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="shrink-0 p-1 text-gray-100 transition-colors hover:text-gray-300"
+                      aria-label={`${term.label} 자세히 보기`}
+                    >
+                      <ChevronRight className="size-4" />
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setTermsModalSlug(term.slug)}
+                      className="shrink-0 p-1 text-gray-100 transition-colors hover:text-gray-300"
+                      aria-label={`${term.label} 자세히 보기`}
+                    >
+                      <ChevronRight className="size-4" />
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
@@ -225,6 +238,7 @@ export function MobilePaymentSheet({
           </div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
+      <TermsDetailModal slug={termsModalSlug} onClose={() => setTermsModalSlug(null)} />
     </DialogPrimitive.Root>
   );
 }
