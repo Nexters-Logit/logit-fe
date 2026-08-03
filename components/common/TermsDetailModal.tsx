@@ -14,11 +14,13 @@ export function TermsDetailModal({ slug, onClose }: Props) {
 
   return (
     <Dialog open={!!doc} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-h-[80vh] w-full max-w-160 overflow-y-auto rounded-3xl p-8">
+      <DialogContent className="flex h-[85vh] w-full max-w-160 flex-col overflow-hidden rounded-3xl p-0">
         {doc && (
           <>
-            <DialogTitle className="text-title-3 text-gray-500">{doc.title}</DialogTitle>
-            <div className="mt-4">
+            <div className="shrink-0 border-b border-gray-70 py-5 pr-14 pl-6 sm:pl-8">
+              <DialogTitle className="text-title-3 text-gray-500">{doc.title}</DialogTitle>
+            </div>
+            <div className="flex-1 overflow-y-auto px-6 py-5 sm:px-8">
               <TermsContentView doc={doc} />
             </div>
           </>
