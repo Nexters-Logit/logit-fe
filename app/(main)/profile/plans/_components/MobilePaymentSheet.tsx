@@ -203,26 +203,14 @@ export function MobilePaymentSheet({
                       </>
                     }
                   />
-                  {term.kind === "external" ? (
-                    <a
-                      href={term.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="shrink-0 p-1 text-gray-100 transition-colors hover:text-gray-300"
-                      aria-label={`${term.label} 자세히 보기`}
-                    >
-                      <ChevronRight className="size-4" />
-                    </a>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => setTermsModalSlug(term.slug)}
-                      className="shrink-0 p-1 text-gray-100 transition-colors hover:text-gray-300"
-                      aria-label={`${term.label} 자세히 보기`}
-                    >
-                      <ChevronRight className="size-4" />
-                    </button>
-                  )}
+                  <button
+                    type="button"
+                    onClick={() => setTermsModalSlug(term.slug)}
+                    className="shrink-0 p-1 text-gray-100 transition-colors hover:text-gray-300"
+                    aria-label={`${term.label} 자세히 보기`}
+                  >
+                    <ChevronRight className="size-4" />
+                  </button>
                 </div>
               ))}
             </div>
