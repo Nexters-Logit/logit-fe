@@ -13,6 +13,7 @@ import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import { showToast } from "@/libs/toast";
 import { useCurrentUser } from "@/app/_hooks/useCurrentUser";
 import { TermsCheckbox } from "@/components/common/TermsCheckbox";
+import { TermsDetailModal } from "@/components/common/TermsDetailModal";
 import { PAYMENT_TERMS, type PaymentTermId } from "../_data/paymentTerms";
 import type { PlanData } from "@/types/api";
 
@@ -34,6 +35,7 @@ export function AccountPaymentDialog({ plan, onClose }: Props) {
   const [phone, setPhone] = useState("");
   const [checkedTerms, setCheckedTerms] = useState<Set<TermId>>(new Set());
   const [isPending, setIsPending] = useState(false);
+  const [termsModalSlug, setTermsModalSlug] = useState<string | null>(null);
   const hasPrefilledPhone = useRef(false);
 
   useEffect(() => {
@@ -168,15 +170,14 @@ export function AccountPaymentDialog({ plan, onClose }: Props) {
                     </>
                   }
                 />
-                <a
-                  href={term.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
+                  onClick={() => setTermsModalSlug(term.slug)}
                   className="shrink-0 p-1 text-gray-100 transition-colors hover:text-gray-300"
                   aria-label={`${term.label} 자세히 보기`}
                 >
                   <ChevronRight className="size-4" />
-                </a>
+                </button>
               </div>
             ))}
           </div>
@@ -193,6 +194,7 @@ export function AccountPaymentDialog({ plan, onClose }: Props) {
           </button>
         </div>
       </DialogContent>
+      <TermsDetailModal slug={termsModalSlug} onClose={() => setTermsModalSlug(null)} />
     </Dialog>
   );
 }
