@@ -7,6 +7,7 @@ interface TokenBalance {
   plan: string;
   monthly_tokens: number;
   monthly_used: number;
+  today_received_amount: number;
   monthly_grant_amount: number;
   signup_bonus_amount: number;
   attendance_amount: number;
