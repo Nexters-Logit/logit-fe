@@ -8,6 +8,7 @@ import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
 import { showToast } from "@/libs/toast";
 import { useCurrentUser } from "@/app/_hooks/useCurrentUser";
 import { TermsCheckbox } from "@/components/common/TermsCheckbox";
+import { PAYMENT_TERMS as MOBILE_TERMS, type PaymentTermId } from "../../_data/paymentTerms";
 
 export type MobilePlanInfo = {
   id: string;
@@ -16,15 +17,7 @@ export type MobilePlanInfo = {
   price: number;
 };
 
-const MOBILE_TERMS = [
-  { id: "payapp_service", label: "페이앱 서비스 이용 약관", required: true },
-  { id: "subscription", label: "유료서비스 및 정기결제 이용 약관", required: true },
-  { id: "refund", label: "해지 및 환불 정책 동의", required: false },
-  { id: "credit", label: "개인(신용)정보 제공 동의", required: false },
-  { id: "id_info", label: "고유식별정보 처리 동의", required: false },
-] as const;
-
-type TermId = (typeof MOBILE_TERMS)[number]["id"];
+type TermId = PaymentTermId;
 
 function formatPhoneDigits(digits: string): string {
   if (digits.length <= 3) return digits;
@@ -208,13 +201,15 @@ export function MobilePaymentSheet({
                       </>
                     }
                   />
-                  <button
-                    type="button"
+                  <a
+                    href={term.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="shrink-0 p-1 text-gray-100 transition-colors hover:text-gray-300"
                     aria-label={`${term.label} 자세히 보기`}
                   >
                     <ChevronRight className="size-4" />
-                  </button>
+                  </a>
                 </div>
               ))}
             </div>

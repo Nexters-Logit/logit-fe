@@ -1343,7 +1343,7 @@ export default function OpenEventPage() {
                 <span className="text-body-8-2 text-white">Logit</span>
               </div>
               <a
-                href="https://pf.kakao.com/_Jxgxbxn"
+                href="https://pf.kakao.com/_eGnxnX/chat"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-body-7-3 text-white/30 underline hover:text-white/60 transition-colors"

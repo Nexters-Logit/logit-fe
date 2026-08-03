@@ -307,7 +307,7 @@ export function AccountPageWeb() {
               가이드 페이지로 이동
             </a>
             <a
-              href="https://pf.kakao.com/_Jxgxbxn"
+              href="https://pf.kakao.com/_eGnxnX/chat"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center py-5 text-body-1-2 text-gray-300 transition-colors hover:text-primary-200"
