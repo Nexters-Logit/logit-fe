@@ -206,7 +206,7 @@ export function ProfilePageMobile() {
             <ChevronRight className="size-4 text-gray-200" aria-hidden="true" />
           </a>
           <a
-            href="https://pf.kakao.com/_Jxgxbxn"
+            href="https://pf.kakao.com/_eGnxnX/chat"
             target="_blank"
             rel="noopener noreferrer"
             className="flex w-full items-center justify-between py-4 regular_14 text-gray-400 transition-colors hover:text-primary-200"
