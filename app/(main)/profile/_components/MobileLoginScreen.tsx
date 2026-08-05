@@ -13,7 +13,7 @@ export function MobileLoginScreen() {
   };
 
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-between px-7.5 py-16">
+    <main className="flex min-h-dvh flex-col items-center px-7.5 py-16">
       <div className="flex flex-1 flex-col items-center justify-center gap-10 w-full">
         <div className="flex flex-col items-center gap-4">
           <Image
@@ -61,7 +61,7 @@ export function MobileLoginScreen() {
         </div>
       </div>
 
-      <p className="text-center text-body-9-3 text-gray-200">
+      <p className="mt-auto pt-8 text-center text-body-9-3 text-gray-200">
         계속하면{" "}
         <a href="https://docs.logit.ai.kr/policys/tos" target="_blank" rel="noopener noreferrer" className="underline">
           이용약관
