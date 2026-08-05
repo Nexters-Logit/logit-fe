@@ -35,7 +35,7 @@ export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onS
   return (
     <div
       className={cn(
-        "flex flex-col rounded-5 border-2 bg-white p-4",
+        "flex h-full flex-col rounded-5 border-2 bg-white p-4",
         isActive ? "border-primary-100" : "border-gray-70",
       )}
     >
@@ -80,7 +80,7 @@ export function AccountMcpPlanCard({ plan, isActive, isAutoRenew, expiresAt, onS
         </p>
       )}
 
-      <div className="mt-5 flex flex-col gap-2">
+      <div className="mt-auto flex flex-col gap-2 pt-5">
         {isActive && !isCancelPending ? (
           <>
             <button
