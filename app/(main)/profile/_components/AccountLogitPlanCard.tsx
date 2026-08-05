@@ -30,7 +30,9 @@ export function AccountLogitPlanCard({
   onSubscribe,
   onCancel,
 }: Props) {
-  const showFreeDefault = isFree && !hasActivePaidPlan;
+  // Free는 결제로 "구독"하는 대상이 아니므로, 유료 플랜 보유 여부와 무관하게
+  // 항상 안내 문구만 보여주고 클릭 가능한 버튼을 노출하지 않는다.
+  const showFreeDefault = isFree;
   const isCancelPending = isActive && !isAutoRenew;
   const canResubscribe = isCancelPending && (!expiresAt || new Date(expiresAt) <= new Date());
 
@@ -74,7 +76,7 @@ export function AccountLogitPlanCard({
       <div className="mt-auto pt-5">
         {showFreeDefault ? (
           <div className="flex h-16 items-center justify-center rounded-3.5 bg-gray-50 text-body-3-2 text-gray-200">
-            무료로 이용 중
+            {hasActivePaidPlan ? "무료 요금제" : "무료로 이용 중"}
           </div>
         ) : isCancelPending ? (
           canResubscribe ? (

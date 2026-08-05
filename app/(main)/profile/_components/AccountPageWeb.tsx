@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "@/app/_hooks/useCurrentUser";
 import { useTokenBalance } from "@/app/_hooks/useTokenBalance";
-import { useSessionTokenGain } from "@/app/_hooks/useSessionTokenGain";
 import { useLoginModal } from "@/components/common/LoginModalContext";
 import { getAccessToken, clearAuthTokens } from "@/libs/auth";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
@@ -33,7 +32,6 @@ export function AccountPageWeb() {
   const { data: paymentHistory = [] } = usePaymentHistory();
   const { data: plansData = [] } = usePlans();
   const { data: tokenBalance } = useTokenBalance();
-  const { data: sessionTokenGain = 0 } = useSessionTokenGain();
   const queryClient = useQueryClient();
 
   const [tab, setTab] = useState<BillingTab>("monthly");
@@ -91,10 +89,13 @@ export function AccountPageWeb() {
   const logitPlansFromDB = plansData.filter((p) => p.subscription_type === "logit");
   const mcpPlansFromDB = plansData.filter((p) => p.subscription_type === "mcp");
 
-  const monthlyTokens = tokenBalance?.monthly_tokens ?? 0;
-  const usedTokens = Math.max(0, monthlyTokens - (tokenBalance?.balance ?? 0));
+  const usedTokens = tokenBalance?.monthly_used ?? 0;
+  // 이번 달 사용 가능한 토큰 총량 = 현재 잔액(이미 쓴 만큼은 빠진 값) + 이번 달 사용량.
+  // balance는 credit()/debit() 때마다 실시간으로 유지되는 값이라 로그를 다시 합산할 필요 없음.
+  const totalAvailableTokens = (tokenBalance?.balance ?? 0) + usedTokens;
   const tokenUsagePercent =
-    monthlyTokens > 0 ? Math.min(100, Math.round((usedTokens / monthlyTokens) * 100)) : 0;
+    totalAvailableTokens > 0 ? Math.min(100, Math.round((usedTokens / totalAvailableTokens) * 100)) : 0;
+  const todayReceivedAmount = tokenBalance?.today_received_amount ?? 0;
 
   const activeStatus = tab === "monthly" ? logitStatus : mcpStatus;
   const periodDisplay =
@@ -246,15 +247,15 @@ export function AccountPageWeb() {
           <div className="mb-2 flex items-baseline justify-between">
             <div className="flex items-center gap-1.5">
               <h2 className="text-headline-1 text-gray-500">토큰 사용량</h2>
-              {sessionTokenGain > 0 && (
+              {todayReceivedAmount > 0 && (
                 <span className="rounded-full bg-primary-100 px-2 py-0.5 text-body-8-1 text-white">
-                  +{sessionTokenGain}
+                  +{todayReceivedAmount}
                 </span>
               )}
             </div>
             <p className="text-title-3 text-gray-500 tabular-nums">
               {usedTokens.toLocaleString()}
-              <span className="text-body-3-2 text-gray-300"> / {monthlyTokens.toLocaleString()}</span>
+              <span className="text-body-3-2 text-gray-300"> / {totalAvailableTokens.toLocaleString()}</span>
             </p>
           </div>
           <p className="mb-4 text-body-3-2 text-gray-300">
@@ -306,7 +307,7 @@ export function AccountPageWeb() {
               가이드 페이지로 이동
             </a>
             <a
-              href="https://pf.kakao.com/_Jxgxbxn"
+              href="https://pf.kakao.com/_eGnxnX/chat"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center py-5 text-body-1-2 text-gray-300 transition-colors hover:text-primary-200"

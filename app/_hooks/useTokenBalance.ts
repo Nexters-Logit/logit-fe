@@ -6,13 +6,11 @@ interface TokenBalance {
   balance: number;
   plan: string;
   monthly_tokens: number;
-  monthly_grant_received: boolean;
+  monthly_used: number;
+  today_received_amount: number;
   monthly_grant_amount: number;
-  signup_bonus_received: boolean;
   signup_bonus_amount: number;
-  attendance_received: boolean;
   attendance_amount: number;
-  referral_reward_received: boolean;
   referral_reward_amount: number;
   referral_reward_count: number;
 }
