@@ -63,11 +63,11 @@ export function MobileLoginScreen() {
 
       <p className="mt-auto pt-8 text-center text-body-9-3 text-gray-200">
         계속하면{" "}
-        <a href="https://docs.logit.ai.kr/policys/tos" target="_blank" rel="noopener noreferrer" className="underline">
+        <a href="https://docs.logit.ai.kr/policys/tos" target="_blank" rel="noopener noreferrer" className="text-primary-80 underline">
           이용약관
         </a>
         {" · "}
-        <a href="https://docs.logit.ai.kr/policys/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline">
+        <a href="https://docs.logit.ai.kr/policys/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-primary-80 underline">
           개인정보 처리방침
         </a>
         에 동의합니다.
