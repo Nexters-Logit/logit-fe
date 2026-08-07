@@ -39,7 +39,7 @@ export function ProfilePageMobile() {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      await logout();
+      await logout("/profile");
     } catch {
       setIsLoggingOut(false);
     }

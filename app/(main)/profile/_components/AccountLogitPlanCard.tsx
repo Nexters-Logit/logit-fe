@@ -39,7 +39,7 @@ export function AccountLogitPlanCard({
   return (
     <div
       className={cn(
-        "flex flex-col rounded-5 border-2 bg-white p-4",
+        "flex h-full flex-col rounded-5 border-2 bg-white p-4",
         isActive ? "border-primary-100" : "border-gray-70",
       )}
     >
@@ -73,7 +73,7 @@ export function AccountLogitPlanCard({
         </p>
       )}
 
-      <div className="mt-5">
+      <div className="mt-auto pt-5">
         {showFreeDefault ? (
           <div className="flex h-16 items-center justify-center rounded-3.5 bg-gray-50 text-body-3-2 text-gray-200">
             {hasActivePaidPlan ? "무료 요금제" : "무료로 이용 중"}
