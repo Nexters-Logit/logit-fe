@@ -86,6 +86,18 @@ export function MobilePaymentSheet({
     setPhone(formatPhoneDigits(digits));
   };
 
+  const phoneInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (step === 2) {
+      const el = phoneInputRef.current;
+      if (!el) return;
+      el.focus();
+      const len = el.value.length;
+      el.setSelectionRange(len, len);
+    }
+  }, [step]);
+
   const dragStartY = useRef(0);
   const [dragOffset, setDragOffset] = useState(0);
 
@@ -228,6 +240,7 @@ export function MobilePaymentSheet({
                 <div className="flex min-h-80 flex-col">
                   <div className="mt-4">
                     <Input
+                      ref={phoneInputRef}
                       id="mobile-payment-phone"
                       type="tel"
                       inputMode="numeric"
