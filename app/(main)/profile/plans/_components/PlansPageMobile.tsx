@@ -64,6 +64,16 @@ export function PlansPageMobile() {
       ? "mcp"
       : null;
 
+  const cancelEndDate = cancelTarget
+    ? subscriptionStatus?.[cancelTarget]?.next_payment_date ?? null
+    : null;
+  const cancelSubtext = cancelEndDate
+    ? (() => {
+        const d = new Date(cancelEndDate);
+        return `취소 시 ${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일에 이용이 종료돼요`;
+      })()
+    : "취소 후에도 현재 구독 기간까지 이용할 수 있어요";
+
   const handleCancelConfirm = async () => {
     if (!cancelTarget) return;
     setIsCanceling(true);
@@ -208,6 +218,7 @@ const handleCardClick = (active || plan.is_free)
         onClose={() => setCancelTarget(null)}
         onConfirm={handleCancelConfirm}
         isPending={isCanceling}
+        subtext={cancelSubtext}
       />
 
       <MobilePaymentSheet

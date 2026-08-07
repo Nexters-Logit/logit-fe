@@ -34,6 +34,7 @@ export function ProfilePageMobile() {
   const queryClient = useQueryClient();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
@@ -217,7 +218,7 @@ export function ProfilePageMobile() {
           <button
             type="button"
             disabled={isLoggingOut}
-            onClick={handleLogout}
+            onClick={() => setShowLogoutConfirm(true)}
             className="flex w-full items-center justify-between py-4 regular_14 text-gray-400 transition-colors hover:text-primary-200 disabled:opacity-50"
           >
             {isLoggingOut ? "로그아웃 중..." : "로그아웃"}
@@ -234,6 +235,16 @@ export function ProfilePageMobile() {
         </div>
       </section>
 
+      <MobileCancelDialog
+        open={showLogoutConfirm}
+        onClose={() => setShowLogoutConfirm(false)}
+        onConfirm={handleLogout}
+        isPending={isLoggingOut}
+        title="로그아웃 하시겠어요?"
+        description="로그아웃 후 다시 로그인할 수 있어요."
+        dismissLabel="취소"
+        confirmLabel="로그아웃"
+      />
       <MobileCancelDialog
         open={showDeleteConfirm}
         onClose={() => setShowDeleteConfirm(false)}
