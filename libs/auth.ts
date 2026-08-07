@@ -32,6 +32,9 @@ export function setAuthTokens(accessToken: string): void {
 
 export function getAccessToken(): string | null {
   if (typeof window === "undefined") return null;
+  if (process.env.NODE_ENV === "development" && process.env.NEXT_PUBLIC_DEV_ACCESS_TOKEN) {
+    return process.env.NEXT_PUBLIC_DEV_ACCESS_TOKEN;
+  }
   return getCookie(ACCESS_TOKEN_COOKIE);
 }
 
@@ -81,9 +84,10 @@ export async function refreshAuthTokens(): Promise<boolean> {
 }
 
 /**
- * 로그아웃: 서버에 토큰 무효화 요청 후 로컬 토큰 삭제 및 홈으로 이동
+ * 로그아웃: 서버에 토큰 무효화 요청 후 로컬 토큰 삭제 및 리다이렉트
+ * @param redirectTo 로그아웃 후 이동할 경로 (기본값: "/")
  */
-export async function logout(): Promise<void> {
+export async function logout(redirectTo = "/"): Promise<void> {
   if (typeof window === "undefined") return;
 
   const accessToken = getAccessToken();
@@ -106,7 +110,7 @@ export async function logout(): Promise<void> {
   }
   // 로그아웃 직후 리다이렉트 시 미들웨어가 401로 login_required를 세팅해 모달이 뜨는 것 방지
   setCookie(JUST_LOGGED_OUT_COOKIE, "1");
-  window.location.href = "/";
+  window.location.href = redirectTo;
 }
 
 const AUTH_REDIRECT_KEY = "auth_redirect";
