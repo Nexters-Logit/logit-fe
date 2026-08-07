@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Input } from "@/components/ui/input";
 import { apiFetch, API_ENDPOINTS } from "@/libs/api-client";
@@ -38,6 +38,7 @@ export function MobilePaymentSheet({
   const [checkedTerms, setCheckedTerms] = useState<Set<TermId>>(new Set());
   const [isPending, setIsPending] = useState(false);
   const [termsModalSlug, setTermsModalSlug] = useState<string | null>(null);
+  const [step, setStep] = useState<1 | 2>(1);
   const hasPrefilledPhone = useRef(false);
 
   useEffect(() => {
@@ -45,6 +46,7 @@ export function MobilePaymentSheet({
       setPhone("");
       setCheckedTerms(new Set());
       setIsPending(false);
+      setStep(1);
       hasPrefilledPhone.current = false;
     }
   }, [plan]);
@@ -145,85 +147,116 @@ export function MobilePaymentSheet({
             <span className="h-1 w-10 rounded-full bg-gray-70" />
           </button>
 
-          <div className="px-6 pb-2 pt-3">
-            <DialogPrimitive.Title className="text-title-3 text-gray-500">
-              결제하기
-            </DialogPrimitive.Title>
-            <DialogPrimitive.Description className="mt-1 text-body-7-3 text-gray-200">
-              결제 정보를 등록 하려면 약관 동의가 필요해요.
-            </DialogPrimitive.Description>
-          </div>
+          {step === 1 ? (
+            <>
+              <div className="px-6 pb-2 pt-3">
+                <DialogPrimitive.Title className="text-title-3 text-gray-500">
+                  결제하기
+                </DialogPrimitive.Title>
+                <DialogPrimitive.Description className="mt-1 medium_14 text-gray-500 self-stretch">
+                  결제 정보를 등록 하려면 약관 동의가 필요해요.
+                </DialogPrimitive.Description>
+              </div>
 
-          <div className="overflow-y-auto px-6 pb-6 scrollbar-hide">
-            <div className="mb-5 mt-4">
-              <label
-                htmlFor="mobile-payment-phone"
-                className="mb-2 block text-body-7-2 text-gray-400"
-              >
-                결제 알림을 받을 휴대폰 번호
-              </label>
-              <Input
-                id="mobile-payment-phone"
-                type="tel"
-                inputMode="numeric"
-                autoComplete="tel"
-                value={phone}
-                onChange={(e) => handlePhoneChange(e.target.value)}
-                placeholder="010-1234-5678"
-                className="h-12 rounded-xl bg-white text-body-5-4"
-                aria-invalid={phone.length > 0 && !isPhoneValid}
-              />
-              {user?.phone && (
-                <p className="mt-1.5 text-body-9-3 text-gray-200">
-                  저장된 번호가 자동 입력되었어요. 변경하시면 새 번호로 저장됩니다.
-                </p>
-              )}
-            </div>
-
-            <div className="border-b border-gray-70 pb-4">
-              <TermsCheckbox
-                checked={allChecked}
-                onChange={toggleAll}
-                label="약관 모두 동의하기"
-              />
-            </div>
-
-            <div className="flex flex-col gap-3.5 pt-4">
-              {MOBILE_TERMS.map((term) => (
-                <div key={term.id} className="flex items-center justify-between">
+              <div className="overflow-y-auto px-6 pb-6 scrollbar-hide">
+                <div className="border-b border-gray-70 pb-4 pt-4">
                   <TermsCheckbox
-                    checked={checkedTerms.has(term.id)}
-                    onChange={() => toggleTerm(term.id)}
-                    label={
-                      <>
-                        {term.required && (
-                          <span className="mr-1 text-primary-200">[필수]</span>
-                        )}
-                        {term.label}
-                      </>
-                    }
+                    checked={allChecked}
+                    onChange={toggleAll}
+                    label="약관 모두 동의하기"
                   />
+                </div>
+
+                <div className="flex flex-col gap-3.5 pt-4">
+                  {MOBILE_TERMS.map((term) => (
+                    <div key={term.id} className="flex items-center justify-between">
+                      <TermsCheckbox
+                        checked={checkedTerms.has(term.id)}
+                        onChange={() => toggleTerm(term.id)}
+                        label={
+                          <>
+                            {term.required && (
+                              <span className="mr-1 text-primary-200">[필수]</span>
+                            )}
+                            {term.label}
+                          </>
+                        }
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setTermsModalSlug(term.slug)}
+                        className="shrink-0 p-1 text-gray-100 transition-colors hover:text-gray-300"
+                        aria-label={`${term.label} 자세히 보기`}
+                      >
+                        <ChevronRight className="size-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  disabled={!allRequiredChecked}
+                  onClick={() => setStep(2)}
+                  className="mt-10 h-14 w-full rounded-3.5 bg-primary-100 text-body-5-2 text-white transition-colors hover:bg-primary-200 disabled:cursor-not-allowed disabled:bg-gray-100"
+                >
+                  다음으로
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="px-6 pb-2 pt-3">
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className="mb-2 flex items-center gap-1 text-body-7-3 text-gray-300 transition-colors hover:text-gray-400"
+                  aria-label="이전 단계로"
+                >
+                  <ChevronLeft className="size-4" />
+                  이전
+                </button>
+                <DialogPrimitive.Title className="text-title-3 text-gray-500">
+                  휴대폰 번호 입력
+                </DialogPrimitive.Title>
+                <DialogPrimitive.Description className="mt-1 medium_14 text-gray-500 self-stretch">
+                  결제 알림을 받을 휴대폰 번호를 입력해주세요.
+                </DialogPrimitive.Description>
+              </div>
+
+              <div className="overflow-y-auto px-6 pb-6 scrollbar-hide">
+                <div className="flex min-h-80 flex-col">
+                  <div className="mt-4">
+                    <Input
+                      id="mobile-payment-phone"
+                      type="tel"
+                      inputMode="numeric"
+                      autoComplete="tel"
+                      value={phone}
+                      onChange={(e) => handlePhoneChange(e.target.value)}
+                      placeholder="010-1234-5678"
+                      className="h-12 rounded-xl bg-white text-body-5-4"
+                      aria-invalid={phone.length > 0 && !isPhoneValid}
+                    />
+                    {user?.phone && (
+                      <p className="mt-2 medium_12 text-gray-200">
+                        저장된 번호가 자동 입력되었어요. 변경하시면 새 번호로 저장됩니다.
+                      </p>
+                    )}
+                  </div>
+
                   <button
                     type="button"
-                    onClick={() => setTermsModalSlug(term.slug)}
-                    className="shrink-0 p-1 text-gray-100 transition-colors hover:text-gray-300"
-                    aria-label={`${term.label} 자세히 보기`}
+                    disabled={!canPay}
+                    onClick={handlePay}
+                    className="mt-auto h-14 w-full rounded-3.5 bg-primary-100 text-body-5-2 text-white transition-colors hover:bg-primary-200 disabled:cursor-not-allowed disabled:bg-gray-100"
                   >
-                    <ChevronRight className="size-4" />
+                    {isPending ? "결제 페이지를 여는 중..." : "동의하기"}
                   </button>
                 </div>
-              ))}
-            </div>
-
-            <button
-              type="button"
-              disabled={!canPay}
-              onClick={handlePay}
-              className="mt-10 h-14 w-full rounded-3.5 bg-primary-100 text-body-5-2 text-white transition-colors hover:bg-primary-200 disabled:cursor-not-allowed disabled:bg-gray-100"
-            >
-              {isPending ? "결제 페이지를 여는 중..." : "동의하기"}
-            </button>
-          </div>
+              </div>
+            </>
+          )}
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
       <TermsDetailModal slug={termsModalSlug} onClose={() => setTermsModalSlug(null)} />
