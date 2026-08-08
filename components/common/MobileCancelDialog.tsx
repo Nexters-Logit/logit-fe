@@ -56,14 +56,17 @@ export function MobileCancelDialog({
         <DialogTitle className="mb-2 text-center text-body-5-2 text-gray-500">
           {title}
         </DialogTitle>
-        <DialogDescription className={cn("text-center text-body-8-3 text-gray-200", subtext ? "mb-1" : "mb-7")}>
-          {description}
-        </DialogDescription>
+        {description && (
+          <DialogDescription className={cn("text-center text-body-8-3 text-gray-200", subtext ? "mb-1" : "mb-7")}>
+            {description}
+          </DialogDescription>
+        )}
         {subtext && (
           <p className="mb-7 text-center medium_13 text-gray-200">
             {subtext}
           </p>
         )}
+        {!description && !subtext && <div className="mb-7" />}
 
         <div className="flex gap-3">
           <button
