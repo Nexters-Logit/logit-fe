@@ -242,7 +242,7 @@ export function ProfilePageMobile() {
         isPending={isLoggingOut}
         title="로그아웃 하시겠어요?"
         description=""
-        dismissLabel="취소"
+        dismissLabel="취소하기"
         confirmLabel="로그아웃"
       />
       <MobileCancelDialog
