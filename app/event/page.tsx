@@ -17,7 +17,7 @@ const EVENT_STATUS = {
 const POOL_TOTAL = 30_000;
 const POOL_REMAINING = 24_750;
 
-const EVENT_END = new Date("2026-10-10T23:59:59");
+const EVENT_END = new Date("2026-11-18T23:59:59");
 
 // INTRO 배경 파티클 — 위치/크기/딜레이 고정값
 const PARTICLES = [
@@ -367,7 +367,7 @@ export default function OpenEventPage() {
           {/* D-day 카운트다운 */}
           <div className="flex flex-col items-center gap-2">
             <p className="text-body-9-3 text-gray-200/70">
-              2026.08.10 ~ 2026.10.10
+              2026.08.11 ~ 2026.11.18
             </p>
             <p className="text-body-8-1 text-gray-200 tracking-widest">
               이벤트 종료까지
