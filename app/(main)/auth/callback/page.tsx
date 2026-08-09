@@ -52,6 +52,7 @@ function AuthCallbackContent() {
         } = await res.json();
 
         setAuthTokens(data.access_token);
+        document.cookie = "login_required=; path=/; max-age=0";
 
         await queryClient.prefetchQuery({
           queryKey: ["currentUser"],

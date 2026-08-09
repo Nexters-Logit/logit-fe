@@ -241,8 +241,8 @@ export function ProfilePageMobile() {
         onConfirm={handleLogout}
         isPending={isLoggingOut}
         title="로그아웃 하시겠어요?"
-        description="로그아웃 후 다시 로그인할 수 있어요."
-        dismissLabel="취소"
+        description=""
+        dismissLabel="취소하기"
         confirmLabel="로그아웃"
       />
       <MobileCancelDialog
