@@ -61,6 +61,12 @@ export function ToastProvider() {
       pauseOnHover={false}
       draggable={false}
       transition={Slide}
+      style={{
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "auto",
+        maxWidth: "calc(100vw - 32px)",
+      }}
     />
   );
 }
